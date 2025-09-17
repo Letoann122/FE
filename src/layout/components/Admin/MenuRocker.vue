@@ -141,6 +141,12 @@
                                 <div class="menu-title">Số lượng người hiến</div>
                             </router-link>
                         </li>
+                        <li class="nav-item">
+                        <router-link to="/admin/users" class="nav-link">
+                            <div class="parent-icon"><i class="bx bx-user"></i></div>
+                            <div class="menu-title">Quản lý người dùng</div>
+                        </router-link>
+                        </li>
                     </ul>
                 </li>
             </ul>

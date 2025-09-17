@@ -9,6 +9,14 @@ const routes = [
             layout : "admin"
         }
     },
+    {
+        path: "/admin/users",
+        name: "UserManagement",
+        component: () => import("../components/Admin/UserManagement.vue"),
+        meta: {
+            layout: "admin"
+        }
+      },     
     //bacsi
 
     //client
