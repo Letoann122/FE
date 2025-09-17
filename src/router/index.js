@@ -2,7 +2,13 @@ import { createRouter, createWebHistory } from "vue-router"; // cài vue-router:
 const routes = [
   
     //admin
-
+    {
+        path: "/admin/trang-chu",
+        component: () => import("../components/Admin/trangchu/index.vue"),
+        meta: {
+            layout : "admin"
+        }
+    },
     //bacsi
 
     //client
