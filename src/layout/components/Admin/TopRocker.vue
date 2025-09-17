@@ -7,7 +7,7 @@
                         <!-- <img src="../../../assets/images/Generated Image September 17, 2025 - 12_45PM.png" class="logo-icon" alt="logo icon"> -->
                     </div>
                     <div class="">
-                        <h4 class="logo-text">Admin</h4>
+                        <h4 class="logo-text text-danger">Admin</h4>
                     </div>
                 </div>
                 <div class="mobile-toggle-menu"><i class='bx bx-menu'></i></div>
