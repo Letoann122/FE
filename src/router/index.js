@@ -20,13 +20,6 @@ const routes = [
         }
     },
     {
-        path: "/login",
-        component: () => import("../components/Client/Login/index.vue"),
-        meta : {
-            layout : "client",
-        }
-    },
-    {
         path: "/GioiThieu",
         component: () => import("../components/Client/GioiThieu/index.vue"),
         meta : {
@@ -40,6 +33,21 @@ const routes = [
             layout : "client",
         }
     },
+    //blank
+    {
+        path: "/login",
+        component: () => import("../components/Client/Login/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    // {
+    //     path: "/test",
+    //     component: () => import("../components/Client/Dangky/index.vue"),
+    //     meta : {
+    //         layout : "blank",
+    //     }
+    // },
 ];
 
 const router = createRouter({

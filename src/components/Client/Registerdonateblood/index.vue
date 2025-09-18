@@ -8,7 +8,7 @@
           <h4 class="text-center mb-4">
             <i class="bi bi-heart-fill text-danger"></i> Đăng ký hiến máu
           </h4>
-          <h6 class="text-center" style="top: 2px ;">Tạo tài khoản để tham gia hiến máu cứu người</h6>
+          <h6 class="text-center mt-1">Tạo tài khoản để tham gia hiến máu cứu người</h6>
 
           <form @submit.prevent="handleSubmit">
             <div class="mb-3">
