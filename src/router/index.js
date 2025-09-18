@@ -26,6 +26,20 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/GioiThieu",
+        component: () => import("../components/Client/GioiThieu/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/Register",
+        component: () => import("../components/Client/Registerdonateblood/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
 ];
 
 const router = createRouter({
