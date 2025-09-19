@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
     <div class="row align-items-center shadow rounded overflow-hidden bg-white">
-      
       <!-- Giới thiệu bên trái -->
       <div class="col-md-6  d-flex flex-column align-items-center justify-content-center text-center p-5" style="background-color: #fdf2f2;">
         <img src="../../../assets/img/traitim.png" 
@@ -11,7 +10,6 @@
           Kết nối những trái tim nhân ái, cứu sống những cuộc đời.
         </p>
       </div>
-
       <!-- Form đăng nhập -->
       <div class="col-md-6 bg-white p-5">
         <div class="text-center mb-4">
@@ -19,21 +17,18 @@
           <h4 class="fw-bold mt-2">Đăng nhập</h4>
           <p class="text-muted">Chào mừng bạn trở lại với SBDD</p>
         </div>
-
         <form @submit.prevent="handleLogin">
           <div class="mb-3">
             <label class="form-label">Email hoặc số điện thoại</label>
-            <input type="text" class="form-control" v-model="form.username" required />
+            <input type="text" class="form-control"/>
           </div>
-
           <div class="mb-3">
             <label class="form-label">Mật khẩu</label>
-            <input type="password" class="form-control" v-model="form.password" required />
+            <input type="password" class="form-control" />
           </div>
-
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <input type="checkbox" v-model="form.remember" id="rememberMe" />
+              <input type="checkbox"/>
               <label for="rememberMe" class="ms-1">Ghi nhớ đăng nhập</label>
             </div>
             <a href="#" class="text-danger small">Quên mật khẩu?</a>
@@ -65,25 +60,11 @@
     </div>
   </div>
 </template>
-<script setup>
-import { reactive } from "vue";
-
-const form = reactive({
-  username: "",
-  password: "",
-  remember: false,
-});
-
-function handleLogin() {
-  alert(`Xin chào ${form.username}, bạn đã đăng nhập thành công!`);
+<script>
+export default {
+    
 }
 </script>
-
-<style scoped>
-.container {
-  max-width: 1000px;
-}
-.row {
-  min-height: 500px;
-}
+<style>
+    
 </style>
