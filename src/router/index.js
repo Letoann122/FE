@@ -27,6 +27,13 @@ const routes = [
         }
     },
     {
+        path: "/LoginAccount",
+        component: () => import("../components/Client/LoginAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
         path: "/Register",
         component: () => import("../components/Client/Registerdonateblood/index.vue"),
         meta : {

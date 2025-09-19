@@ -72,6 +72,50 @@
     </div>
   </div>
 
+  <!-- Core Values -->
+  <div class="container my-5">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Giá trị cốt lõi</h2>
+      <p class="text-muted">Những nguyên tắc chúng tôi luôn giữ vững để phát triển hệ thống bền vững</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6" v-for="(value, idx) in coreValues" :key="idx">
+        <div class="card border-0 shadow-sm h-100 rounded-4 text-center p-4">
+          <span 
+            class="justify-content-center rounded-circle align-items-center d-inline-flex mb-3"
+            :class="value.bg"
+            style="width:64px;height:64px;"
+          >
+            <i :class="value.icon" ></i>
+          </span>
+          <h5 class="fw-bold mb-2">{{ value.title }}</h5>
+          <p class="text-muted mb-0 small">{{ value.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics -->
+<div class="container my-5">
+  <div class="text-center mb-5">
+    <h2 class="fw-bold">Thành tựu & Thống kê</h2>
+    <p class="text-muted">Những con số biết nói về hệ thống Smart Blood Donation</p>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-3 col-md-6" v-for="(stat, idx) in statistics" :key="idx">
+      <div class="card h-100 border-0 rounded-4 shadow text-white" :class="stat.bg">
+        <div class="card-body text-center p-4">
+          <i :class="stat.icon" class="fa-2x mb-3"></i>
+          <h2 class="fw-bold mb-2">{{ stat.value }}</h2>
+          <p class="mb-0">{{ stat.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
    <div class="container my-5">
 
     <!-- Đội ngũ phát triển -->
@@ -133,6 +177,19 @@ const benefitItems = [
     points: ["Quản lý toàn hệ thống","Theo dõi công việc", "Quản lý thông tin", "Kiểm duyệt & xét duyệt"] 
   },
 ]
+const coreValues = [
+  { icon: "fas fa-heart fa-2x text-danger", title: "Tận tâm", desc: "Luôn đặt sức khỏe và sự an toàn của bệnh nhân lên hàng đầu", bg: "bg-danger bg-opacity-10" },
+  { icon: "fas fa-star fa-2x text-warning", title: "Chất lượng", desc: "Cam kết cung cấp dịch vụ y tế chất lượng cao nhất", bg: "bg-warning bg-opacity-10" },
+  { icon: "fas fa-users fa-2x text-primary", title: "Đồng đội", desc: "Làm việc nhóm hiệu quả, hỗ trợ lẫn nhau vì mục tiêu chung", bg: "bg-primary bg-opacity-10" },
+  { icon: "fas fa-sync fa-2x text-success", title: "Đổi mới", desc: "Không ngừng cải tiến và áp dụng công nghệ mới", bg: "bg-success bg-opacity-10" },
+]
+const statistics = [
+  { icon: "fas fa-user-md", value: "50+", label: "Bác sĩ chuyên khoa", bg: "bg-primary" },
+  { icon: "fas fa-procedures", value: "10K+", label: "Bệnh nhân/năm", bg: "bg-info" },
+  { icon: "fas fa-stethoscope", value: "15+", label: "Chuyên khoa", bg: "bg-success" },
+  { icon: "fas fa-certificate", value: "20+", label: "Năm kinh nghiệm", bg: "bg-warning" },
+]
+
 
 const team = [
   { name: "Tài Phạm", role: "Project Leader", email: "leader@smartblood.com", image: leaderImg},
