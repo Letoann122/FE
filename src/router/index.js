@@ -27,13 +27,6 @@ const routes = [
         }
     },
     {
-        path: "/LoginAccount",
-        component: () => import("../components/Client/LoginAccount/index.vue"),
-        meta : {
-            layout : "client",
-        }
-    },
-    {
         path: "/Register",
         component: () => import("../components/Client/Registerdonateblood/index.vue"),
         meta : {
@@ -42,19 +35,12 @@ const routes = [
     },
     //blank
     {
-        path: "/login",
-        component: () => import("../components/Client/Login/index.vue"),
+        path: "/LoginAccount",
+        component: () => import("../components/Client/LoginAccount/index.vue"),
         meta : {
             layout : "blank",
         }
     },
-    // {
-    //     path: "/test",
-    //     component: () => import("../components/Client/Dangky/index.vue"),
-    //     meta : {
-    //         layout : "blank",
-    //     }
-    // },
 ];
 
 const router = createRouter({

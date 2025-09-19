@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-5">
+  <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
     <div class="row align-items-center shadow rounded overflow-hidden bg-white">
       
       <!-- Giới thiệu bên trái -->
