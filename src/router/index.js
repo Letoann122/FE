@@ -40,6 +40,13 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
     //blank
     {
         path: "/login",
