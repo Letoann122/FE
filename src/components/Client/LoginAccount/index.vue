@@ -61,8 +61,24 @@
   </div>
 </template>
 <script>
+import baseRequestClient from '../../../core/baseRequestClient';
 export default {
-    
+    name : 'LoginClient',
+    data() {
+      return {
+        user : {
+          email     : '',
+          password  : '',
+        },
+        showPassword: false,
+      }
+    },
+    // mounted() {
+      
+    // },
+    // methods: {
+      
+    // },
 }
 </script>
 <style>
