@@ -28,10 +28,32 @@ const routes = [
         }
     },
     {
-        path: "/login",
-        component: () => import("../components/Client/Login/index.vue"),
+        path: "/GioiThieu",
+        component: () => import("../components/Client/GioiThieu/index.vue"),
         meta : {
             layout : "client",
+        }
+    },
+    {
+        path: "/Register",
+        component: () => import("../components/Client/Registerdonateblood/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    //blank
+    {
+        path: "/LoginAccount",
+        component: () => import("../components/Client/LoginAccount/index.vue"),
+        meta : {
+            layout : "blank",
         }
     },
 ];
