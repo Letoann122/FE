@@ -33,6 +33,13 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/QuenPassword",
+        component: () => import("../components/Client/QuenPassword/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
     //blank
     {
         path: "/LoginAccount",
