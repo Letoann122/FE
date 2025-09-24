@@ -40,6 +40,13 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/tintuc",
+        component: () => import("../components/Client/TinTuc/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
     //blank
     {
         path: "/LoginAccount",
