@@ -36,14 +36,14 @@ const routes = [
     },
     //blank
     {
-        path: "/LoginAccount",
-        component: () => import("../components/Client/LoginAccount/index.vue"),
+        path: "/dang-nhap",
+        component: () => import("../components/Client/DangNhap/index.vue"),
         meta : {
             layout : "blank",
         }
     },
     {
-        path: "/RegisterAccount",
+        path: "/dang-ky",
         component: () => import("../components/Client/Dangky/index.vue"),
         meta : {
             layout : "blank",
