@@ -128,7 +128,59 @@
 </template>
 <script>
 export default {
-  name: "RegisterForm",
+ name: "RegisterForm",
+  data() {
+    return {
+      form: {
+        fullname: "",
+        birthdate: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        bloodType: "",
+        role: "donor",
+        medicalHistory: "",
+        password: "",
+        confirmPassword: "",
+      },
+    };
+},
+methods: {
+    async handleRegister() {
+      if (this.form.password !== this.form.confirmPassword) {
+        alert("Mật khẩu xác nhận không khớp!");
+        return;
+      }
+      try {
+        const res = await baseRequestClient.post("/auth/register", this.form);
+        alert("Đăng ký thành công!");
+        console.log("Thông tin user:", res.data);
+        this.$router.push("/dang-nhap");
+      } catch (err) {
+        console.error("Lỗi đăng ký:", err);
+        alert(err.response?.data?.message || "Đăng ký thất bại, vui lòng thử lại!");
+      }
+    },
+    resetForm() {
+      this.form = {
+        fullname: "",
+        birthdate: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        bloodType: "",
+        role: "donor",
+        medicalHistory: "",
+        password: "",
+        confirmPassword: "",
+      };
+    },
+  },
+
 };
+
+
 </script>
 
