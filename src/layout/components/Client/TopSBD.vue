@@ -1,49 +1,39 @@
 <template>
   <div class="top-wrapper">
-    <nav
-      ref="nav"
-      class="navbar navbar-expand-lg bg-white"
-      :class="{ 'fixed-top shadow-sm': isSticky }"
-    >
+    <nav ref="nav" class="navbar navbar-expand-lg bg-white" :class="{ 'fixed-top shadow-sm': isSticky }">
       <div class="container-fluid">
-        <a class="navbar-brand fw-bold ms-3" href="#">
+        <router-link class="navbar-brand fw-bold ms-3" to="/trang-chu">
           <i class="fa-solid fa-heart text-danger"></i> Smart Blood Donation
-        </a>
+        </router-link>
 
         <!-- toggler mobile -->
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
-              <a class="nav-link active" href="#">Trang chủ</a>
+              <router-link class="nav-link" to="/trang-chu" exact-active-class="active">Trang chủ</router-link>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#">Giới thiệu</a>
+              <router-link class="nav-link" to="/GioiThieu" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#">Đăng ký hiến máu</a>
+              <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
             </li>
             <li class="nav-item mx-3">
               <a class="nav-link" href="#">Đặt lịch</a>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#">Tin tức & chiến dịch</a>
+              <router-link class="nav-link" to="/tintuc" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
 
             <!-- dropdown đúng chuẩn bootstrap -->
             <li class="nav-item dropdown mx-3">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 Mục lục
               </a>
               <ul class="dropdown-menu">
@@ -55,8 +45,8 @@
           </ul>
 
           <div class="d-flex">
-            <a class="btn btn-outline-secondary me-2">Đăng nhập</a>
-            <a class="btn btn-danger">Đăng ký</a>
+            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">Đăng nhập</router-link>
+            <router-link class="btn btn-danger" to="/dang-ky">Đăng ký</router-link>
           </div>
         </div>
       </div>
@@ -106,7 +96,10 @@ export default {
 </script>
 
 <style scoped>
-.navbar { transition: box-shadow .2s ease, padding .2s ease; }
+.navbar {
+  transition: box-shadow .2s ease, padding .2s ease;
+}
+
 /* Có thể thu nhỏ padding khi sticky nếu thích:
 .navbar.fixed-top { padding-top: 8px; padding-bottom: 8px; } */
 </style>

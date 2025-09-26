@@ -31,6 +31,7 @@ const routes = [
         component: () => import("../components/Client/Registerdonateblood/index.vue"),
         meta : {
             layout : "client",
+            
         }
     },
     {
@@ -47,10 +48,24 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
     //blank
     {
-        path: "/LoginAccount",
-        component: () => import("../components/Client/LoginAccount/index.vue"),
+        path: "/dang-nhap",
+        component: () => import("../components/Client/DangNhap/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/dang-ky",
+        component: () => import("../components/Client/Dangky/index.vue"),
         meta : {
             layout : "blank",
         }

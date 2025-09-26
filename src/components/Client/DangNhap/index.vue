@@ -63,22 +63,35 @@
 <script>
 import baseRequestClient from '../../../core/baseRequestClient';
 export default {
-    name : 'LoginClient',
-    data() {
-      return {
-        user : {
-          email     : '',
-          password  : '',
-        },
-        showPassword: false,
-      }
+     name: 'LoginClient',
+  data() {
+    return {
+      user: {
+        email: '',
+        password: '',
+      },
+      showPassword: false,
+    }
     },
-    // mounted() {
-      
-    // },
-    // methods: {
-      
-    // },
+   methods: {
+    async handleLogin() {
+      try {
+        const res = await baseRequestClient.post("/auth/login", this.user);
+        
+        // Lưu token
+        localStorage.setItem("token", res.data.token);
+        
+        alert("Đăng nhập thành công!");
+        console.log("Thông tin user:", res.data);
+
+        // Chuyển hướng về trang chủ
+        this.$router.push("/trang-chu");
+      } catch (err) {
+        console.error("Lỗi đăng nhập:", err);
+        alert(err.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại!");
+      }
+    }
+  }
 }
 </script>
 <style>
