@@ -146,9 +146,7 @@ export default {
           this.$toast.error("Mật khẩu xác nhận không khớp!");
           return;
         }
-
         const res = await axios.post("http://localhost:4000/register", this.form);
-
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đăng ký thành công!");
           this.form = {
@@ -173,4 +171,6 @@ export default {
     }
   }
 };
+
+
 </script>

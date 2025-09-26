@@ -34,6 +34,27 @@ const routes = [
             
         }
     },
+    {
+        path: "/QuenPassword",
+        component: () => import("../components/Client/QuenPassword/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/tintuc",
+        component: () => import("../components/Client/TinTuc/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
     //blank
     {
         path: "/dang-nhap",
