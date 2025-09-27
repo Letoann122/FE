@@ -70,7 +70,7 @@
                 <div class="col-lg-6">
                   <label>Mật khẩu</label>
                   <input v-model="form.password" type="password" class="form-control mt-2"
-                    placeholder="Tối thiểu 8 ký tự" />
+                    placeholder="Tối thiểu 6 ký tự" />
                 </div>
                 <div class="col-lg-6">
                   <label>Xác nhận mật khẩu</label>
@@ -144,7 +144,7 @@ export default {
       try {
         if (this.form.password !== this.form.password_confirmation) {
           this.$toast.error("Mật khẩu xác nhận không khớp!");
-          return;
+          return;``
         }
         const res = await axios.post("http://localhost:4000/register", this.form);
         if (res.data.status) {
