@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-lg-6">
                   <label class="mt-3">Số điện thoại</label>
-                  <input v-model="form.phone" type="number" class="form-control mt-2" placeholder="0123456789" />
+                  <input v-model="form.phone" type="text" class="form-control mt-2" placeholder="0123456789" />
                 </div>
                 <div class="col-lg-12">
                   <label class="mt-3">Email</label>
