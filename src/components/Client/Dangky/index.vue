@@ -43,7 +43,7 @@
                 <div class="col-lg-6">
                   <label>Nhóm máu</label>
                   <select v-model="form.blood_group" class="form-select mt-2">
-                    <option disabled selected>Chọn nhóm máu</option>
+                    <option disabled value="">Chọn nhóm máu</option>
                     <option value="A+">A+</option>
                     <option value="A-">A-</option>
                     <option value="B+">B+</option>
@@ -142,31 +142,24 @@ export default {
   methods: {
     async submitForm() {
       try {
-        if (this.form.password !== this.form.password_confirmation) {
-          this.$toast.error("Mật khẩu xác nhận không khớp!");
-          return;``
-        }
         const res = await axios.post("http://localhost:4000/register", this.form);
+
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đăng ký thành công!");
-          this.form = {
-            full_name: "",
-            birthday: "",
-            gender: "",
-            phone: "",
-            email: "",
-            address: "",
-            blood_group: "",
-            role: "donor",
-            medical_history: "",
-            password: "",
-            password_confirmation: ""
-          };
+          this.form = {}; // reset
         } else {
-          this.$toast.error(res.data.message || "Đăng ký thất bại!");
+          if (Array.isArray(res.data.errors)) {
+            res.data.errors.forEach(msg => this.$toast.error(msg));
+          } else {
+            this.$toast.error(res.data.message || "Đăng ký thất bại!");
+          }
         }
       } catch (err) {
-        this.$toast.error(err.response?.data?.error || "Có lỗi xảy ra!");
+        if (Array.isArray(err.response?.data?.errors)) {
+          err.response.data.errors.forEach(msg => this.$toast.error(msg));
+        } else {
+          this.$toast.error(err.response?.data?.message || "Có lỗi xảy ra!");
+        }
       }
     }
   }
