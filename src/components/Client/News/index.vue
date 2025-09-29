@@ -210,7 +210,7 @@ const Data = [
 .status-active {
   color: red;
   margin-top: 10px;
-  border: 1px solid red;
+  border: 1px solid red;    
   border-radius: 10px;
   background-color: aquamarine;
   width: fit-content;

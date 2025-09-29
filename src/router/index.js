@@ -20,8 +20,8 @@ const routes = [
         }
     },
     {
-        path: "/GioiThieu",
-        component: () => import("../components/Client/GioiThieu/index.vue"),
+        path: "/About",
+        component: () => import("../components/Client/About/index.vue"),
         meta : {
             layout : "client",
         }
@@ -35,15 +35,22 @@ const routes = [
         }
     },
     {
-        path: "/QuenPassword",
-        component: () => import("../components/Client/QuenPassword/index.vue"),
+        path: "/Forgotpassword",
+        component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/tintuc",
-        component: () => import("../components/Client/TinTuc/index.vue"),
+        path: "/News",
+        component: () => import("../components/Client/News/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/Seedetails",
+        component: () => import("../components/Client/Seedetails/index.vue"),
         meta : {
             layout : "client",
         }
