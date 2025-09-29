@@ -6,7 +6,6 @@ import Client from './layout/wrapper/Client/index.vue';
 import Blank from './layout/wrapper/blank.vue';
 import Toaster from "@meforma/vue-toaster";
 import './style.css'
-import './tailwind.css'
 
 const app = createApp(App)
 

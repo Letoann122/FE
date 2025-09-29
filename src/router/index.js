@@ -16,6 +16,14 @@ const routes = [
         meta: {
             layout: "admin"
         }
+      },
+    {
+        path: "/admin/roles",
+        name: "RoleManagement",
+        component: () => import("../components/Admin/RoleManagement.vue"),
+        meta: {
+            layout: "admin"
+        }
       },     
     //bacsi
 

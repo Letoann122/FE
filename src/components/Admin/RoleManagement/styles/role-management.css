@@ -1,0 +1,234 @@
+/* Role Management Styles */
+.rm :is(input, select, button) {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+.rm :is(input, select) {
+  border-color: #d1d5db;
+}
+
+.rm :is(input, select):focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  border-color: #9ca3af;
+}
+
+.search-icon { width: 16px; height: 16px; }
+.avatar { width: 32px; height: 32px; object-fit: cover; }
+
+.bright { filter: saturate(1.2); }
+
+/* Role Cards */
+.role-card .card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-card .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%) !important;
+}
+
+/* Role card colors - Force override */
+.role-card .card-header {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%) !important;
+}
+
+/* Different colors for different role categories - Force override */
+.role-card.medical .card-header {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+  background-color: #dc3545 !important;
+}
+
+.role-card.administrative .card-header {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
+  background-color: #28a745 !important;
+}
+
+.role-card.technical .card-header {
+  background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%) !important;
+  background-color: #6f42c1 !important;
+}
+
+.role-card.support .card-header {
+  background: linear-gradient(135deg, #fd7e14 0%, #e55a00 100%) !important;
+  background-color: #fd7e14 !important;
+}
+
+/* Force override any other background classes */
+.rm .role-card.medical .card-header,
+.rm .role-card.administrative .card-header,
+.rm .role-card.technical .card-header,
+.rm .role-card.support .card-header {
+  background: linear-gradient(135deg, var(--role-color, #0d6efd) 0%, var(--role-color-dark, #0b5ed7) 100%) !important;
+}
+
+.rm .role-card.medical .card-header {
+  --role-color: #dc3545;
+  --role-color-dark: #c82333;
+}
+
+.rm .role-card.administrative .card-header {
+  --role-color: #28a745;
+  --role-color-dark: #1e7e34;
+}
+
+.rm .role-card.technical .card-header {
+  --role-color: #6f42c1;
+  --role-color-dark: #5a32a3;
+}
+
+.rm .role-card.support .card-header {
+  --role-color: #fd7e14;
+  --role-color-dark: #e55a00;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.status-active { 
+  background-color: #d1fae5 !important; 
+  color: #047857 !important; 
+  border-color: #a7f3d0 !important; 
+}
+
+.status-inactive { 
+  background-color: #e5e7eb !important; 
+  color: #374151 !important; 
+  border-color: #d1d5db !important; 
+}
+
+/* Permissions grid */
+.permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 1rem;
+}
+
+.permissions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+/* User list */
+.user-list {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+/* Modal improvements */
+.modal-content {
+  border-radius: 0.75rem;
+  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Button styles */
+.btn {
+  border-radius: 0.5rem;
+  font-weight: 500;
+}
+
+/* Remove any unwanted borders */
+.rm * {
+  border-color: #e5e7eb !important;
+}
+
+.rm .border-bottom {
+  border-color: #e5e7eb !important;
+}
+
+.rm .border-top {
+  border-color: #e5e7eb !important;
+}
+
+/* Force remove all blue colors */
+.rm {
+  background-color: #f8f9fa !important;
+}
+
+.rm .bg-white {
+  background-color: #ffffff !important;
+}
+
+/* Style primary buttons with blue color */
+.rm .btn-primary {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.rm .btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0b5ed7 !important;
+}
+
+/* Style outline primary buttons with blue color */
+.rm .btn-outline-primary {
+  color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.rm .btn-outline-primary:hover {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+
+.rm .text-primary {
+  color: #0d6efd !important;
+}
+
+.rm .border-primary {
+  border-color: #0d6efd !important;
+}
+
+/* Style pagination buttons */
+.rm .btn-outline-secondary {
+  color: #0d6efd !important;
+  border-color: #0d6efd !important;
+}
+
+.rm .btn-outline-secondary:hover {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+}
+
+.rm .btn-outline-secondary:disabled {
+  color: #6c757d !important;
+  border-color: #dee2e6 !important;
+  background-color: transparent !important;
+}
+
+/* Remove any blue focus states */
+.rm input:focus,
+.rm select:focus,
+.rm button:focus {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1) !important;
+  border-color: #9ca3af !important;
+  outline: none !important;
+}
+
+svg {
+  max-width: unset;
+  max-height: unset;
+}

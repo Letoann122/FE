@@ -98,20 +98,20 @@
                         <div class="parent-icon"><i class="fa-solid fa-shield"></i></div>
                         <div class="menu-title">Phân quyền</div>
                     </a>
-                    <!-- <ul class="dropdown-menu">
+                    <ul class="dropdown-menu">
                         <li class="nav-item">
-                            <router-link to="/admin/nhan-vien" class="nav-link">
+                            <router-link to="/admin/users" class="nav-link">
                                 <div class="parent-icon"><i class="bx bx-user"></i></div>
-                                <div class="menu-title">Nhân viên</div>
+                                <div class="menu-title">Quản lý người dùng</div>
                             </router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link to="/admin/phan-quyen" class="nav-link">
+                            <router-link to="/admin/roles" class="nav-link">
                                 <div class="parent-icon"><i class="bx bx-lock"></i></div>
-                                <div class="menu-title">Phân quyền</div>
+                                <div class="menu-title">Quản lý vai trò</div>
                             </router-link>
                         </li>
-                    </ul> -->
+                    </ul>
                 </li>
 
                 <!-- Thống kê & Báo cáo -->
