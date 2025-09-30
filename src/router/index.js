@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router"; // cài vue-router: npm install vue-router@next --save
 const routes = [
-  
+    //redirect trang-chu
+     {
+        path: "/",
+        redirect: "/trang-chu",   
+    },
     //admin
     {
         path: "/admin/trang-chu",
