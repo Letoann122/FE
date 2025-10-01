@@ -56,6 +56,13 @@ const routes = [
         }
     },
     {
+        path: "/Guidehealth",
+        component: () => import("../components/Client/Guidehealth/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
         path: "/RegisterAccount",
         component: () => import("../components/Client/RegisterAccount/index.vue"),
         meta : {
