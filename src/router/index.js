@@ -39,13 +39,6 @@ const routes = [
         }
     },
     {
-        path: "/Forgotpassword",
-        component: () => import("../components/Client/Forgotpassword/index.vue"),
-        meta : {
-            layout : "client",
-        }
-    },
-    {
         path: "/News",
         component: () => import("../components/Client/News/index.vue"),
         meta : {
@@ -66,13 +59,13 @@ const routes = [
             layout : "client",
         }
     },
-    {
-        path: "/RegisterAccount",
-        component: () => import("../components/Client/RegisterAccount/index.vue"),
-        meta : {
-            layout : "client",
-        }
-    },
+    // {
+    //     path: "/RegisterAccount",
+    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
+    //     meta : {
+    //         layout : "client",
+    //     }
+    // },
     //blank
     {
         path: "/dang-nhap",
@@ -84,6 +77,13 @@ const routes = [
     {
         path: "/dang-ky",
         component: () => import("../components/Client/Dangky/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/Forgotpassword",
+        component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {
             layout : "blank",
         }
