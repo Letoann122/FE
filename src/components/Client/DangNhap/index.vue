@@ -31,30 +31,23 @@
               <input type="checkbox"/>
               <label for="rememberMe" class="ms-1">Ghi nhớ đăng nhập</label>
             </div>
-            <a href="#" class="text-danger small">Quên mật khẩu?</a>
+            <router-link to="/Forgotpassword" class="text-danger small">
+              Quên mật khẩu?
+            </router-link>
           </div>
 
           <button type="submit" class="btn btn-danger w-100 mb-3">
             <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
           </button>
-
-          <div class="text-center text-muted mb-3">Hoặc đăng nhập với</div>
-
-          <div class="d-flex justify-content-center gap-3">
-            <button type="button" class="btn btn-outline-dark w-100">
-              <i class="bi bi-google"></i> Google
-            </button>
-            <button type="button" class="btn btn-outline-primary w-100">
-              <i class="bi bi-facebook"></i> Facebook
-            </button>
-          </div>
         </form>
-
         <div class="text-center mt-4">
           <p class="small">
-            Chưa có tài khoản? 
-            <a href="#" class="text-danger fw-bold">Đăng ký ngay</a>
-          </p>
+          Chưa có tài khoản? 
+          <router-link to="/dang-ky" class="text-danger fw-bold">
+            Đăng ký ngay
+          </router-link>
+        </p>
+
         </div>
       </div>
     </div>
