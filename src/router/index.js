@@ -59,6 +59,7 @@ const routes = [
             layout : "client",
         }
     },
+<<<<<<< Updated upstream
     // {
     //     path: "/RegisterAccount",
     //     component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -66,6 +67,22 @@ const routes = [
     //         layout : "client",
     //     }
     // },
+=======
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/profile",
+        component: () => import("../components/Client/profile/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+>>>>>>> Stashed changes
     //blank
     {
         path: "/dang-nhap",
