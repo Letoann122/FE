@@ -209,7 +209,25 @@
 </template>
 
 <script>
-export default {};
+export default {
+    name: "TrangChu",
+    data() {
+    return {
+      news: [],
+      loading: true,
+    };
+  },
+  async created() {
+    try {
+      const res = await baseRequestClient.get("/news"); 
+      this.news = res.data;
+    } catch (err) {
+      console.error("Lỗi tải dữ liệu:", err);
+    } finally {
+      this.loading = false;
+    }
+  },
+};
 </script>
 <style>
 .alert-custom {

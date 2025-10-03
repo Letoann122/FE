@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import TopSBD from "../../components/Client/TopSBD.vue";
-import BotSBD from "../../components/Client/BotSBD.vue";
+import TopSBD from "../../components/Client/Header.vue";
+import BotSBD from "../../components/Client/Footer.vue";
 import "../../../assets/js/bootstrap.bundle.min.js";
 
 export default {

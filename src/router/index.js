@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router"; // cài vue-router: npm install vue-router@next --save
 const routes = [
-  
+    //redirect trang-chu
+     {
+        path: "/",
+        redirect: "/trang-chu",   
+    },
     //admin
     {
         path: "/admin/trang-chu",
@@ -20,8 +24,8 @@ const routes = [
         }
     },
     {
-        path: "/GioiThieu",
-        component: () => import("../components/Client/GioiThieu/index.vue"),
+        path: "/About",
+        component: () => import("../components/Client/About/index.vue"),
         meta : {
             layout : "client",
         }
@@ -31,8 +35,39 @@ const routes = [
         component: () => import("../components/Client/Registerdonateblood/index.vue"),
         meta : {
             layout : "client",
+            
         }
     },
+    {
+        path: "/News",
+        component: () => import("../components/Client/News/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/Seedetails",
+        component: () => import("../components/Client/Seedetails/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/Guidehealth",
+        component: () => import("../components/Client/Guidehealth/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+<<<<<<< Updated upstream
+    // {
+    //     path: "/RegisterAccount",
+    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
+    //     meta : {
+    //         layout : "client",
+    //     }
+    // },
+=======
     {
         path: "/RegisterAccount",
         component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -40,10 +75,32 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/profile",
+        component: () => import("../components/Client/profile/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+>>>>>>> Stashed changes
     //blank
     {
-        path: "/LoginAccount",
-        component: () => import("../components/Client/LoginAccount/index.vue"),
+        path: "/dang-nhap",
+        component: () => import("../components/Client/DangNhap/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/dang-ky",
+        component: () => import("../components/Client/Dangky/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/Forgotpassword",
+        component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {
             layout : "blank",
         }
