@@ -59,7 +59,6 @@ const routes = [
             layout : "client",
         }
     },
-<<<<<<< Updated upstream
     // {
     //     path: "/RegisterAccount",
     //     component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -67,7 +66,11 @@ const routes = [
     //         layout : "client",
     //     }
     // },
-=======
+    
+
+
+
+
     {
         path: "/RegisterAccount",
         component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -82,7 +85,6 @@ const routes = [
             layout : "client",
         }
     },
->>>>>>> Stashed changes
     //blank
     {
         path: "/dang-nhap",
@@ -101,6 +103,13 @@ const routes = [
     {
         path: "/Forgotpassword",
         component: () => import("../components/Client/Forgotpassword/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/doi-mat-khau",
+        component: () => import("../components/Client/DoiMatKhau/index.vue"),
         meta : {
             layout : "blank",
         }
