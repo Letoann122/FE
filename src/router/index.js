@@ -67,7 +67,6 @@ const routes = [
     //         layout : "client",
     //     }
     // },
-
     {
         path: "/RegisterAccount",
         component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -85,6 +84,13 @@ const routes = [
     {
         path: "/blooddonationhistory",
         component: () => import("../components/Client/blooddonationhistory/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/accountsecurity",
+        component: () => import("../components/Client/accountsecurity/index.vue"),
         meta : {
             layout : "client",
         }
@@ -108,6 +114,13 @@ const routes = [
     {
         path: "/Forgotpassword",
         component: () => import("../components/Client/Forgotpassword/index.vue"),
+        meta : {
+            layout : "blank",
+        }
+    },
+    {
+        path: "/doi-mat-khau",
+        component: () => import("../components/Client/DoiMatKhau/index.vue"),
         meta : {
             layout : "blank",
         }
