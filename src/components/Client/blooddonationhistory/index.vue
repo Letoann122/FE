@@ -62,7 +62,6 @@
         </div>
 
         <div class="container my-4">
-         
           <div class="card p-3 mb-4 shadow-sm border-0 rounded-4">
             <div class="row g-2 align-items-center">
               <div class="col-md-2">
@@ -89,44 +88,48 @@
                 />
               </div>
               <div class="col-md-2 text-end">
-                <button class="btn btn-danger" style="height: 40px; width: 200px;">
+                <button
+                  class="btn btn-danger"
+                  style="height: 40px; width: 200px"
+                >
                   <i class="bi bi-download me-2"></i>Xuất dữ liệu
                 </button>
               </div>
             </div>
           </div>
+        </div>
 
-        
-          <div class="card shadow-sm border-0 rounded-4">
-            <div class="table-responsive">
-              <table class="table align-middle mb-0 w-100">
-                <thead class="table-light ">
-                  <tr>
-                    <th><i class="bi bi-calendar3 me-2"></i>Ngày hiến</th>
-                    <th><i class="bi bi-geo-alt me-2 "></i>Địa điểm</th>
-                    <th><i class="bi bi-droplet me-2 "></i>Số lượng máu</th>
-                    <th><i class="bi bi-chat-square-text me-2 "></i>Ghi chú</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in donations" :key="index">
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.location }}</td>
-                    <td>
-                      <span
-                        class="badge bg-light text-danger fw-semibold px-3 py-2"
-                      >
-                        {{ item.amount }}
-                      </span>
-                    </td>
-                    <td>{{ item.note }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="bottom-info">
-              Hiển thị 1 đến 4 của {{ donations.length }} kết quả
-            </div>
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th><i class="bi bi-calendar3 me-2"></i>Ngày hiến</th>
+                  <th><i class="bi bi-geo-alt me-2"></i>Địa điểm</th>
+                  <th><i class="bi bi-droplet me-2"></i>Số lượng máu</th>
+                  <th><i class="bi bi-chat-square-text me-2"></i>Ghi chú</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr v-for="(item, index) in donations" :key="index">
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.location }}</td>
+                  <td>
+                    <span
+                      class="badge bg-light text-danger fw-semibold px-3 py-2"
+                    >
+                      {{ item.amount }}
+                    </span>
+                  </td>
+                  <td>{{ item.note }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 text-muted small">
+            Hiển thị 1 đến 4 của {{ donations.length }} kết quả
           </div>
         </div>
       </div>
@@ -145,7 +148,11 @@ export default {
           icon: "bi bi-arrow-counterclockwise",
           active: true,
         },
-        { label: "Bảo mật tài khoản", icon: "bi bi-shield-shaded", active: false },
+        {
+          label: "Bảo mật tài khoản",
+          icon: "bi bi-shield-shaded",
+          active: false,
+        },
       ],
       stats: [
         {
@@ -212,21 +219,33 @@ export default {
 }
 
 .card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  position: relative;
+  background-color: #fff;
+  border-radius: 12px;
 }
 
-.table td,
+.table {
+  margin-bottom: 0;
+}
+
 .table th {
+  font-weight: 600;
+  color: #333;
   vertical-align: middle;
 }
-.card {
-  background-color: #fff;
+
+.table td {
+  vertical-align: middle;
+  color: #444;
 }
+
 .badge {
-  border-radius: 10px;
+  background-color: rgba(255, 99, 132, 0.1);
+  color: #dc3545;
+  border-radius: 12px;
+}
+
+.table-light {
+  background-color: #f9fafb !important;
 }
 
 .card .bottom-info {
