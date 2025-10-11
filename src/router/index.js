@@ -95,6 +95,13 @@ const routes = [
             layout : "client",
         }
     },
+    {
+        path: "/Register_blooddonation",
+        component: () => import("../components/Client/Register_blooddonation/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
 
     //blank
     {
