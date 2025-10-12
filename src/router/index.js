@@ -24,6 +24,14 @@ const routes = [
         meta: {
             layout: "admin"
         }
+      },
+    {
+        path: "/admin/content",
+        name: "ContentManagement",
+        component: () => import("../components/Admin/ContentManagement.vue"),
+        meta: {
+            layout: "admin"
+        }
       },     
     //bacsi
 

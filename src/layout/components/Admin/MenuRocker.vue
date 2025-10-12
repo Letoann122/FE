@@ -75,14 +75,28 @@
                     </ul> -->
                 </li>
 
-                <!-- Quản lý Dịch vụ -->
+                <!-- Quản lý Nội dung -->
                 <li class="nav-item dropdown">
-                    <router-link to="/admin/chuyen-khoa" class="nav-link">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
                         <div class="menu-title">Nội dung & tin tức</div>
-                    </router-link>
-                                    
-                    </li>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <router-link to="/admin/content" class="nav-link">
+                                <div class="parent-icon"><i class="bx bx-edit"></i></div>
+                                <div class="menu-title">Quản lý nội dung</div>
+                            </router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link to="/admin/chuyen-khoa" class="nav-link">
+                                <div class="parent-icon"><i class="bx bx-category"></i></div>
+                                <div class="menu-title">Danh mục</div>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
                  <!-- Quản lý Phòng khám -->
                  <!-- <li class="nav-item">
                     <router-link to="/admin/phong-kham" class="nav-link">

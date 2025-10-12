@@ -90,3 +90,56 @@ button:focus-visible {
   padding: 2rem;
   text-align: center;
 }
+
+/* Global checkbox styles - Force light appearance with highest specificity */
+html body #app input[type="checkbox"],
+html body #app input[type="checkbox"].checkbox-input,
+html body #app input[type="checkbox"].custom-checkbox,
+html body #app input[type="checkbox"].form-check-input {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: white !important;
+  background-color: white !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 0.25rem !important;
+  width: 16px !important;
+  height: 16px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html body #app input[type="checkbox"]:checked,
+html body #app input[type="checkbox"].checkbox-input:checked,
+html body #app input[type="checkbox"].custom-checkbox:checked,
+html body #app input[type="checkbox"].form-check-input:checked {
+  background: #dc2626 !important;
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+
+html body #app input[type="checkbox"]:checked::after,
+html body #app input[type="checkbox"].checkbox-input:checked::after,
+html body #app input[type="checkbox"].custom-checkbox:checked::after,
+html body #app input[type="checkbox"].form-check-input:checked::after {
+  content: "✓" !important;
+  color: white !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.status-active { background-color:#d1fae5 !important; color:#047857 !important; border-color:#a7f3d0 !important; }
+.status-inactive { background-color:#e5e7eb !important; color:#374151 !important; border-color:#d1d5db !important; }
+.status-banned { background-color:#fee2e2 !important; color:#b91c1c !important; border-color:#fecaca !important; }
+.status-pending { background-color:#dbeafe !important; color:#1e40af !important; border-color:#bfdbfe !important; }
+.status-suspended { background-color:#ffedd5 !important; color:#c2410c !important; border-color:#fed7aa !important; }

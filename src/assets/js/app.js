@@ -36,7 +36,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const searchIcon = document.querySelector(".mobile-search-icon");
     if (searchIcon) {
         searchIcon.addEventListener("click", function () {
-            addClass(document.querySelector(".search-bar"), "full-search-bar");
+            const searchBar = document.querySelector(".search-bar");
+            if (searchBar) {
+                addClass(searchBar, "full-search-bar");
+            }
         });
     }
 
@@ -44,7 +47,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const searchClose = document.querySelector(".search-close");
     if (searchClose) {
         searchClose.addEventListener("click", function () {
-            removeClass(document.querySelector(".search-bar"), "full-search-bar");
+            const searchBar = document.querySelector(".search-bar");
+            if (searchBar) {
+                removeClass(searchBar, "full-search-bar");
+            }
         });
     }
 
@@ -52,7 +58,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const mobileToggleMenu = document.querySelector(".mobile-toggle-menu");
     if (mobileToggleMenu) {
         mobileToggleMenu.addEventListener("click", function () {
-            addClass(document.querySelector(".wrapper"), "toggled");
+            const wrapper = document.querySelector(".wrapper");
+            if (wrapper) {
+                addClass(wrapper, "toggled");
+            }
         });
     }
 
@@ -66,22 +75,28 @@ document.addEventListener("DOMContentLoaded", function() {
                 // document.querySelector(".sidebar-wrapper").onmouseenter = null;
             } else {
                 addClass(wrapper, "toggled");
-                document.querySelector(".sidebar-wrapper").onmouseenter = function () {
-                    addClass(wrapper, "sidebar-hovered");
-                };
-                document.querySelector(".sidebar-wrapper").onmouseleave = function () {
-                    removeClass(wrapper, "sidebar-hovered");
-                };
+                const sidebarWrapper = document.querySelector(".sidebar-wrapper");
+                if (sidebarWrapper) {
+                    sidebarWrapper.onmouseenter = function () {
+                        addClass(wrapper, "sidebar-hovered");
+                    };
+                    sidebarWrapper.onmouseleave = function () {
+                        removeClass(wrapper, "sidebar-hovered");
+                    };
+                }
             }
         });
     }
 
     // Tạo sự kiện scroll cho window để hiển thị nút back-to-top
     window.addEventListener("scroll", function () {
-        if (window.pageYOffset > 300) {
-            document.querySelector('.back-to-top').style.display = "block";
-        } else {
-            document.querySelector('.back-to-top').style.display = "none";
+        const backToTopBtn = document.querySelector('.back-to-top');
+        if (backToTopBtn) {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
         }
     });
 
@@ -97,7 +112,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatToggleBtn = document.querySelector(".chat-toggle-btn");
     if (chatToggleBtn) {
         chatToggleBtn.addEventListener("click", function () {
-            document.querySelector(".chat-wrapper").classList.toggle("chat-toggled");
+            const chatWrapper = document.querySelector(".chat-wrapper");
+            if (chatWrapper) {
+                chatWrapper.classList.toggle("chat-toggled");
+            }
         });
     }
 
@@ -105,7 +123,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const chatToggleBtnMobile = document.querySelector(".chat-toggle-btn-mobile");
     if (chatToggleBtnMobile) {
         chatToggleBtnMobile.addEventListener("click", function () {
-            document.querySelector(".chat-wrapper").classList.remove("chat-toggled");
+            const chatWrapper = document.querySelector(".chat-wrapper");
+            if (chatWrapper) {
+                chatWrapper.classList.remove("chat-toggled");
+            }
         });
     }
 
@@ -113,7 +134,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const emailToggleBtn = document.querySelector(".email-toggle-btn");
     if (emailToggleBtn) {
         emailToggleBtn.addEventListener("click", function () {
-            document.querySelector(".email-wrapper").classList.toggle("email-toggled");
+            const emailWrapper = document.querySelector(".email-wrapper");
+            if (emailWrapper) {
+                emailWrapper.classList.toggle("email-toggled");
+            }
         });
     }
 
@@ -121,7 +145,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const emailToggleBtnMobile = document.querySelector(".email-toggle-btn-mobile");
     if (emailToggleBtnMobile) {
         emailToggleBtnMobile.addEventListener("click", function () {
-            document.querySelector(".email-wrapper").classList.remove("email-toggled");
+            const emailWrapper = document.querySelector(".email-wrapper");
+            if (emailWrapper) {
+                emailWrapper.classList.remove("email-toggled");
+            }
         });
     }
 
@@ -129,7 +156,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const composeMailBtn = document.querySelector(".compose-mail-btn");
     if (composeMailBtn) {
         composeMailBtn.addEventListener("click", function () {
-            document.querySelector(".compose-mail-popup").style.display = "block";
+            const composeMailPopup = document.querySelector(".compose-mail-popup");
+            if (composeMailPopup) {
+                composeMailPopup.style.display = "block";
+            }
         });
     }
 
@@ -137,7 +167,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const composeMailClose = document.querySelector(".compose-mail-close");
     if (composeMailClose) {
         composeMailClose.addEventListener("click", function () {
-            document.querySelector(".compose-mail-popup").style.display = "none";
+            const composeMailPopup = document.querySelector(".compose-mail-popup");
+            if (composeMailPopup) {
+                composeMailPopup.style.display = "none";
+            }
         });
     }
 
@@ -145,7 +178,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const switcherBtn = document.querySelector(".switcher-btn");
     if (switcherBtn) {
         switcherBtn.addEventListener("click", function () {
-            document.querySelector(".switcher-wrapper").classList.toggle("switcher-toggled");
+            const switcherWrapper = document.querySelector(".switcher-wrapper");
+            if (switcherWrapper) {
+                switcherWrapper.classList.toggle("switcher-toggled");
+            }
         });
     }
 
@@ -153,7 +189,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const closeSwitcher = document.querySelector(".close-switcher");
     if (closeSwitcher) {
         closeSwitcher.addEventListener("click", function () {
-            document.querySelector(".switcher-wrapper").classList.remove("switcher-toggled");
+            const switcherWrapper = document.querySelector(".switcher-wrapper");
+            if (switcherWrapper) {
+                switcherWrapper.classList.remove("switcher-toggled");
+            }
         });
     }
 

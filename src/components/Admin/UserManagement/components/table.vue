@@ -108,7 +108,6 @@ const toggleUserSelection = (userId, isSelected) => {
   emit('update:selected-users', currentSelected)
 }
 
-// trả về class cho status
 const statusClassName = (status) => {
   if (status === 'Active') {
     return 'status-active'
@@ -125,7 +124,6 @@ const statusClassName = (status) => {
   }
 }
 
-// chuyển đổi status sang tiếng Việt
 const getStatusText = (status) => {
   if (status === 'Active') {
     return 'Hoạt động'
