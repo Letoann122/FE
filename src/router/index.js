@@ -59,6 +59,7 @@ const routes = [
             layout : "client",
         }
     },
+
     // {
     //     path: "/RegisterAccount",
     //     component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -66,6 +67,41 @@ const routes = [
     //         layout : "client",
     //     }
     // },
+    {
+        path: "/RegisterAccount",
+        component: () => import("../components/Client/RegisterAccount/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/profile",
+        component: () => import("../components/Client/profile/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/blooddonationhistory",
+        component: () => import("../components/Client/blooddonationhistory/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/accountsecurity",
+        component: () => import("../components/Client/accountsecurity/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/Register_blooddonation",
+        component: () => import("../components/Client/Register_blooddonation/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
 
     //blank
     {
