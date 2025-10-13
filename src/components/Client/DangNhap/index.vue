@@ -19,7 +19,7 @@
         </div>
         <form @submit.prevent="handleLogin">
           <div class="mb-3">
-            <label class="form-label">Email hoặc số điện thoại</label>
+            <label class="form-label">Email</label>
             <input type="text" class="form-control"/>
           </div>
           <div class="mb-3">

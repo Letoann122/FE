@@ -18,16 +18,16 @@
               <router-link class="nav-link" to="/trang-chu" exact-active-class="active">Trang chủ</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/GioiThieu" exact-active-class="active">Giới thiệu</router-link>
+              <router-link class="nav-link" to="/About" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#">Đặt lịch</a>
+              <router-link class="nav-link" to="/Register_blooddonation" exact-active-class="active">Đặt lịch</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/tintuc" exact-active-class="active">Tin tức & chiến dịch</router-link>
+              <router-link class="nav-link" to="/News" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
 
             <!-- dropdown đúng chuẩn bootstrap -->
