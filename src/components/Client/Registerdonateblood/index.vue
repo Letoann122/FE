@@ -13,17 +13,17 @@
           <form @submit.prevent="handleSubmit">
             <div class="mb-3">
               <label class="form-label">Họ và tên</label>
-              <input type="text" class="form-control" v-model="form.fullName" required />
+              <input type="text" class="form-control"   />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Ngày sinh</label>
-              <input type="date" class="form-control" v-model="form.dob" required />
+              <input type="date" class="form-control"   />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Giới tính</label>
-              <select class="form-select" v-model="form.gender" required>
+              <select class="form-select"  >
                 <option value="">-- Chọn giới tính --</option>
                 <option>Nam</option>
                 <option>Nữ</option>
@@ -32,22 +32,22 @@
 
             <div class="mb-3">
               <label class="form-label">Số điện thoại</label>
-              <input type="text" class="form-control" v-model="form.phone" required />
+              <input type="text" class="form-control"   />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Email</label>
-              <input type="email" class="form-control" v-model="form.email" required />
+              <input type="email" class="form-control"   />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Địa chỉ</label>
-              <input type="text" class="form-control" v-model="form.address" />
+              <input type="text" class="form-control"  />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Nhóm máu</label>
-              <select class="form-select" v-model="form.bloodGroup" required>
+              <select class="form-select"  >
                 <option value="">-- Chọn nhóm máu --</option>
                 <option>A</option>
                 <option>B</option>
@@ -58,12 +58,12 @@
 
             <div class="mb-3">
               <label class="form-label">Tiền sử bệnh lý</label>
-              <textarea class="form-control" rows="2" v-model="form.medicalHistory"></textarea>
+              <textarea class="form-control" rows="2" ></textarea>
             </div>
 
-            <div class="d-flex justify-content-between">
-              <button type="submit" class="btn btn-danger">Đăng ký</button>
-              <button type="reset" class="btn btn-secondary">Hủy</button>
+            <div class="group-input text-end">
+              <button class="btn btn-danger">Đăng Ký</button>
+              <button class="btn btn-secondary ms-2">Huỷ</button>
             </div>
           </form>
         </div>
@@ -89,23 +89,7 @@
   </div>
 </template>
 
-<script setup>
-import { reactive } from "vue";
-
-const form = reactive({
-  fullName: "",
-  dob: "",
-  gender: "",
-  phone: "",
-  email: "",
-  address: "",
-  bloodGroup: "",
-  medicalHistory: ""
-});
-
-function handleSubmit() {
-  alert(`Cảm ơn ${form.fullName}, bạn đã đăng ký hiến máu thành công!`);
-}
+<script>
 </script>
 
 <style scoped>

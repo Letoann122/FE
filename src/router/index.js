@@ -66,10 +66,6 @@ const routes = [
     //         layout : "client",
     //     }
     // },
-    
-
-
-
 
     //blank
     {
@@ -87,7 +83,7 @@ const routes = [
         }
     },
     {
-        path: "/Forgotpassword",
+        path: "/quen-mat-khau",
         component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {
             layout : "blank",

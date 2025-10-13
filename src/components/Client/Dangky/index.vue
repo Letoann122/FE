@@ -9,15 +9,15 @@
               <p>Tham gia cộng đồng hiến máu cứu người</p>
               <div class="row">
                 <div class="col-lg-6">
-                  <label>Họ và tên</label>
+                  <label>Họ và tên <span class="text-danger">*</span></label>
                   <input v-model="form.full_name" type="text" class="form-control mt-2" placeholder="Nhập họ và tên" />
                 </div>
                 <div class="col-lg-6">
-                  <label>Ngày sinh</label>
+                  <label>Ngày sinh <span class="text-danger">*</span></label>
                   <input v-model="form.birthday" type="date" class="form-control mt-2" />
                 </div>
                 <div class="col-lg-6">
-                  <label class="mt-3">Giới tính</label>
+                  <label class="mt-3">Giới tính <span class="text-danger">*</span></label>
                   <select v-model="form.gender" class="form-select mt-2">
                     <option disabled selected>Chọn giới tính</option>
                     <option>Nam</option>
@@ -26,22 +26,22 @@
                   </select>
                 </div>
                 <div class="col-lg-6">
-                  <label class="mt-3">Số điện thoại</label>
+                  <label class="mt-3">Số điện thoại <span class="text-danger">*</span></label>
                   <input v-model="form.phone" type="text" class="form-control mt-2" placeholder="0123456789" />
                 </div>
                 <div class="col-lg-12">
-                  <label class="mt-3">Email</label>
+                  <label class="mt-3">Email <span class="text-danger">*</span></label>
                   <input v-model="form.email" type="email" class="form-control mt-2" placeholder="example@gmail.com" />
                 </div>
                 <div class="col-lg-12">
-                  <label class="mt-3">Địa chỉ</label>
+                  <label class="mt-3">Địa chỉ <span class="text-danger">*</span></label>
                   <input v-model="form.address" type="text" class="form-control mt-2"
                     placeholder="Nhập địa chỉ của bạn" />
                 </div>
               </div>
               <div class="row mt-3">
                 <div class="col-lg-6">
-                  <label>Nhóm máu</label>
+                  <label>Nhóm máu <span class="text-danger">*</span></label>
                   <select v-model="form.blood_group" class="form-select mt-2">
                     <option disabled value="">Chọn nhóm máu</option>
                     <option value="A+">A+</option>
@@ -55,7 +55,7 @@
                   </select>
                 </div>
                 <div class="col-lg-6">
-                  <label>Vai trò</label>
+                  <label>Vai trò <span class="text-danger">*</span></label>
                   <select v-model="form.role" class="form-select mt-2">
                     <option value="donor">Người hiến máu</option>
                   </select>
@@ -68,12 +68,12 @@
               </div>
               <div class="row mt-3">
                 <div class="col-lg-6">
-                  <label>Mật khẩu</label>
+                  <label>Mật khẩu <span class="text-danger">*</span></label>
                   <input v-model="form.password" type="password" class="form-control mt-2"
                     placeholder="Tối thiểu 6 ký tự" />
                 </div>
                 <div class="col-lg-6">
-                  <label>Xác nhận mật khẩu</label>
+                  <label>Xác nhận mật khẩu <span class="text-danger">*</span></label>
                   <input v-model="form.password_confirmation" type="password" class="form-control mt-2"
                     placeholder="Nhập lại mật khẩu" />
                 </div>
@@ -117,6 +117,7 @@
   </div>
 </template>
 
+
 <script>
 import axios from "axios";
 
@@ -146,7 +147,7 @@ export default {
 
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đăng ký thành công!");
-          this.form = {}; // reset
+          this.form = {};
         } else {
           if (Array.isArray(res.data.errors)) {
             res.data.errors.forEach(msg => this.$toast.error(msg));
