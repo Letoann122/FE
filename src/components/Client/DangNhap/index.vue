@@ -19,7 +19,7 @@
         </div>
         <form @submit.prevent="handleLogin">
           <div class="mb-3">
-            <label class="form-label">Email hoặc số điện thoại</label>
+            <label class="form-label">Email</label>
             <input type="text" class="form-control"/>
           </div>
           <div class="mb-3">
@@ -31,11 +31,10 @@
               <input type="checkbox"/>
               <label for="rememberMe" class="ms-1">Ghi nhớ đăng nhập</label>
             </div>
-            <router-link to="/Forgotpassword" class="text-danger small">
+            <router-link to="/quen-mat-khau" class="text-danger small">
               Quên mật khẩu?
             </router-link>
           </div>
-
           <button type="submit" class="btn btn-danger w-100 mb-3">
             <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
           </button>
@@ -47,7 +46,6 @@
             Đăng ký ngay
           </router-link>
         </p>
-
         </div>
       </div>
     </div>
@@ -70,14 +68,9 @@ export default {
     async handleLogin() {
       try {
         const res = await baseRequestClient.post("/auth/login", this.user);
-        
-        // Lưu token
         localStorage.setItem("token", res.data.token);
-        
         alert("Đăng nhập thành công!");
         console.log("Thông tin user:", res.data);
-
-        // Chuyển hướng về trang chủ
         this.$router.push("/trang-chu");
       } catch (err) {
         console.error("Lỗi đăng nhập:", err);
