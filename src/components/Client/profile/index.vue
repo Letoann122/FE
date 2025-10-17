@@ -108,11 +108,12 @@
               </div>
               <div class="col-md-12">
                 <label class="form-label">Tiền sử y tế</label>
-                <input
+                <textarea
                   type="text"
                   class="form-control"
                   placeholder="Không có tiền sử bệnh lý đặc biệt"
-                />
+                  rows="4"
+                ></textarea>
               </div>
 
               <div class="col-md-12">

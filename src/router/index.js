@@ -24,14 +24,14 @@ const routes = [
         }
     },
     {
-        path: "/About",
+        path: "/about",
         component: () => import("../components/Client/About/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/Register",
+        path: "/register",
         component: () => import("../components/Client/Registerdonateblood/index.vue"),
         meta : {
             layout : "client",
@@ -39,21 +39,21 @@ const routes = [
         }
     },
     {
-        path: "/News",
+        path: "/news",
         component: () => import("../components/Client/News/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/Seedetails",
+        path: "/see-details",
         component: () => import("../components/Client/Seedetails/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/Guidehealth",
+        path: "/guide-health",
         component: () => import("../components/Client/Guidehealth/index.vue"),
         meta : {
             layout : "client",
@@ -66,9 +66,9 @@ const routes = [
     //     meta : {
     //         layout : "client",
     //     }
-    // },
+    // },       
     {
-        path: "/RegisterAccount",
+        path: "/register-account",
         component: () => import("../components/Client/RegisterAccount/index.vue"),
         meta : {
             layout : "client",
@@ -82,22 +82,36 @@ const routes = [
         }
     },
     {
-        path: "/blooddonationhistory",
+        path: "/blood-donation-history",
         component: () => import("../components/Client/blooddonationhistory/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/accountsecurity",
+        path: "/account-security",
         component: () => import("../components/Client/accountsecurity/index.vue"),
         meta : {
             layout : "client",
         }
     },
     {
-        path: "/Register_blooddonation",
+        path: "/register-blooddonation",
         component: () => import("../components/Client/Register_blooddonation/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/:pathMatch(.*)*",
+        component: () => import("../components/Client/not-found/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
+    {
+        path: "/notification",
+        component: () => import("../components/Client/notification/index.vue"),
         meta : {
             layout : "client",
         }
@@ -119,7 +133,7 @@ const routes = [
         }
     },
     {
-        path: "/Forgotpassword",
+        path: "/forgot-password",
         component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {
             layout : "blank",
