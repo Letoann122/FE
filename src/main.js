@@ -6,8 +6,7 @@ import Client from './layout/wrapper/Client/index.vue';
 import Blank from './layout/wrapper/blank.vue';
 import Hospital from './layout/wrapper/Hospital/index.vue';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 import Toaster from "@meforma/vue-toaster";
 

@@ -4,7 +4,7 @@
 
         <main class="main-content">
             <div class="container-fluid py-4 px-lg-5"> 
-                <slot />
+                <slot></slot>
             </div>
         </main>
         
