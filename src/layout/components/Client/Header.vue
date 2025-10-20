@@ -30,7 +30,6 @@
               <router-link class="nav-link" to="/News" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
 
-            <!-- dropdown đúng chuẩn bootstrap -->
             <li class="nav-item dropdown mx-3">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -52,7 +51,6 @@
       </div>
     </nav>
 
-    <!-- spacer: xuất hiện khi navbar chuyển sang fixed-top để tránh giật layout -->
     <div v-show="isSticky" :style="{ height: navHeight + 'px' }"></div>
   </div>
 </template>
@@ -64,7 +62,7 @@ export default {
     return {
       isSticky: false,
       navHeight: 0,
-      stickyOffset: 10, // cuộn > 10px thì dính top (bạn đổi số này nếu muốn)
+      stickyOffset: 10, 
     };
   },
   mounted() {
@@ -87,7 +85,6 @@ export default {
     },
   },
   watch: {
-    // khi đổi route, đo lại chiều cao navbar
     "$route.fullPath"() {
       this.$nextTick(this.measure);
     },
@@ -100,6 +97,4 @@ export default {
   transition: box-shadow .2s ease, padding .2s ease;
 }
 
-/* Có thể thu nhỏ padding khi sticky nếu thích:
-.navbar.fixed-top { padding-top: 8px; padding-bottom: 8px; } */
 </style>
