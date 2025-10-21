@@ -20,11 +20,11 @@
         <form @submit.prevent="handleLogin">
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="text" class="form-control"/>
+            <input type="text" class="form-control" v-model="user.email" placeholder="Nhập email của bạn" />
           </div>
           <div class="mb-3">
             <label class="form-label">Mật khẩu</label>
-            <input type="password" class="form-control" />
+            <input type="password" class="form-control" v-model="user.password" placeholder="Nhập mật khẩu"/>
           </div>
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
@@ -52,7 +52,8 @@
   </div>
 </template>
 <script>
-import baseRequestClient from '../../../core/baseRequestClient';
+import axios from 'axios';
+// import baseRequestClient from '../../../core/baseRequestClient';
 export default {
      name: 'LoginClient',
   data() {
@@ -61,19 +62,26 @@ export default {
         email: '',
         password: '',
       },
-      showPassword: false,
+      // showPassword: false,
     }
     },
    methods: {
     async handleLogin() {
       try {
-        const res = await baseRequestClient.post("/auth/login", this.user);
-        localStorage.setItem("token", res.data.token);
-        alert("Đăng nhập thành công!");
-        console.log("Thông tin user:", res.data);
-        this.$router.push("/trang-chu");
+console.log("📤 Gửi dữ liệu:", this.user);
+
+
+        const res = await axios.post("http://localhost:4000/login", this.user);
+          if (res.data.status) {
+          localStorage.setItem("token", res.data.data.token);
+          alert(" Đăng nhập thành công!");
+          console.log("Thông tin user:", res.data.data);
+          this.$router.push("/trang-chu");
+        } else {
+          alert(res.data.message || "Đăng nhập thất bại, vui lòng thử lại!");
+        }
       } catch (err) {
-        console.error("Lỗi đăng nhập:", err);
+        console.error(" Lỗi đăng nhập:", err);
         alert(err.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại!");
       }
     }
