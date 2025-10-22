@@ -111,7 +111,7 @@ export default {
         return;
       }
       try {
-        const res = await baseRequestClient.get("/auth/profile");
+        const res = await baseRequestClient.get("/profile");
         if (res.data.status) {
           this.isLoggedIn = true;
           this.user = res.data.data;
@@ -127,7 +127,7 @@ export default {
     },
     async logout() {
       try {
-        await baseRequestClient.get("/auth/logout");
+        await baseRequestClient.get("/logout");
         localStorage.clear();
         this.isLoggedIn = false;
         toast.success("Đăng xuất thành công!");

@@ -1,29 +1,40 @@
 <template>
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
     <div class="row align-items-center shadow rounded overflow-hidden bg-white">
+      <!-- Cột bên trái -->
       <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center p-5"
         style="background-color: #fdf2f2">
-        <img src="../../../assets/img/traitim.png" alt="Blood Donation" class="img-fluid mb-4"
-          style="max-width: 500px" />
+        <img
+          src="../../../assets/img/traitim.png"
+          alt="Blood Donation"
+          class="img-fluid mb-4"
+          style="max-width: 500px"
+        />
         <h3 class="fw-bold text-danger">Smart Blood Donation System</h3>
-        <p class="text-muted">Kết nối những trái tim nhân ái, cứu sống những cuộc đời.</p>
+        <p class="text-muted">
+          Kết nối những trái tim nhân ái, cứu sống những cuộc đời.
+        </p>
       </div>
+
+      <!-- Cột bên phải -->
       <div class="col-md-6 bg-white p-5">
         <div class="text-center mb-4">
           <i class="bi bi-heart-fill text-danger fs-2"></i>
           <h4 class="fw-bold mt-2">Đăng nhập</h4>
           <p class="text-muted">Chào mừng bạn trở lại với SBDS</p>
         </div>
+
         <form @submit.prevent="handleLogin" novalidate>
           <div class="mb-3">
             <label class="form-label">Email</label>
             <input
               v-model="user.email"
-              type="text"
+              type="email"
               class="form-control"
               placeholder="Nhập email của bạn"
             />
           </div>
+
           <div class="mb-3">
             <label class="form-label">Mật khẩu</label>
             <input
@@ -33,6 +44,7 @@
               placeholder="Nhập mật khẩu"
             />
           </div>
+
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
               <input type="checkbox" v-model="showPassword" id="showPassword" />
@@ -42,10 +54,12 @@
               Quên mật khẩu?
             </router-link>
           </div>
+
           <button type="submit" class="btn btn-danger w-100 mb-3">
             <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
           </button>
         </form>
+
         <div class="text-center mt-4">
           <p class="small">
             Chưa có tài khoản?
@@ -75,20 +89,28 @@ export default {
   },
   methods: {
     async handleLogin() {
+      // Kiểm tra form rỗng
       if (!this.user.email || !this.user.password) {
         this.$toast.error("Vui lòng nhập đầy đủ email và mật khẩu!");
         return;
       }
-      if (!this.user.email.includes("@gmail.com")) {
+
+      // Kiểm tra định dạng email
+      if (!this.user.email.includes("@")) {
         this.$toast.error("Địa chỉ email không hợp lệ!");
         return;
       }
+
       try {
-        const res = await baseRequestClient.post("/auth/login", this.user);
+        // ✅ Gọi API mới (đúng route `/api/login`)
+        const res = await baseRequestClient.post("/login", this.user);
+
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đăng nhập thành công!");
           localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("user", JSON.stringify(res.data.data));
+
+          // Điều hướng sang trang chủ
           this.$router.push("/trang-chu");
         } else {
           this.$toast.error(res.data.message || "Đăng nhập thất bại!");
