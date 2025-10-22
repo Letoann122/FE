@@ -113,7 +113,7 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const res = await axios.post("http://localhost:4000/register", this.form);
+        const res = await axios.post("http://localhost:4000/api/register", this.form);
 
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đăng ký thành công!");
