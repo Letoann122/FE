@@ -1,35 +1,42 @@
 <template>
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center">
     <div class="row align-items-center shadow rounded overflow-hidden bg-white">
-      <!-- Giới thiệu bên trái -->
-      <div class="col-md-6  d-flex flex-column align-items-center justify-content-center text-center p-5" style="background-color: #fdf2f2;">
-        <img src="../../../assets/img/traitim.png" 
-             alt="Blood Donation" class="img-fluid mb-4" style="max-width: 500px;" />
+      <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center p-5"
+        style="background-color: #fdf2f2">
+        <img src="../../../assets/img/traitim.png" alt="Blood Donation" class="img-fluid mb-4"
+          style="max-width: 500px" />
         <h3 class="fw-bold text-danger">Smart Blood Donation System</h3>
-        <p class="text-muted">
-          Kết nối những trái tim nhân ái, cứu sống những cuộc đời.
-        </p>
+        <p class="text-muted">Kết nối những trái tim nhân ái, cứu sống những cuộc đời.</p>
       </div>
-      <!-- Form đăng nhập -->
       <div class="col-md-6 bg-white p-5">
         <div class="text-center mb-4">
           <i class="bi bi-heart-fill text-danger fs-2"></i>
           <h4 class="fw-bold mt-2">Đăng nhập</h4>
-          <p class="text-muted">Chào mừng bạn trở lại với SBDD</p>
+          <p class="text-muted">Chào mừng bạn trở lại với SBDS</p>
         </div>
-        <form @submit.prevent="handleLogin">
+        <form @submit.prevent="handleLogin" novalidate>
           <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="text" class="form-control"/>
+            <input
+              v-model="user.email"
+              type="text"
+              class="form-control"
+              placeholder="Nhập email của bạn"
+            />
           </div>
           <div class="mb-3">
             <label class="form-label">Mật khẩu</label>
-            <input type="password" class="form-control" />
+            <input
+              v-model="user.password"
+              :type="showPassword ? 'text' : 'password'"
+              class="form-control"
+              placeholder="Nhập mật khẩu"
+            />
           </div>
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-              <input type="checkbox"/>
-              <label for="rememberMe" class="ms-1">Ghi nhớ đăng nhập</label>
+              <input type="checkbox" v-model="showPassword" id="showPassword" />
+              <label for="showPassword" class="ms-1">Hiện mật khẩu</label>
             </div>
             <router-link to="/quen-mat-khau" class="text-danger small">
               Quên mật khẩu?
@@ -41,45 +48,77 @@
         </form>
         <div class="text-center mt-4">
           <p class="small">
-          Chưa có tài khoản? 
-          <router-link to="/dang-ky" class="text-danger fw-bold">
-            Đăng ký ngay
-          </router-link>
-        </p>
+            Chưa có tài khoản?
+            <router-link to="/dang-ky" class="text-danger fw-bold">
+              Đăng ký ngay
+            </router-link>
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
-import baseRequestClient from '../../../core/baseRequestClient';
+import baseRequestClient from "../../../core/baseRequestClient";
+
 export default {
-     name: 'LoginClient',
+  name: "LoginClient",
   data() {
     return {
       user: {
-        email: '',
-        password: '',
+        email: "",
+        password: "",
       },
       showPassword: false,
-    }
-    },
-   methods: {
+    };
+  },
+  methods: {
     async handleLogin() {
+      if (!this.user.email || !this.user.password) {
+        this.$toast.error("Vui lòng nhập đầy đủ email và mật khẩu!");
+        return;
+      }
+      if (!this.user.email.includes("@gmail.com")) {
+        this.$toast.error("Địa chỉ email không hợp lệ!");
+        return;
+      }
       try {
         const res = await baseRequestClient.post("/auth/login", this.user);
-        localStorage.setItem("token", res.data.token);
-        alert("Đăng nhập thành công!");
-        console.log("Thông tin user:", res.data);
-        this.$router.push("/trang-chu");
+        if (res.data.status) {
+          this.$toast.success(res.data.message || "Đăng nhập thành công!");
+          localStorage.setItem("token", res.data.data.token);
+          localStorage.setItem("user", JSON.stringify(res.data.data));
+          this.$router.push("/trang-chu");
+        } else {
+          this.$toast.error(res.data.message || "Đăng nhập thất bại!");
+        }
       } catch (err) {
-        console.error("Lỗi đăng nhập:", err);
-        alert(err.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại!");
+        const message =
+          err.response?.data?.message ||
+          (Array.isArray(err.response?.data?.errors)
+            ? err.response.data.errors.join(", ")
+            : "Đăng nhập thất bại, vui lòng thử lại!");
+        this.$toast.error(message);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
-<style>
-    
+
+<style scoped>
+input.form-control {
+  padding: 10px;
+}
+button.btn-danger {
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+button.btn-danger:hover {
+  transform: translateY(-1px);
+  background-color: #b02a37;
+}
+a.text-danger:hover {
+  text-decoration: underline;
+}
 </style>
