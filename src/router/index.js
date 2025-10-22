@@ -185,14 +185,6 @@ const routes = [
         }
     },
     {
-        path: "/forgot-password",
-        path: "/quen-mat-khau",
-        component: () => import("../components/Client/Forgotpassword/index.vue"),
-        meta : {
-            layout : "blank",
-        }
-    },
-    {
         path: "/doi-mat-khau",
         component: () => import("../components/Client/DoiMatKhau/index.vue"),
         meta : {
