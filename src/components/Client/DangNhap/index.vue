@@ -68,7 +68,7 @@ export default {
    methods: {
     async handleLogin() {
       try {
-console.log("📤 Gửi dữ liệu:", this.user);
+console.log(" Gửi dữ liệu:", this.user);
 
 
         const res = await axios.post("http://localhost:4000/login", this.user);
