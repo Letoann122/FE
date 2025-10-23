@@ -23,7 +23,7 @@
               <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Register_blooddonation" exact-active-class="active">Đặt
+              <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
                 lịch</router-link>
             </li>
             <li class="nav-item mx-3">
