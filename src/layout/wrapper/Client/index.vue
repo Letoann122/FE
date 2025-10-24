@@ -25,4 +25,14 @@ export default {
 <style>
 @import "../../../assets/css/bootstrap.min.css";
 @import "../../../assets/css/all.min.css"; 
+.client-wrapper {
+  background-color: #f5f6f7; /* hoặc #f7f7f8 để sáng hơn */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
 </style>

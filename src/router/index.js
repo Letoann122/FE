@@ -14,7 +14,72 @@ const routes = [
         }
     },
     //bacsi
-
+    {
+        path: "/Hospital/dashboard",
+        component: () => import("../components/Hospital/dashboard/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/blood-inventory",
+        component: () => import("../components/Hospital/BloodInventory/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/blood-inventory/:id", 
+        name: "BloodBatchDetail",
+        component: () => import("../components/Hospital/BloodBatchDetail/index.vue"),
+        meta: {
+            layout: "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/blood-inventory/log", 
+        name: "BloodStockLog",
+        component: () => import("../components/Hospital/BloodStockLog/index.vue"),
+        meta: {
+            layout: "Hospital"
+        }
+    },
+     {
+        path: "/Hospital/donor-management",
+        component: () => import("../components/Hospital/DonorManagement/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/donor-management/:id",
+        name: "DonorDetail",
+        component: () => import("../components/Hospital/DonorDetail/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/campaign-management",
+        component: () => import("../components/Hospital/CampaignManagement/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+     {
+        path: "/Hospital/support",
+        component: () => import("../components/Hospital/Support/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
+        path: "/Hospital/report",
+        component: () => import("../components/Hospital/Report/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
     //client
     {
         path: "/trang-chu",
@@ -60,7 +125,6 @@ const routes = [
         }
     },
 
-
     // {
     //     path: "/RegisterAccount",
     //     component: () => import("../components/Client/RegisterAccount/index.vue"),
@@ -75,6 +139,7 @@ const routes = [
     //         layout : "client",
     //     }
     // },
+
     {
         path: "/profile",
         component: () => import("../components/Client/profile/index.vue"),
@@ -134,7 +199,6 @@ const routes = [
         }
     },
     {
-        path: "/forgot-password",
         path: "/quen-mat-khau",
         component: () => import("../components/Client/Forgotpassword/index.vue"),
         meta : {

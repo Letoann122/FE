@@ -141,38 +141,77 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
   </div>
 </template>
 
+
 <script>
+import baseRequestClient from "../../../core/baseRequestClient";
+
 export default {
+  name: "ProfileClient",
+  data() {
+    return {
+      profile: {
+        full_name: "",
+        birthday: "",
+        gender: "",
+        phone: "",
+        address: "",
+        blood_group: "",
+        medical_history: "",
+      },
+    };
+  },
+  mounted() {
+    this.loadProfile();
+  },
   methods: {
-    triggerFileUpload() {
-      this.$refs.fileInput.click(); // mở hộp chọn file
-    },
-    handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        console.log("File đã chọn:", file.name);
+    // Lấy thông tin hồ sơ người dùng
+    async loadProfile() {
+      try {
+        const res = await baseRequestClient.get("/profile");
+        if (res.data.status) {
+          this.profile = res.data.data;
+        } else {
+          this.$toast.error(res.data.message || "Không thể tải hồ sơ!");
+        }
+      } catch (err) {
+        this.$toast.error("Không thể tải thông tin hồ sơ!");
       }
     },
-    saveChanges() {
-      console.log("Dữ liệu lưu:", this.form);
-      alert("✅ Lưu thay đổi thành công!");
-      // Gọi API lưu dữ liệu ở đây (nếu có)
-      this.originalForm = { ...this.form };
-    },
-    cancelChanges() {
-      this.form = { ...this.originalForm };
-      this.previewUrl = null;
-      this.$refs.fileInput.value = "";
-      alert("⚠️ Đã hủy thay đổi!");
+
+    // Cập nhật hồ sơ người dùng
+    async updateProfile() {
+      try {
+        if (!this.profile.full_name || !this.profile.birthday || !this.profile.phone) {
+          this.$toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
+          return;
+        }
+
+        // ✅ Đúng route BE
+        const res = await baseRequestClient.put("/profile", this.profile);
+
+        if (res.data.status) {
+          this.$toast.success(res.data.message || "Cập nhật hồ sơ thành công!");
+          this.loadProfile();
+        } else {
+          this.$toast.error(res.data.message || "Không thể cập nhật hồ sơ!");
+        }
+      } catch (err) {
+        if (err.response?.data?.errors) {
+          const errors = err.response.data.errors;
+          Object.values(errors).forEach((msg) => this.$toast.error(msg));
+        } else {
+          this.$toast.error(err.response?.data?.message || "Lỗi khi cập nhật hồ sơ!");
+        }
+      }
+
     },
   },
 };
 </script>
+
 
 <style scoped>
 .list-group-item.active {
@@ -186,3 +225,5 @@ export default {
   border-radius: 8px;
 }
 </style>
+
+
