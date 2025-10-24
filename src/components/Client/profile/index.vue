@@ -1,134 +1,142 @@
 <template>
-  <div class="container my-5">
-    <div class="row">
-      <div class="col-md-3 shadow-sm border">
-        <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px; background-color: antiquewhite"
-        >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-person-fill text-danger"></i>
-            <p class="ms-2 d-inline text-danger">Hồ sơ cá nhân</p>
-          </a>
-        </div>
+  <div class="container-fluid bg-light py-4">
+    <div class="row justify-content-center">
+      <div class="col-md-3 col-lg-2">
+        <div class="card border-0 shadow-sm" style="height: 560px">
+          <div class="list-group list-group-flush">
+            <router-link
+              to="/profile"
+              class="list-group-item list-group-item-action border-0"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
+            </router-link>
 
-        <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px"
-        >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-arrow-counterclockwise"></i>
-            <p class="ms-2 d-inline">Lịch sử hiến máu</p>
-          </a>
-        </div>
+            <router-link
+              to="/blood-donation-history"
+              class="list-group-item list-group-item-action border-0"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
+            </router-link>
 
-        <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px"
-        >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-shield-shaded"></i>
-            <p class="ms-2 d-inline">Bảo mật tài khoản</p>
-          </a>
+            <router-link
+              to="/account-security"
+              class="list-group-item list-group-item-action border-0"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-shield-shaded me-2"></i> Bảo mật tài khoản
+            </router-link>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-9 shadow-sm border">
-        <div class="ms-4">
-          <i class="bi bi-person-fill fs-3 fw-bold text-danger"></i>
-          <h5 class="d-inline ms-3">Hồ sơ cá nhân</h5>
-          <p>Cập nhật hồ sơ cá nhân của bạn</p>
-        </div>
-
-        <div class="row">
-          <div
-            class="col-md-4 d-flex flex-column align-items-center justify-content-center">
-            <img
-              class="rounded-circle mb-3"
-              src="../../../assets/img/hienmau.png"
-              alt="avata"
-              style="height: 200px; width: 200px"
-            />
-            <div class="d-flex flex-column align-items-center">
-              <div class="input-group" style="width: 180px">
-                <span class="input-group-text bg-white border-end-0">
-                  <i class="bi bi-arrow-bar-up fs-5 text-danger"></i>
-                </span>
-                <input
-                  type="file"
-                  accept="image/*" p
-                  class="form-control rounded-pill border-start-0"
-                  style="width: 120px"
-                />
-              </div>
+      <div class="col-md-8 col-lg-9">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <div class="mb-4">
+              <i class="bi bi-person-fill fs-3 text-danger"></i>
+              <span class="fs-5 fw-bold ms-2">Hồ sơ cá nhân</span>
+              <p class="text-muted mb-0">Cập nhật thông tin cá nhân của bạn</p>
             </div>
-          </div>
-          <div class="col-md-8">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Họ và tên *</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Nguyễn Văn A"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Ngày sinh *</label>
-                <input type="date" class="form-control" required />
-              </div>
-              <div class="col-md-12">
-                <label class="form-label mb-0">Địa chỉ</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="40 Nguyễn Hữu Thọ, Hải Châu, Đà Nẵng"
-                />
+
+            <div class="row align-items-center">
+              <div class="col-md-4 text-center mb-3">
+                <div class="position-relative d-inline-block">
+                  <img
+                    src="../../../assets/img/hienmau.png"
+                    alt="avatar"
+                    class="rounded-circle border"
+                    style="width: 150px; height: 150px; object-fit: cover"
+                  />
+                  <button
+                    class="btn btn-danger btn-sm rounded-circle position-absolute bottom-0 end-0"
+                    style="transform: translate(25%, 25%)"
+                  >
+                    <i class="bi bi-camera-fill"></i>
+                  </button>
+                </div>
+                <div>
+                  <button
+                    class="btn btn-outline-secondary bg-light mt-3"
+                    @click="triggerFileUpload"
+                  >
+                    <i class="bi bi-upload me-0"></i> Đổi ảnh đại diện
+                  </button>
+
+                  <input
+                    type="file"
+                    ref="fileInput"
+                    accept="image/*"
+                    @change="handleFileChange"
+                    style="display: none"
+                  />
+                </div>
               </div>
 
-              <div class="col-md-6">
-                <label class="form-label">Nhóm máu *</label>
-                <select class="form-select" required>
-                  <option value="">Chọn nhóm máu</option>
-                  <option>A</option>
-                  <option>B</option>
-                  <option>AB</option>
-                  <option>O</option>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Số điện thoại *</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="0123456789"
-                  required
-                />
-              </div>
-              <div class="col-md-12">
-                <label class="form-label">Tiền sử y tế</label>
-                <textarea
-                  type="text"
-                  class="form-control"
-                  placeholder="Không có tiền sử bệnh lý đặc biệt"
-                  rows="4"
-                ></textarea>
-              </div>
+              <!-- Form -->
+              <div class="col-md-8">
+                <form @submit.prevent="saveChanges">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">Họ và tên *</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Nguyễn Văn A"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Ngày sinh *</label>
+                      <input type="date" class="form-control" required />
+                    </div>
+                    <div class="col-md-12">
+                      <label class="form-label">Địa chỉ</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="123 Đường ABC, Phường XYZ, Quận 1, TPHCM"
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Nhóm máu *</label>
+                      <select class="form-select" required>
+                        <option value="">Chọn nhóm máu</option>
+                        <option>A</option>
+                        <option>B</option>
+                        <option>AB</option>
+                        <option>O</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label">Số điện thoại *</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="0912345678"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-12">
+                      <label class="form-label">Tiền sử y tế</label>
+                      <textarea
+                        class="form-control"
+                        placeholder="Không có tiền sử bệnh lý đặc biệt"
+                        rows="3"
+                      ></textarea>
+                    </div>
 
-              <div class="col-md-12">
-                <button
-                  class="rounded"
-                  type="button"
-                  style="margin-right: 10px; background-color: red"
-                >
-                  <i class="bi bi-save-fill"></i>
-                  Lưu thay đổi
-                </button>
-                <button type="button" class="mb-3 rounded">
-                  <i class="bi bi-tools"></i>
-                  Hủy
-                </button>
+                    <div class="col-md-12 text-end mt-3">
+                      <button class="btn btn-danger me-2">
+                        <i class="bi bi-save-fill me-1"></i> Lưu thay đổi
+                      </button>
+                      <button class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle me-1"></i> Hủy
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -137,3 +145,44 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    triggerFileUpload() {
+      this.$refs.fileInput.click(); // mở hộp chọn file
+    },
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        console.log("File đã chọn:", file.name);
+      }
+    },
+    saveChanges() {
+      console.log("Dữ liệu lưu:", this.form);
+      alert("✅ Lưu thay đổi thành công!");
+      // Gọi API lưu dữ liệu ở đây (nếu có)
+      this.originalForm = { ...this.form };
+    },
+    cancelChanges() {
+      this.form = { ...this.originalForm };
+      this.previewUrl = null;
+      this.$refs.fileInput.value = "";
+      alert("⚠️ Đã hủy thay đổi!");
+    },
+  },
+};
+</script>
+
+<style scoped>
+.list-group-item.active {
+  background-color: #ffecec !important;
+  color: #dc3545 !important;
+}
+.card {
+  border-radius: 10px;
+}
+.btn {
+  border-radius: 8px;
+}
+</style>

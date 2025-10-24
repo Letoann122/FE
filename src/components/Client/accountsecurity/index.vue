@@ -1,58 +1,60 @@
 <template>
   <div class="container my-5">
     <div class="row">
-      <div class="col-md-3 shadow-sm border">
+      <!-- Sidebar -->
+      <div class="col-md-3">
         <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px"
+          class="sidebar bg-white border rounded-4 shadow-sm py-3"
+          style="height: 725px;"
         >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-person-fill"></i>
-            <p class="ms-2 d-inline">Hồ sơ cá nhân</p>
-          </a>
-        </div>
+          <router-link
+            to="/profile"
+            class="menu-item d-flex align-items-center px-3 py-2 rounded mb-2"
+            active-class="active-tab"
+          >
+            <i class="bi bi-person-fill me-2"></i>
+            <span>Hồ sơ cá nhân</span>
+          </router-link>
 
-        <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px"
-        >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-arrow-counterclockwise"></i>
-            <p class="ms-2 d-inline">Lịch sử hiến máu</p>
-          </a>
-        </div>
+          <router-link
+            to="/blood-donation-history"
+            class="menu-item d-flex align-items-center px-3 py-2 rounded mb-2"
+            active-class="active-tab"
+          >
+            <i class="bi bi-arrow-counterclockwise me-2"></i>
+            <span>Lịch sử hiến máu</span>
+          </router-link>
 
-        <div
-          class="mt-3 m-3 shadow-sm d-flex align-items-center justify-content-center"
-          style="width: 200px; height: 30px; background-color: antiquewhite"
-        >
-          <a href="" style="text-decoration: none">
-            <i class="bi bi-shield-shaded text-danger"></i>
-            <p class="ms-2 d-inline text-danger">Bảo mật tài khoản</p>
-          </a>
+          <router-link
+            to="/account-security"
+            class="menu-item d-flex align-items-center px-3 py-2 rounded mb-2"
+            active-class="active-tab"
+          >
+            <i class="bi bi-shield-shaded me-2"></i>
+            <span>Bảo mật tài khoản</span>
+          </router-link>
         </div>
       </div>
 
-      <div class="col-md-9 shadow-sm border">
-        <div class="ms-4 mt-3">
-          <h5 class="d-inline fw-bold">Quản lý bảo mật tài khoản</h5>
-          <p>Quản lý mật khẩu và các thiết lập bảo mật của bạn</p>
-        </div>
+      <!-- Main content -->
+      <div class="col-md-9">
+        <div class="shadow-sm border bg-white rounded-4 p-4">
+          <h5 class="fw-bold mb-1">Quản lý bảo mật tài khoản</h5>
+          <p class="text-muted">
+            Quản lý mật khẩu và các thiết lập bảo mật của bạn
+          </p>
 
-        <div>
+          <!-- Khối xác minh bảo mật -->
           <div class="card shadow-sm border-0 rounded-4 mb-4 p-4">
-            <h5 class="mb-3 text-danger">
+            <h6 class="fw-bold text-danger mb-3">
               <i class="bi bi-shield-lock-fill me-2"></i>Xác minh bảo mật
-            </h5>
+            </h6>
 
-            <div class="row align-items-center mb-3 ms-3">
+            <div class="row align-items-center mb-3">
               <div class="col">
-                <label class="fw-semibold" for="emailVerification">
-                  Xác minh email
-                </label>
+                <p class="fw-semibold mb-1">Xác minh email</p>
                 <p class="text-muted small mb-0">
-                  Nhận thông báo qua email khi có hoạt động đăng nhập bất
-                  thường.
+                  Nhận thông báo qua email khi có hoạt động đăng nhập bất thường.
                 </p>
               </div>
               <div class="col-auto">
@@ -67,11 +69,9 @@
               </div>
             </div>
 
-            <div class="row align-items-center ms-3">
+            <div class="row align-items-center">
               <div class="col">
-                <label class="fw-semibold" for="smsVerification">
-                  Xác minh số điện thoại (OTP SMS)
-                </label>
+                <p class="fw-semibold mb-1">Xác minh số điện thoại (OTP SMS)</p>
                 <p class="text-muted small mb-0">
                   Nhận mã OTP qua SMS để xác thực đăng nhập.
                 </p>
@@ -88,66 +88,65 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="card shadow-sm border-0 rounded-4 p-4">
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="text-danger mb-0">
-              <i class="bi bi-laptop me-2"></i>Quản lý thiết bị đăng nhập
-            </h5>
-            <button class="btn btn-danger btn-sm">
-              <i class="bi bi-box-arrow-right me-1"></i>Đăng xuất tất cả thiết
-              bị khác
-            </button>
-          </div>
+          <!-- Khối quản lý thiết bị -->
+          <div class="card shadow-sm border-0 rounded-4 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold text-danger mb-0">
+                <i class="bi bi-laptop me-2"></i>Quản lý thiết bị đăng nhập
+              </h6>
+              <button class="btn btn-danger btn-sm">
+                <i class="bi bi-box-arrow-right me-1"></i>Đăng xuất tất cả thiết bị khác
+              </button>
+            </div>
 
-          <div class="table-responsive">
-            <table class="table align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Thiết bị</th>
-                  <th>Hệ điều hành</th>
-                  <th>Địa điểm</th>
-                  <th>Lần đăng nhập cuối</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(device, index) in devices" :key="index">
-                  <td>
-                    <i
-                      class="bi bi-laptop me-2"
-                      v-if="device.type === 'Laptop'"
-                    ></i>
-                    <i class="bi bi-phone me-2" v-else></i>
-                    {{ device.name }}
-                    <span
-                      v-if="device.current"
-                      class="badge bg-success bg-opacity-10 text-success ms-2"
-                    >
-                      Hiện tại
-                    </span>
-                  </td>
-                  <td>{{ device.os }}</td>
-                  <td>{{ device.location }}</td>
-                  <td>{{ device.lastLogin }}</td>
-                  <td>
-                    <span v-if="device.current" class="text-muted small">
-                      Thiết bị hiện tại
-                    </span>
-                    <button
-                      v-else
-                      class="btn btn-outline-secondary btn-sm"
-                      @click="logoutDevice(device)"
-                    >
-                      Đăng xuất
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Thiết bị</th>
+                    <th>Hệ điều hành</th>
+                    <th>Địa điểm</th>
+                    <th>Lần đăng nhập cuối</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(device, index) in devices" :key="index">
+                    <td>
+                      <i
+                        class="bi bi-laptop me-2"
+                        v-if="device.type === 'Laptop'"
+                      ></i>
+                      <i class="bi bi-phone me-2" v-else></i>
+                      {{ device.name }}
+                      <span
+                        v-if="device.current"
+                        class="badge bg-success bg-opacity-10 text-success ms-2"
+                      >
+                        Hiện tại
+                      </span>
+                    </td>
+                    <td>{{ device.os }}</td>
+                    <td>{{ device.location }}</td>
+                    <td>{{ device.lastLogin }}</td>
+                    <td>
+                      <span v-if="device.current" class="text-muted small">
+                        Thiết bị hiện tại
+                      </span>
+                      <button
+                        v-else
+                        class="btn btn-outline-secondary btn-sm"
+                        @click="logoutDevice(device)"
+                      >
+                        Đăng xuất
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -156,16 +155,13 @@
 
 <script>
 export default {
-  name: "BaoMat",
+  name: "BaoMatTaiKhoan",
   data() {
     return {
-      verify: {
-        email: false,
-        sms: false,
-      },
+      verify: { email: false, sms: false },
       devices: [
         {
-          name: "Laptop Acer",
+          name: "Laptop Dell",
           type: "Laptop",
           os: "Windows 11",
           location: "Đà Nẵng, VN",
@@ -192,6 +188,38 @@ export default {
 </script>
 
 <style scoped>
+/* === Sidebar giống Profile === */
+.sidebar {
+  min-height: 100%;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+.menu-item:hover {
+  background-color: #f8f9fa;
+}
+
+.active-tab {
+  background-color: #fff0f0 !important;
+  color: #dc3545 !important;
+  font-weight: 600;
+  border-left: 4px solid #dc3545;
+}
+
+/* === Table & Badge === */
+.table td,
+.table th {
+  vertical-align: middle;
+}
 .badge {
   font-size: 0.8rem;
   border-radius: 6px;
@@ -200,9 +228,5 @@ export default {
 .form-check-input {
   width: 2em;
   height: 1em;
-}
-.table td,
-.table th {
-  vertical-align: middle;
 }
 </style>

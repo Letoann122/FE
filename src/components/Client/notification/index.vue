@@ -1,6 +1,6 @@
 <template>
   <div class="container py-4">
-   
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
       <h4 class="fw-bold mb-0">
         <i class="bi bi-bell-fill text-danger me-2"></i> Trung tâm thông báo
@@ -18,36 +18,39 @@
       </div>
     </div>
 
-    
-    <form>
+    <!-- Notification list -->
+    <div v-if="filteredNotifications.length">
       <div
         v-for="(item, index) in filteredNotifications"
         :key="index"
-        class="card mb-3 border-0 shadow-sm rounded-3"
+        class="card mb-3 border-0 shadow-sm rounded-3 notification-item"
+        @click="goToNotification(item)"
       >
         <div class="card-body d-flex justify-content-between align-items-start">
-          
           <div class="me-3">
             <i :class="item.icon + ' fs-4 text-danger'"></i>
           </div>
 
-         
           <div class="flex-grow-1">
             <h6 class="fw-bold mb-1">{{ item.title }}</h6>
             <small class="text-muted">{{ item.time }}</small>
             <p class="mb-0 mt-1 text-secondary">{{ item.message }}</p>
           </div>
 
-          
           <div>
             <span v-if="!item.read" class="badge bg-danger rounded-circle p-2">&nbsp;</span>
           </div>
         </div>
       </div>
-    </form>
+    </div>
 
-    
-    <div class="d-flex justify-content-end mt-3 gap-3">
+    <div v-else class="text-center text-muted py-5">
+      <i class="bi bi-inbox fs-1 mb-3 d-block"></i>
+      Không có thông báo nào
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end mt-3 gap-3" v-if="notifications.length">
       <button class="btn btn-outline-secondary" @click="clearAll">
         <i class="bi bi-trash me-2"></i> Xóa tất cả
       </button>
@@ -59,16 +62,21 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "NotificationCenter",
   data() {
     return {
+      
       currentFilter: "all",
       filters: [
         { label: "Tất cả", value: "all" },
         { label: "Chưa đọc", value: "unread" },
         { label: "Đã đọc", value: "read" },
       ],
+
+      // 🔹 Dữ liệu giả lập (mock) — sẽ bị thay thế bằng API khi backend xong
       notifications: [
         {
           title: "Nhắc nhở lịch hiến máu",
@@ -76,6 +84,7 @@ export default {
           time: "2 giờ trước",
           icon: "bi bi-calendar-event-fill",
           read: false,
+          link: "/lich-hien-mau",
         },
         {
           title: "Chiến dịch hiến máu mới",
@@ -83,6 +92,7 @@ export default {
           time: "5 giờ trước",
           icon: "bi bi-megaphone-fill",
           read: false,
+          link: "/chien-dich-moi",
         },
         {
           title: "Thông báo khẩn cấp",
@@ -90,20 +100,7 @@ export default {
           time: "1 ngày trước",
           icon: "bi bi-exclamation-triangle-fill",
           read: true,
-        },
-        {
-          title: "Xác nhận lịch hiến máu",
-          message: "Cảm ơn bạn đã đăng ký hiến máu. Lịch của bạn đã được xác nhận cho ngày 15/01/2025.",
-          time: "2 ngày trước",
-          icon: "bi bi-check-circle-fill",
-          read: true,
-        },
-        {
-          title: "Hoàn thành hiến máu",
-          message: "Cảm ơn bạn đã hoàn thành đợt hiến máu ngày 08/01/2025. Hãy nghỉ ngơi và bổ sung dinh dưỡng.",
-          time: "1 tuần trước",
-          icon: "bi bi-heart-fill",
-          read: true,
+          link: "/tin-khan",
         },
       ],
     };
@@ -119,24 +116,49 @@ export default {
     },
   },
   methods: {
+    // 🔹 Khi backend xong, thay phần mock này bằng API thật
+    async fetchNotifications() {
+      try {
+        const res = await axios.get("/api/notifications");
+        this.notifications = res.data;
+      } catch (error) {
+        console.error("Không thể tải danh sách thông báo:", error);
+      }
+    },
+
+    goToNotification(item) {
+      item.read = true;
+      if (item.link) {
+        this.$router.push(item.link);
+      }
+    },
+
     clearAll() {
       if (confirm("Bạn có chắc muốn xóa tất cả thông báo?")) {
         this.notifications = [];
       }
     },
+
     markAllAsRead() {
       this.notifications.forEach((n) => (n.read = true));
     },
+  },
+
+  mounted() {
+    // Khi backend hoàn thiện, chỉ cần bật dòng này:
+    // this.fetchNotifications();
   },
 };
 </script>
 
 <style scoped>
 .card {
-  transition: transform 0.2s;
+  transition: transform 0.2s, background-color 0.2s;
+  cursor: pointer;
 }
 .card:hover {
   transform: translateY(-3px);
+  background-color: #fff7f7;
 }
 .badge {
   width: 10px;
