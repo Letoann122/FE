@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid bg-light py-4">
     <div class="row justify-content-center">
+      <!-- Sidebar -->
       <div class="col-md-3 col-lg-2">
         <div class="card border-0 shadow-sm" style="height: 560px">
           <div class="list-group list-group-flush">
@@ -11,7 +12,6 @@
             >
               <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
             </router-link>
-
             <router-link
               to="/blood-donation-history"
               class="list-group-item list-group-item-action border-0"
@@ -19,7 +19,6 @@
             >
               <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
             </router-link>
-
             <router-link
               to="/account-security"
               class="list-group-item list-group-item-action border-0"
@@ -30,7 +29,6 @@
           </div>
         </div>
       </div>
-
       <div class="col-md-8 col-lg-9">
         <div class="card shadow-sm border-0">
           <div class="card-body">
@@ -74,13 +72,13 @@
                 </div>
               </div>
 
-              <!-- Form -->
               <div class="col-md-8">
-                <form @submit.prevent="saveChanges">
+                <form @submit.prevent="updateProfile">
                   <div class="row g-3">
                     <div class="col-md-6">
                       <label class="form-label">Họ và tên *</label>
                       <input
+                        v-model="profile.full_name"
                         type="text"
                         class="form-control"
                         placeholder="Nguyễn Văn A"
@@ -89,11 +87,17 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label">Ngày sinh *</label>
-                      <input type="date" class="form-control" required />
+                      <input
+                        v-model="profile.birthday"
+                        type="date"
+                        class="form-control"
+                        required
+                      />
                     </div>
                     <div class="col-md-12">
                       <label class="form-label">Địa chỉ</label>
                       <input
+                        v-model="profile.address"
                         type="text"
                         class="form-control"
                         placeholder="123 Đường ABC, Phường XYZ, Quận 1, TPHCM"
@@ -101,17 +105,27 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label">Nhóm máu *</label>
-                      <select class="form-select" required>
+                      <select
+                        v-model="profile.blood_group"
+                        class="form-select"
+                        required
+                      >
                         <option value="">Chọn nhóm máu</option>
-                        <option>A</option>
-                        <option>B</option>
-                        <option>AB</option>
-                        <option>O</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
                       </select>
                     </div>
+
                     <div class="col-md-6">
                       <label class="form-label">Số điện thoại *</label>
                       <input
+                        v-model="profile.phone"
                         type="text"
                         class="form-control"
                         placeholder="0912345678"
@@ -121,17 +135,21 @@
                     <div class="col-md-12">
                       <label class="form-label">Tiền sử y tế</label>
                       <textarea
+                        v-model="profile.medical_history"
                         class="form-control"
                         placeholder="Không có tiền sử bệnh lý đặc biệt"
                         rows="3"
                       ></textarea>
                     </div>
-
                     <div class="col-md-12 text-end mt-3">
-                      <button class="btn btn-danger me-2">
+                      <button class="btn btn-danger me-2" type="submit">
                         <i class="bi bi-save-fill me-1"></i> Lưu thay đổi
                       </button>
-                      <button class="btn btn-outline-secondary">
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @click="loadProfile"
+                      >
                         <i class="bi bi-x-circle me-1"></i> Hủy
                       </button>
                     </div>
@@ -145,7 +163,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import baseRequestClient from "../../../core/baseRequestClient";
@@ -169,7 +186,6 @@ export default {
     this.loadProfile();
   },
   methods: {
-    // Lấy thông tin hồ sơ người dùng
     async loadProfile() {
       try {
         const res = await baseRequestClient.get("/profile");
@@ -183,15 +199,17 @@ export default {
       }
     },
 
-    // Cập nhật hồ sơ người dùng
     async updateProfile() {
       try {
-        if (!this.profile.full_name || !this.profile.birthday || !this.profile.phone) {
+        if (
+          !this.profile.full_name ||
+          !this.profile.birthday ||
+          !this.profile.phone
+        ) {
           this.$toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
           return;
         }
 
-        // ✅ Đúng route BE
         const res = await baseRequestClient.put("/profile", this.profile);
 
         if (res.data.status) {
@@ -202,30 +220,43 @@ export default {
         }
       } catch (err) {
         if (err.response?.data?.errors) {
-          const errors = err.response.data.errors;
-          Object.values(errors).forEach((msg) => this.$toast.error(msg));
+          Object.values(err.response.data.errors).forEach((msg) =>
+            this.$toast.error(msg)
+          );
         } else {
-          this.$toast.error(err.response?.data?.message || "Lỗi khi cập nhật hồ sơ!");
+          this.$toast.error(
+            err.response?.data?.message || "Lỗi khi cập nhật hồ sơ!"
+          );
         }
       }
+    },
 
+    triggerFileUpload() {
+      this.$refs.fileInput.click();
+    },
+
+    handleFileChange(e) {
+      const file = e.target.files[0];
+      if (file) {
+        this.$toast.success(`Đã chọn ảnh: ${file.name}`);
+        // Sau này có thể thêm upload avatar tại đây
+      }
     },
   },
 };
 </script>
-
 
 <style scoped>
 .list-group-item.active {
   background-color: #ffecec !important;
   color: #dc3545 !important;
 }
+
 .card {
   border-radius: 10px;
 }
+
 .btn {
   border-radius: 8px;
 }
 </style>
-
-
