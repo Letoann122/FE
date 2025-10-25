@@ -125,6 +125,20 @@ const routes = [
         }
     },
 
+    // {
+    //     path: "/RegisterAccount",
+    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
+    //     meta : {
+    //         layout : "client",
+    //     }
+    // },       
+    // {
+    //     path: "/register-account",
+    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
+    //     meta : {
+    //         layout : "client",
+    //     }
+    // },
 
     {
         path: "/profile",

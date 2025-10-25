@@ -59,7 +59,7 @@ export default {
                 return;
             }
             try {
-                const res = await axios.post("http://localhost:4000/change-password", {
+                const res = await axios.post("http://localhost:4000/reset-password", {
                     token: this.token,
                     password: this.form.password,
                     password_confirmation: this.form.password_confirmation,

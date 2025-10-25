@@ -1,24 +1,28 @@
 <template>
     <!-- alert -->
-    <div class="alert alert-custom text-white mb-0" role="alert">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <i class="fa-solid fa-circle ms-3" style="color: #fff"></i>
-                <i class="fa-solid fa-triangle-exclamation ms-2" style="color: #ffd43b"></i>
-                <strong class="ms-2">KHẨN CẤP:</strong>
-                <span class="ms-2">Hiện đang cần nhóm máu O tại BV Đà Nẵng</span>
-            </div>
-            <div class="d-flex align-items-center">
-                <button class="btn btn-light text-danger fw-bold rounded-pill me-3">
-                    <i class="fa-solid fa-heart-circle-plus me-1 text-danger"></i>
-                    Đăng ký ngay
-                </button>
-                <button class="btn btn-link text-white fw-bold p-0 me-3" style="font-size: 18px">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-        </div>
+   <div v-if="showAlert" class="alert alert-custom text-white mb-0" role="alert">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <i class="fa-solid fa-circle ms-3" style="color: #fff"></i>
+        <i class="fa-solid fa-triangle-exclamation ms-2" style="color: #ffd43b"></i>
+        <strong class="ms-2">KHẨN CẤP:</strong>
+        <span class="ms-2">Hiện đang cần nhóm máu O tại BV Đà Nẵng</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-light text-danger fw-bold rounded-pill me-3">
+          <i class="fa-solid fa-heart-circle-plus me-1 text-danger"></i>
+          Đăng ký ngay
+        </button>
+        <button
+          class="btn btn-link text-white fw-bold p-0 me-3"
+          style="font-size: 18px"
+          @click="showAlert = false"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
     </div>
+  </div>
     <div class="container my-5">
         <div class="row align-items-center">
             <div class="col-md-6 mt-5 mb-5">
@@ -215,6 +219,7 @@ export default {
     return {
       news: [],
       loading: true,
+      showAlert : true,
     };
   },
   async created() {
