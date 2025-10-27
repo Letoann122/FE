@@ -50,18 +50,6 @@
                 <div class="excerpt-text" v-if="content.excerpt">
                   {{ truncateText(content.excerpt, 60) }}
                 </div>
-                <div class="tags-row" v-if="content.tags && content.tags.length > 0">
-                  <span 
-                    v-for="tag in content.tags.slice(0, 3)" 
-                    :key="tag"
-                    class="tag-badge"
-                  >
-                    {{ tag }}
-                  </span>
-                  <span v-if="content.tags.length > 3" class="more-tags">
-                    +{{ content.tags.length - 3 }}
-                  </span>
-                </div>
               </div>
             </td>
 
@@ -388,26 +376,6 @@ const getStatusLabel = (status) => {
   line-height: 1.3;
 }
 
-.tags-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.tag-badge {
-  background: #e9ecef;
-  color: #495057;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.more-tags {
-  color: #6c757d;
-  font-size: 0.75rem;
-  font-style: italic;
-}
 
 /* Type badges */
 .type-badge {

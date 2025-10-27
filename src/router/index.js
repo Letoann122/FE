@@ -32,7 +32,7 @@ const routes = [
         meta: {
             layout: "admin"
         }
-      },     
+      },    
     //bacsi
 
     //client
