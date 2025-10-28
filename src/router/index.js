@@ -13,6 +13,13 @@ const routes = [
             layout : "admin"
         }
     },
+    {
+        path: "/admin/quan-li-nguoi-dung",
+        component: () => import("../components/Admin/QuanLyUser/index.vue"),
+        meta: {
+            layout : "admin"
+        }
+    },
     //bacsi
     {
         path: "/Hospital/dashboard",
