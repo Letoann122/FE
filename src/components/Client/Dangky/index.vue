@@ -2,15 +2,17 @@
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="row shadow rounded overflow-hidden bg-white" style="max-width: 1100px; width: 100%;">
       <div class="col-md-6 p-5 d-flex flex-column justify-content-center position-relative">
-        <!-- Overlay mờ khi loading -->
+        <!-- Overlay loading -->
         <div v-if="loading" class="loading-overlay">
           <div class="spinner-border text-danger" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
 
-        <h4 class="fw-bold text-center mb-3">Đăng ký hiến máu</h4>
-        <p class="text-center text-muted mb-4">Tham gia cộng đồng hiến máu cứu người</p>
+        <h4 class="fw-bold text-center mb-3 text-danger">
+          <i class="bi bi-heart-fill me-2"></i> Đăng ký tài khoản
+        </h4>
+        <p class="text-center">Tham gia hệ thống hiến máu cứu người</p>
 
         <form @submit.prevent="submitForm" :class="{ 'opacity-50': loading }">
           <div class="row g-3">
@@ -48,6 +50,11 @@
               <input v-model="form.address" type="text" class="form-control" placeholder="Nhập địa chỉ của bạn" />
             </div>
 
+            <div class="col-lg-12">
+              <label>Tiền sử bệnh lý</label>
+              <input v-model="form.medical_history" type="text" class="form-control" placeholder="Nếu có" />
+            </div>
+
             <div class="col-lg-6">
               <label>Nhóm máu <span class="text-danger">*</span></label>
               <select v-model="form.blood_group" class="form-select" required>
@@ -64,8 +71,12 @@
             </div>
 
             <div class="col-lg-6">
-              <label>Tiền sử bệnh lý</label>
-              <input v-model="form.medical_history" type="text" class="form-control" placeholder="Nếu có" />
+              <label>Bạn là<span class="text-danger">*</span></label>
+              <select v-model="form.role" class="form-select" required>
+                <option disabled value="">Chọn vai trò</option>
+                <option value="donor">Người hiến máu</option>
+                <option value="doctor">Bác sĩ</option>
+              </select>
             </div>
 
             <div class="col-lg-6">
@@ -98,10 +109,9 @@
         </p>
       </div>
 
-      <!-- Ảnh bên phải -->
       <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center p-5 bg-danger bg-opacity-10">
-        <h5 class="fw-bold mb-2">Cùng nhau cứu sống</h5>
-        <p class="text-muted mb-4">Mỗi giọt máu bạn hiến có thể cứu sống 3 người</p>
+        <h5 class="fw-bold mb-2 text-danger">Cùng nhau cứu sống</h5>
+        <p>Mỗi giọt máu bạn hiến có thể cứu sống 3 người</p>
         <img
           src="https://static.vecteezy.com/system/resources/previews/008/190/897/non_2x/human-blood-donate-on-white-background-free-vector.jpg"
           class="img-fluid mb-4 rounded" style="max-width: 350px;"
@@ -127,7 +137,7 @@ const initialForm = () => ({
   email: "",
   address: "",
   blood_group: "",
-  role: "donor",
+  role: "", 
   medical_history: "",
   password: "",
   password_confirmation: ""
@@ -149,9 +159,19 @@ export default {
     async submitForm() {
       this.loading = true;
       try {
-        const res = await axios.post("http://localhost:4000/api/register", this.form);
+        const payload = {
+          ...this.form,
+          role: this.form.role === "doctor" ? "hospital" : "donor"
+        };
+
+        const res = await axios.post("http://localhost:4000/api/register", payload);
+
         if (res.data.status) {
-          this.$toast?.success(res.data.message || "Đăng ký thành công!");
+          if (this.form.role === "doctor") {
+            this.$toast?.success("Tài khoản của bạn đang được xét duyệt bởi quản trị viên.");
+          } else {
+            this.$toast?.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.");
+          }
           this.resetForm();
         } else {
           const errs = Array.isArray(res.data.errors)
