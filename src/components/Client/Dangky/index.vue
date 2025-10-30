@@ -1,6 +1,7 @@
 <template>
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="row shadow rounded overflow-hidden bg-white" style="max-width: 1100px; width: 100%;">
+      <!-- Cột trái -->
       <div class="col-md-6 p-5 d-flex flex-column justify-content-center position-relative">
         <!-- Overlay loading -->
         <div v-if="loading" class="loading-overlay">
@@ -109,12 +110,14 @@
         </p>
       </div>
 
+      <!-- Cột phải -->
       <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center p-5 bg-danger bg-opacity-10">
         <h5 class="fw-bold mb-2 text-danger">Cùng nhau cứu sống</h5>
         <p>Mỗi giọt máu bạn hiến có thể cứu sống 3 người</p>
         <img
           src="https://static.vecteezy.com/system/resources/previews/008/190/897/non_2x/human-blood-donate-on-white-background-free-vector.jpg"
-          class="img-fluid mb-4 rounded" style="max-width: 350px;"
+          class="img-fluid mb-4 rounded"
+          style="max-width: 350px;"
         />
         <div class="text-start">
           <p><i class="fa-solid fa-heart text-danger me-2"></i> Quy trình hiến máu an toàn</p>
@@ -129,59 +132,60 @@
 <script>
 import axios from "axios";
 
-const initialForm = () => ({
-  full_name: "",
-  birthday: "",
-  gender: "",
-  phone: "",
-  email: "",
-  address: "",
-  blood_group: "",
-  role: "", 
-  medical_history: "",
-  password: "",
-  password_confirmation: ""
-});
-
 export default {
   name: "RegisterForm",
   data() {
     return {
-      form: initialForm(),
-      loading: false
+      loading: false,
+      form: {
+        full_name: "",
+        birthday: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        blood_group: "",
+        role: "",
+        medical_history: "",
+        password: "",
+        password_confirmation: ""
+      }
     };
   },
   methods: {
     resetForm() {
       if (this.loading) return;
-      this.form = initialForm();
+      this.form = {
+        full_name: "",
+        birthday: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        blood_group: "",
+        role: "",
+        medical_history: "",
+        password: "",
+        password_confirmation: ""
+      };
     },
     async submitForm() {
       this.loading = true;
       try {
-        const payload = {
-          ...this.form,
-          role: this.form.role === "doctor" ? "hospital" : "donor"
-        };
-
-        const res = await axios.post("http://localhost:4000/api/register", payload);
+        const res = await axios.post("http://localhost:4000/api/register", this.form);
 
         if (res.data.status) {
           if (this.form.role === "doctor") {
-            this.$toast?.success("Tài khoản của bạn đang được xét duyệt bởi quản trị viên.");
+            this.$toast?.success("Đăng ký thành công! Tài khoản bác sĩ của bạn đang được xét duyệt bởi quản trị viên.");
           } else {
             this.$toast?.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.");
           }
           this.resetForm();
         } else {
-          const errs = Array.isArray(res.data.errors)
-            ? res.data.errors
-            : [res.data.message || "Đăng ký thất bại!"];
-          errs.forEach(msg => this.$toast?.error(msg));
+          this.$toast?.error(res.data.message || "Đăng ký thất bại!");
         }
-      } catch (err) {
-        const errs = err.response?.data?.errors || [err.response?.data?.message || "Có lỗi xảy ra!"];
-        errs.forEach(msg => this.$toast?.error(msg));
+      } catch (error) {
+        this.$toast?.error(error.response?.data?.message || "Có lỗi xảy ra!");
       } finally {
         this.loading = false;
       }
