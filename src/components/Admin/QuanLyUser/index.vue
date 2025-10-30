@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid um py-4">
-    <!-- Header -->
     <div class="mb-4 border-bottom pb-3">
       <h3 class="fw-bold text-primary">
         <i class="bi bi-people me-2"></i> Quản lý Người dùng
@@ -9,7 +8,6 @@
         Quản lý tài khoản và quyền hạn người dùng trong hệ thống hiến máu.
       </p>
     </div>
-
     <!-- Controls -->
     <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between border-bottom pb-3 mb-4">
       <div class="d-flex flex-wrap gap-3 align-items-center">
@@ -23,22 +21,12 @@
           <option>Donor</option>
         </select>
       </div>
-      <div class="d-flex gap-2">
-        <button class="btn btn-outline-danger">
-          <i class="bi bi-trash me-1"></i> Xóa đã chọn
-        </button>
-        <button class="btn btn-primary">
-          <i class="bi bi-person-plus me-1"></i> Thêm người dùng
-        </button>
-      </div>
     </div>
-
     <!-- User Table -->
     <div class="table-responsive bg-white rounded shadow-sm">
       <table class="table align-middle table-hover mb-0">
         <thead class="table-light">
           <tr>
-            <th style="width: 40px;"><input type="checkbox" class="form-check-input" /></th>
             <th style="width: 25%">Họ và Tên</th>
             <th>Email</th>
             <th>Vai trò</th>
@@ -48,7 +36,6 @@
         </thead>
         <tbody>
           <tr>
-            <td><input type="checkbox" class="form-check-input" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" />
@@ -64,7 +51,6 @@
             </td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="form-check-input" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" />
@@ -80,7 +66,6 @@
             </td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="form-check-input" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" />
@@ -96,7 +81,6 @@
             </td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="form-check-input" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" />
@@ -112,7 +96,6 @@
             </td>
           </tr>
           <tr>
-            <td><input type="checkbox" class="form-check-input" /></td>
             <td>
               <div class="d-flex align-items-center">
                 <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face" class="rounded-circle me-2" width="40" height="40" />
