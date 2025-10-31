@@ -1,7 +1,12 @@
 <template>
-  <section class="position-relative align-items-center justify-content-center text-center d-flex">
-    <img src="../../../assets/img/banner2.jpg" alt="hình ảnh hiến máu"
-      style="height: 500px; width: 100vw; opacity: 0.5" />
+  <section
+    class="position-relative align-items-center justify-content-center text-center d-flex"
+  >
+    <img
+      src="../../../assets/img/banner2.jpg"
+      alt="hình ảnh hiến máu"
+      style="height: 500px; width: 100vw; opacity: 0.5"
+    />
     <div class="position-absolute">
       <div class="position-relative z-1">
         <h2 style="font: 4em sans-serif">Tin tức & Chiến dịch Hiến Máu</h2>
@@ -14,7 +19,10 @@
 
   <div>
     <div class="row p-4 g-4">
-      <div class="col-md-3 bg-light p-3" style="width: 300px; height: 230px; border-radius: 10px">
+      <div
+        class="col-md-3 bg-light p-3"
+        style="width: 300px; height: 230px; border-radius: 10px"
+      >
         <div class="row">
           <div class="col-12 mb-3 p-3 bg-white rounded shadow-sm">
             <h6>Bộ lọc</h6>
@@ -36,12 +44,16 @@
             <h6>Sự kiện nổi bật</h6>
             <div>
               <i class="bi bi-building-check text-danger m-2"></i>
-              <label style="font-weight: bold; font-size: 15px">Ngày hiến máu thế giới</label>
+              <label style="font-weight: bold; font-size: 15px"
+                >Ngày hiến máu thế giới</label
+              >
               <label class="mb-2">14/06/2025 </label>
             </div>
             <div>
               <i class="bi bi-heart-fill text-danger m-2"></i>
-              <label class="" style="font-weight: bold; font-size: 15px">Ngày hiến máu thế giới</label>
+              <label class="" style="font-weight: bold; font-size: 15px"
+                >Ngày hiến máu thế giới</label
+              >
               <label>14/06/2025 </label>
             </div>
           </div>
@@ -57,10 +69,16 @@
             </div>
             <div class="row g-4">
               <div class="col-md-4" v-for="(news, index) in Data" :key="index">
-                <div class="card h-90 border-0 shadow-sm rounded-3 overflow-hidden">
+                <div
+                  class="card h-90 border-0 shadow-sm rounded-3 overflow-hidden"
+                >
                   <div class="p-3">
                     <div class="news-image mb-3">
-                      <img :src="news.image" alt="news image" class="img-fluid rounded" />
+                      <img
+                        :src="news.image"
+                        alt="news image"
+                        class="img-fluid rounded"
+                      />
                     </div>
 
                     <div class="news-content">
@@ -68,7 +86,8 @@
                       <p class="text-muted small mb-1">{{ news.date }}</p>
                       <p class="text-secondary small">{{ news.desc }}</p>
                       <p>
-                        <a href="#" class="text-danger fw-bold small">Xem chi tiết</a>
+                        
+                        <router-link to="/see-details" class="text-danger fw-bold small"> Xem chi tiết </router-link>
                       </p>
                     </div>
                   </div>
@@ -159,9 +178,13 @@
       Mỗi giọt máu hiến tặng là một cơ hội cứu sống. Hãy tham gia cộng đồng hiến
       máu ngay hôm nay!
     </p>
-    <button class="btn btn-danger btn-lg rounded-pill">
-      ❤️ Đăng ký hiến máu ngay
-    </button>
+    
+    <router-link
+  to="/register-blooddonation"
+  class="btn btn-danger btn-lg rounded-pill text-decoration-none"
+>
+  ❤️ Đăng ký hiến máu ngay hôm nay
+</router-link>
   </div>
 </template>
 <script setup>

@@ -1,7 +1,7 @@
 <template>
   <div class="container my-5">
     <div class="row">
-      <!-- Sidebar -->
+      
       <div class="col-md-3">
         <div
           class="sidebar bg-white border rounded-4 shadow-sm py-3"
@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <!-- Main content -->
+      
       <div class="col-md-9">
         <div class="shadow-sm border bg-white rounded-4 p-4">
           <h5 class="fw-bold mb-1">Quản lý bảo mật tài khoản</h5>
@@ -44,7 +44,7 @@
             Quản lý mật khẩu và các thiết lập bảo mật của bạn
           </p>
 
-          <!-- Khối xác minh bảo mật -->
+          
           <div class="card shadow-sm border-0 rounded-4 mb-4 p-4">
             <h6 class="fw-bold text-danger mb-3">
               <i class="bi bi-shield-lock-fill me-2"></i>Xác minh bảo mật
@@ -188,7 +188,6 @@ export default {
 </script>
 
 <style scoped>
-/* === Sidebar giống Profile === */
 .sidebar {
   min-height: 100%;
 }
@@ -215,7 +214,7 @@ export default {
   border-left: 4px solid #dc3545;
 }
 
-/* === Table & Badge === */
+
 .table td,
 .table th {
   vertical-align: middle;

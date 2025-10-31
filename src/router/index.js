@@ -182,6 +182,13 @@ const routes = [
             layout : "client",
         }
     },
+     {
+        path: "/contact",
+        component: () => import("../components/Client/Contact/index.vue"),
+        meta : {
+            layout : "client",
+        }
+    },
 
     //blank
     {

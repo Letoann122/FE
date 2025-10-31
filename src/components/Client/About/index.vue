@@ -137,15 +137,18 @@
       </div>
     </div>
 
-    <!-- Call To Action -->
+    
     <div class="cta-section text-center p-5 rounded shadow-sm">
       <h4 class="fw-bold mb-3">Hãy cùng chúng tôi chung tay vì sự sống</h4>
       <p class="text-muted mb-4">
         Mỗi giọt máu hiến tặng là một cơ hội cứu sống. Hãy tham gia cộng đồng hiến máu ngay hôm nay!
       </p>
-      <button class="btn btn-danger btn-lg rounded-pill">
-        ❤️ Đăng ký hiến máu ngay
-      </button>
+      <router-link
+  to="/register-blooddonation"
+  class="btn btn-danger btn-lg rounded-pill text-decoration-none"
+>
+  ❤️ Đăng ký hiến máu ngay hôm nay
+</router-link>
     </div>
 
   </div>
