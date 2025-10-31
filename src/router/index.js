@@ -22,6 +22,13 @@ const routes = [
     },
     //bacsi
     {
+        path: "/Hospital/dang-ki-bac-si",
+        component: () => import("../components/Hospital/DuyetBacSi/index.vue"),
+        meta: {
+            layout : "Hospital"
+        }
+    },
+    {
         path: "/Hospital/dashboard",
         component: () => import("../components/Hospital/dashboard/index.vue"),
         meta: {
