@@ -13,7 +13,7 @@
                 <input type="text" v-model="tim_kiem.noi_dung_tim" class="form-control"
                     placeholder="Nhập tên bác sĩ..." />
                 <button class="btn btn-primary text-nowrap" @click="searchDoctor">
-                    <i class="bi bi-search"></i> Tìm kiếm
+                    Tìm kiếm
                 </button>
             </div>
         </div>
@@ -26,7 +26,7 @@
                         <th>Email</th>
                         <th>Ngày sinh</th>
                         <th>Địa chỉ</th>
-                        <th class="text-center">Thao tác</th>
+                        <th class="text-center">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,8 +37,8 @@
                         <td>{{ formatDate(doctor.birthday) }}</td>
                         <td>{{ doctor.address }}</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-primary me-2" @click="openModal(doctor)"
-                                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#approveModal"
+                                @click="Object.assign(selectedDoctor, doctor)">
                                 Duyệt
                             </button>
                             <button class="btn btn-danger" @click="rejectDoctor(doctor.id)">
@@ -55,33 +55,30 @@
             </table>
         </div>
         <div class="text-start mt-4">
-            <small class="text-muted">
-                Tổng số bác sĩ chờ duyệt: {{ list_bac_si.length }}
-            </small>
+            <small class="text-muted">Tổng số bác sĩ chờ duyệt: {{ list_bac_si.length }}</small>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        Xác nhận duyệt bác sĩ
-                    </h5>
+                    <h5 class="modal-title" id="approveModalLabel">Xác nhận duyệt bác sĩ</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>
                         Bạn có chắc chắn muốn duyệt bác sĩ
-                        <strong>{{ selectedDoctor?.full_name }}</strong> không?
+                        <strong>{{ selectedDoctor.full_name }}</strong> không?
                     </p>
                     <ul class="list-unstyled">
-                        <li><b>Email:</b> {{ selectedDoctor?.email }}</li>
-                        <li><b>Ngày sinh:</b> {{ formatDate(selectedDoctor?.birthday) }}</li>
-                        <li><b>Địa chỉ:</b> {{ selectedDoctor?.address }}</li>
+                        <li><b>Email:</b> {{ selectedDoctor.email }}</li>
+                        <li><b>Ngày sinh:</b> {{ formatDate(selectedDoctor.birthday) }}</li>
+                        <li><b>Địa chỉ:</b> {{ selectedDoctor.address }}</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" @click="confirmApprove">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                        @click="confirmApprove(selectedDoctor.id)">
                         Xác nhận duyệt
                     </button>
                 </div>
@@ -101,7 +98,7 @@ export default {
             tim_kiem: {
                 noi_dung_tim: "",
             },
-            selectedDoctor: {},
+            selectedDoctor: {}, 
         };
     },
     mounted() {
@@ -141,18 +138,13 @@ export default {
                     this.$toast.error("Lỗi khi tìm kiếm bác sĩ!");
                 });
         },
-        openModal(doctor) {
-            this.selectedDoctor = doctor;
-        },
-        confirmApprove() {
+        confirmApprove(id) {
             axios
-                .put(`http://localhost:4000/api/doctors/${this.selectedDoctor.id}/approve`)
+                .put(`http://localhost:4000/api/doctors/${id}/approve`)
                 .then((res) => {
                     if (res.data.status) {
                         this.$toast.success("✅ Duyệt bác sĩ thành công!");
                         this.loadData();
-                        const modal = bootstrap.Modal.getInstance(document.getElementById("exampleModal"));
-                        modal.hide();
                     } else {
                         this.$toast.error("Không thể duyệt bác sĩ!");
                     }
