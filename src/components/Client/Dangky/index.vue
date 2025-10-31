@@ -1,58 +1,90 @@
 <template>
   <div class="container-fluid min-vh-100 d-flex align-items-center justify-content-center bg-light">
     <div class="row shadow rounded overflow-hidden bg-white" style="max-width: 1100px; width: 100%;">
-      <div class="col-md-6 p-5 d-flex flex-column justify-content-center">
-        <h4 class="fw-bold text-center mb-3">Đăng ký hiến máu</h4>
-        <p class="text-center text-muted mb-4">Tham gia cộng đồng hiến máu cứu người</p>
-        <form @submit.prevent="submitForm">
+      <!-- Cột trái -->
+      <div class="col-md-6 p-5 d-flex flex-column justify-content-center position-relative">
+        <!-- Overlay loading -->
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner-border text-danger" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <h4 class="fw-bold text-center mb-3 text-danger">
+          <i class="bi bi-heart-fill me-2"></i> Đăng ký tài khoản
+        </h4>
+        <p class="text-center">Tham gia hệ thống hiến máu cứu người</p>
+
+        <form @submit.prevent="submitForm" :class="{ 'opacity-50': loading }">
           <div class="row g-3">
             <div class="col-lg-6">
               <label>Họ và tên <span class="text-danger">*</span></label>
               <input v-model="form.full_name" type="text" class="form-control" placeholder="Nhập họ và tên" />
             </div>
+
             <div class="col-lg-6">
               <label>Ngày sinh <span class="text-danger">*</span></label>
               <input v-model="form.birthday" type="date" class="form-control" />
             </div>
+
             <div class="col-lg-6">
               <label>Giới tính <span class="text-danger">*</span></label>
-              <select v-model="form.gender" class="form-select">
-                <option disabled selected>Chọn giới tính</option>
-                <option>Nam</option>
-                <option>Nữ</option>
-                <option>Khác</option>
+              <select v-model="form.gender" class="form-select" required>
+                <option value="" disabled>Chọn giới tính</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
               </select>
             </div>
+
             <div class="col-lg-6">
               <label>Số điện thoại <span class="text-danger">*</span></label>
               <input v-model="form.phone" type="text" class="form-control" placeholder="0123456789" />
             </div>
+
             <div class="col-12">
               <label>Email <span class="text-danger">*</span></label>
               <input v-model="form.email" type="email" class="form-control" placeholder="example@gmail.com" />
             </div>
+
             <div class="col-12">
               <label>Địa chỉ <span class="text-danger">*</span></label>
               <input v-model="form.address" type="text" class="form-control" placeholder="Nhập địa chỉ của bạn" />
             </div>
-            <div class="col-lg-6">
-              <label>Nhóm máu <span class="text-danger">*</span></label>
-              <select v-model="form.blood_group" class="form-select">
-                <option disabled value="">Chọn nhóm máu</option>
-                <option>A+</option><option>A-</option>
-                <option>B+</option><option>B-</option>
-                <option>AB+</option><option>AB-</option>
-                <option>O+</option><option>O-</option>
-              </select>
-            </div>
-            <div class="col-lg-6">
+
+            <div class="col-lg-12">
               <label>Tiền sử bệnh lý</label>
               <input v-model="form.medical_history" type="text" class="form-control" placeholder="Nếu có" />
             </div>
+
+            <div class="col-lg-6">
+              <label>Nhóm máu <span class="text-danger">*</span></label>
+              <select v-model="form.blood_group" class="form-select" required>
+                <option value="" disabled>Chọn nhóm máu</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+
+            <div class="col-lg-6">
+              <label>Bạn là<span class="text-danger">*</span></label>
+              <select v-model="form.role" class="form-select" required>
+                <option disabled value="">Chọn vai trò</option>
+                <option value="donor">Người hiến máu</option>
+                <option value="doctor">Bác sĩ</option>
+              </select>
+            </div>
+
             <div class="col-lg-6">
               <label>Mật khẩu <span class="text-danger">*</span></label>
               <input v-model="form.password" type="password" class="form-control" placeholder="Tối thiểu 6 ký tự" />
             </div>
+
             <div class="col-lg-6">
               <label>Xác nhận mật khẩu <span class="text-danger">*</span></label>
               <input v-model="form.password_confirmation" type="password" class="form-control" placeholder="Nhập lại mật khẩu" />
@@ -60,8 +92,15 @@
           </div>
 
           <div class="text-end mt-4">
-            <button type="submit" class="btn btn-danger">Đăng ký</button>
-            <button type="button" class="btn btn-secondary ms-2">Huỷ</button>
+            <button type="submit" class="btn btn-danger" :disabled="loading">
+              <span v-if="!loading">Đăng ký</span>
+              <span v-else>
+                <span class="spinner-border spinner-border-sm me-2"></span> Đang đăng ký...
+              </span>
+            </button>
+            <button type="button" class="btn btn-secondary ms-2" @click="resetForm" :disabled="loading">
+              Huỷ
+            </button>
           </div>
         </form>
 
@@ -71,12 +110,14 @@
         </p>
       </div>
 
+      <!-- Cột phải -->
       <div class="col-md-6 d-flex flex-column align-items-center justify-content-center text-center p-5 bg-danger bg-opacity-10">
-        <h5 class="fw-bold mb-2">Cùng nhau cứu sống</h5>
-        <p class="text-muted mb-4">Mỗi giọt máu bạn hiến có thể cứu sống 3 người</p>
-        <img 
+        <h5 class="fw-bold mb-2 text-danger">Cùng nhau cứu sống</h5>
+        <p>Mỗi giọt máu bạn hiến có thể cứu sống 3 người</p>
+        <img
           src="https://static.vecteezy.com/system/resources/previews/008/190/897/non_2x/human-blood-donate-on-white-background-free-vector.jpg"
-          class="img-fluid mb-4 rounded" style="max-width: 350px;" 
+          class="img-fluid mb-4 rounded"
+          style="max-width: 350px;"
         />
         <div class="text-start">
           <p><i class="fa-solid fa-heart text-danger me-2"></i> Quy trình hiến máu an toàn</p>
@@ -95,6 +136,7 @@ export default {
   name: "RegisterForm",
   data() {
     return {
+      loading: false,
       form: {
         full_name: "",
         birthday: "",
@@ -103,7 +145,7 @@ export default {
         email: "",
         address: "",
         blood_group: "",
-        role: "donor",
+        role: "",
         medical_history: "",
         password: "",
         password_confirmation: ""
@@ -111,28 +153,59 @@ export default {
     };
   },
   methods: {
+    resetForm() {
+      if (this.loading) return;
+      this.form = {
+        full_name: "",
+        birthday: "",
+        gender: "",
+        phone: "",
+        email: "",
+        address: "",
+        blood_group: "",
+        role: "",
+        medical_history: "",
+        password: "",
+        password_confirmation: ""
+      };
+    },
     async submitForm() {
+      this.loading = true;
       try {
         const res = await axios.post("http://localhost:4000/api/register", this.form);
 
         if (res.data.status) {
-          this.$toast.success(res.data.message || "Đăng ký thành công!");
-          this.form = {};
-        } else {
-          if (Array.isArray(res.data.errors)) {
-            res.data.errors.forEach(msg => this.$toast.error(msg));
+          if (this.form.role === "doctor") {
+            this.$toast?.success("Đăng ký thành công! Tài khoản bác sĩ của bạn đang được xét duyệt bởi quản trị viên.");
           } else {
-            this.$toast.error(res.data.message || "Đăng ký thất bại!");
+            this.$toast?.success("Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.");
           }
-        }
-      } catch (err) {
-        if (Array.isArray(err.response?.data?.errors)) {
-          err.response.data.errors.forEach(msg => this.$toast.error(msg));
+          this.resetForm();
         } else {
-          this.$toast.error(err.response.data.message || "Có lỗi xảy ra!");
+          this.$toast?.error(res.data.message || "Đăng ký thất bại!");
         }
+      } catch (error) {
+        this.$toast?.error(error.response?.data?.message || "Có lỗi xảy ra!");
+      } finally {
+        this.loading = false;
       }
     }
   }
 };
 </script>
+
+<style scoped>
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 10px;
+}
+</style>
