@@ -55,8 +55,6 @@
               <label>Địa chỉ <span class="text-danger">*</span></label>
               <input v-model="form.address" type="text" class="form-control" placeholder="Nhập địa chỉ của bạn" />
             </div>
-
-            <!-- Hiện thêm field khi là donor -->
             <template v-if="form.role === 'donor'">
               <div class="col-lg-12">
                 <label>Tiền sử bệnh lý</label>
@@ -155,21 +153,30 @@ export default {
       };
     },
     async submitForm() {
-      this.loading = true;
-      try {
-        const res = await axios.post("http://localhost:4000/api/register", this.form);
-        if (res.data.status) {
-          this.$toast?.success(res.data.message);
-          this.resetForm();
-        } else {
-          this.$toast?.error(res.data.message || "Đăng ký thất bại!");
-        }
-      } catch (error) {
-        this.$toast?.error(error.response?.data?.message || "Có lỗi xảy ra!");
-      } finally {
-        this.loading = false;
+  this.loading = true;
+  try {
+    const res = await axios.post("http://localhost:4000/api/register", this.form);
+    if (res.data.status) {
+      this.$toast?.success(res.data.message);
+      this.resetForm();
+    } else {
+      if (Array.isArray(res.data.errors)) {
+        res.data.errors.forEach(err => this.$toast?.error(err));
+      } else {
+        this.$toast?.error(res.data.message || "Đăng ký thất bại!");
       }
-    },
+    }
+  } catch (error) {
+    const errData = error.response?.data;
+    if (Array.isArray(errData?.errors)) {
+      errData.errors.forEach(err => this.$toast?.error(err));
+    } else {
+      this.$toast?.error(errData?.message || "Có lỗi xảy ra!");
+    }
+  } finally {
+    this.loading = false;
+  }
+}
   },
 };
 </script>
