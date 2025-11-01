@@ -20,14 +20,14 @@ const routes = [
             layout : "admin"
         }
     },
-    //bacsi
     {
-        path: "/Hospital/dang-ki-bac-si",
-        component: () => import("../components/Hospital/DuyetBacSi/index.vue"),
+        path: "/admin/dang-ki-bac-si",
+        component: () => import("../components/Admin/DuyetBacSi/index.vue"),
         meta: {
-            layout : "Hospital"
+            layout : "admin"
         }
     },
+    //bacsi
     {
         path: "/Hospital/dashboard",
         component: () => import("../components/Hospital/dashboard/index.vue"),
@@ -138,22 +138,6 @@ const routes = [
             layout : "client",
         }
     },
-
-    // {
-    //     path: "/RegisterAccount",
-    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
-    //     meta : {
-    //         layout : "client",
-    //     }
-    // },       
-    // {
-    //     path: "/register-account",
-    //     component: () => import("../components/Client/RegisterAccount/index.vue"),
-    //     meta : {
-    //         layout : "client",
-    //     }
-    // },
-
     {
         path: "/profile",
         component: () => import("../components/Client/profile/index.vue"),
