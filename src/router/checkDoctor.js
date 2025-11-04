@@ -4,15 +4,15 @@ import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right" });
 
 export default function (to, from, next) {
-  const token = localStorage.getItem("token_bac_si");
+  const token = localStorage.getItem("token_doctor");
 
   if (!token) {
     toaster.error("Vui lòng đăng nhập tài khoản bác sĩ!");
-    return next("/bac-si/login");
+    return next("/dang-nhap");
   }
 
   axios
-    .get("http://127.0.0.1:8000/api/bac-si/check-token", {
+    .get("http://localhost:4000/api/doctor/check-token", {
       headers: {
         Authorization: "Bearer " + token,
       },
