@@ -89,29 +89,36 @@ export default {
   },
   methods: {
     async handleLogin() {
-      // Kiểm tra form rỗng
       if (!this.user.email || !this.user.password) {
         this.$toast.error("Vui lòng nhập đầy đủ email và mật khẩu!");
         return;
       }
 
-      // Kiểm tra định dạng email
       if (!this.user.email.includes("@")) {
         this.$toast.error("Địa chỉ email không hợp lệ!");
         return;
       }
 
       try {
-        // ✅ Gọi API mới (đúng route `/api/login`)
         const res = await baseRequestClient.post("/login", this.user);
 
         if (res.data.status) {
+          const { role, token } = res.data.data;
+
           this.$toast.success(res.data.message || "Đăng nhập thành công!");
-          localStorage.setItem("token", res.data.data.token);
           localStorage.setItem("user", JSON.stringify(res.data.data));
 
-          // Điều hướng sang trang chủ
-          this.$router.push("/trang-chu");
+          // ✅ Phân nhánh theo vai trò
+          if (role === "admin") {
+            localStorage.setItem("token_admin", token);
+            this.$router.push("/admin/trang-chu");
+          } else if (role === "doctor") {
+            localStorage.setItem("token_doctor", token);
+            this.$router.push("/Hospital/dashboard");
+          } else {
+            localStorage.setItem("token_donor", token);
+            this.$router.push("/trang-chu");
+          }
         } else {
           this.$toast.error(res.data.message || "Đăng nhập thất bại!");
         }
@@ -127,6 +134,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 input.form-control {

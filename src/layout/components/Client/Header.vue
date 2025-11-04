@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import baseRequestClient from "../../../core/baseRequestClient";
+import baseRequestDonor from "../../../core/baseRequestClient";
 import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster({ position: "top-right", duration: 3000 });
@@ -77,69 +77,42 @@ export default {
   name: "TopSBD",
   data() {
     return {
+      isLoggedIn: false,
+      user: {},
       isSticky: false,
       navHeight: 0,
       stickyOffset: 10,
-      isLoggedIn: false,
-      user: {},
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.measure();
-      window.addEventListener("scroll", this.onScroll, { passive: true });
-      window.addEventListener("resize", this.measure);
-    });
     this.checkLogin();
   },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.onScroll);
-    window.removeEventListener("resize", this.measure);
-  },
   methods: {
-    onScroll() {
-      this.isSticky = window.scrollY > this.stickyOffset;
-    },
-    measure() {
-      if (this.$refs.nav) this.navHeight = this.$refs.nav.offsetHeight || 64;
-    },
-
     async checkLogin() {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        this.isLoggedIn = false;
-        return;
-      }
+      const token = localStorage.getItem("token_donor");
+      if (!token) return;
+
       try {
-        const res = await baseRequestClient.get("/profile");
+        const res = await baseRequestDonor.get("donor/check-token");
         if (res.data.status) {
           this.isLoggedIn = true;
-          this.user = res.data.data;
+          this.user = { full_name: res.data.ho_ten };
         } else {
+          localStorage.removeItem("token_donor");
           this.isLoggedIn = false;
-          localStorage.clear();
         }
-      } catch (err) {
+      } catch {
+        localStorage.removeItem("token_donor");
         this.isLoggedIn = false;
-        localStorage.clear();
-        toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
-      }
-    },
-    async logout() {
-      try {
-        await baseRequestClient.get("/logout");
-        localStorage.clear();
-        this.isLoggedIn = false;
-        toast.success("Đăng xuất thành công!");
+        toast.error("Phiên đăng nhập đã hết hạn!");
         this.$router.push("/dang-nhap");
-      } catch (err) {
-        toast.error("Có lỗi khi đăng xuất!");
       }
     },
-  },
-  watch: {
-    "$route.fullPath"() {
-      this.$nextTick(this.measure);
+    logout() {
+      localStorage.removeItem("token_donor");
+      this.isLoggedIn = false;
+      toast.success("Đăng xuất thành công!");
+      this.$router.push("/trang-chu");
     },
   },
 };

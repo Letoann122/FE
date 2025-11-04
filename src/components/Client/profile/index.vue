@@ -111,7 +111,7 @@ export default {
   methods: {
     async loadProfile() {
       try {
-        const res = await baseRequestClient.get("/profile");
+        const res = await baseRequestClient.get("/donor/profile");
         if (res.data.status) {
           this.profile = res.data.data;
         } else {
@@ -131,7 +131,7 @@ export default {
           this.$toast?.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
           return;
         }
-        const res = await baseRequestClient.put("/profile", this.profile);
+        const res = await baseRequestClient.put("/donor/profile", this.profile);
         if (res.data.status) {
           this.$toast?.success(
             res.data.message || "Cập nhật hồ sơ thành công!"

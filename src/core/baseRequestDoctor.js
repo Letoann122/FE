@@ -1,18 +1,18 @@
-// src/api/baseRequestAdmin.js
+// src/api/baseRequestHospital.js
 import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster();
 
-const baseRequestAdmin = axios.create({
+const baseRequestHospital = axios.create({
   baseURL: "http://localhost:4000/api",
   timeout: 8000,
 });
 
 // 🧩 Gắn token vào mọi request
-baseRequestAdmin.interceptors.request.use(
+baseRequestHospital.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token_admin");
+    const token = localStorage.getItem("token_doctor");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,19 +22,19 @@ baseRequestAdmin.interceptors.request.use(
 );
 
 // ⚙️ Xử lý lỗi trả về từ BE
-baseRequestAdmin.interceptors.response.use(
+baseRequestHospital.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
       const status = error.response.status;
 
       if (status === 401 || status === 403) {
-        toast.error("Phiên đăng nhập admin đã hết hạn. Vui lòng đăng nhập lại!");
-        localStorage.removeItem("token_admin");
-        localStorage.removeItem("user_admin");
+        toast.error("Phiên đăng nhập bệnh viện đã hết hạn. Vui lòng đăng nhập lại!");
+        localStorage.removeItem("token_doctor");
+        localStorage.removeItem("user_doctor");
 
         setTimeout(() => {
-          window.location.href = "/dang-nhap";
+          window.location.href = "/Hospital/login";
         }, 1500);
       } else if (status >= 500) {
         toast.error("Lỗi máy chủ. Vui lòng thử lại sau!");
@@ -50,4 +50,4 @@ baseRequestAdmin.interceptors.response.use(
   }
 );
 
-export default baseRequestAdmin;
+export default baseRequestHospital;
