@@ -40,16 +40,42 @@
 </template>
 
 <script>
-export default {
-    name: 'TheHeader',
-    methods: {
-        logout() {
-            alert('Đăng xuất!');
-        }
-    }
-}
-</script>
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
+import { createToaster } from "@meforma/vue-toaster";
+const toast = createToaster({ position: "top-right" });
 
+export default {
+  name: "TheHeader",
+  data() {
+    return { user: {} };
+  },
+  mounted() {
+    this.checkTokenDoctor();
+  },
+  methods: {
+    async checkTokenDoctor() {
+      try {
+        const res = await baseRequestDoctor.get("doctor/check-token");
+        if (res.data.status) {
+          this.user = { full_name: res.data.ho_ten };
+        } else {
+          toast.error(res.data.message);
+          this.$router.push("/dang-nhap");
+        }
+      } catch (err) {
+        toast.error("Phiên đăng nhập đã hết hạn!");
+        localStorage.removeItem("token_doctor");
+        this.$router.push("/dang-nhap");
+      }
+    },
+    logout() {
+      localStorage.removeItem("token_doctor");
+      toast.success("Đăng xuất thành công!");
+      this.$router.push("/dang-nhap");
+    },
+  },
+};
+</script>
 <style scoped>
 .main-header {
     border-bottom: 1px solid #e9ecef;
