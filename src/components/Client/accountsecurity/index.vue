@@ -119,7 +119,7 @@ export default {
       }
 
       try {
-        const res = await baseRequestClient.put("/change-password", this.passwords);
+        const res = await baseRequestClient.put("/donor/change-password", this.passwords);
         if (res.data.status) {
           this.$toast.success(res.data.message || "Đổi mật khẩu thành công!");
           this.resetForm();

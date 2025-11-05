@@ -4,10 +4,9 @@ import checkAdmin from "./checkadmin";
 import checkdonor from "./checkdonor";
 
 const routes = [
-  // Redirect
   { path: "/", redirect: "/trang-chu" },
 
-  // ================= ADMIN =================
+//admin
   {
     path: "/admin/trang-chu",
     component: () => import("../components/Admin/trangchu/index.vue"),
@@ -26,8 +25,8 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
-
-  // ================= HOSPITAL =================
+  
+//hospital
   {
     path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),
@@ -86,7 +85,7 @@ const routes = [
     beforeEnter: checkDoctor,
   },
 
-  // ================= CLIENT =================
+//donor
   {
     path: "/trang-chu",
     component: () => import("../components/trangchu/index.vue"),
@@ -153,7 +152,6 @@ const routes = [
     meta: { layout: "client" },
   },
 
-  // ================= BLANK (Auth Pages) =================
   {
     path: "/dang-nhap",
     component: () => import("../components/Client/DangNhap/index.vue"),
@@ -175,7 +173,6 @@ const routes = [
     meta: { layout: "blank" },
   },
 
-  // ================= NOT FOUND =================
   {
     path: "/:pathMatch(.*)*",
     component: () => import("../components/Client/not-found/index.vue"),
