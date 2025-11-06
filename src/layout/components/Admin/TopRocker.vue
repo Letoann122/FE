@@ -40,21 +40,21 @@ export default {
 //     this.checkTokenAdmin();
 //   },
   methods: {
-    async checkTokenAdmin() {
-      try {
-        const res = await baseRequestAdmin.get("admin/check-token");
-        if (res.data.status) {
-          this.user = { full_name: res.data.ho_ten };
-        } else {
-          toast.error(res.data.message);
-          this.$router.push("/dang-nhap");
-        }
-      } catch (err) {
-        toast.error("Phiên đăng nhập đã hết hạn!");
-        localStorage.removeItem("token_admin");
-        this.$router.push("/dang-nhap");
-      }
-    },
+    // async checkTokenAdmin() {
+    //   try {
+    //     const res = await baseRequestAdmin.get("admin/check-token");
+    //     if (res.data.status) {
+    //       this.user = { full_name: res.data.ho_ten };
+    //     } else {
+    //       toast.error(res.data.message);
+    //       this.$router.push("/dang-nhap");
+    //     }
+    //   } catch (err) {
+    //     toast.error("Phiên đăng nhập đã hết hạn!");
+    //     localStorage.removeItem("token_admin");
+    //     this.$router.push("/dang-nhap");
+    //   }
+    // },
     async logout() {
       localStorage.removeItem("token_admin");
       toast.success("Đăng xuất thành công!");
