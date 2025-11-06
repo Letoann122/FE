@@ -4,6 +4,11 @@ import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right" });
 
 export default function (to, from, next) {
+     // ✅ Nếu bật DEV MODE thì bỏ qua xác thực
+  if (import.meta.env.VITE_SKIP_TOKEN === "true") {
+    console.log("⚙️ DEV MODE: Bỏ qua checkToken (admin)");
+    return next();
+  }
   const token = localStorage.getItem("token_admin");
 
   if (!token) {

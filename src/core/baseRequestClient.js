@@ -24,16 +24,20 @@ baseRequestClient.interceptors.request.use(
 baseRequestClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    // ✅ Bỏ qua check token khi DEV MODE
+    if (import.meta.env.VITE_SKIP_TOKEN === "true") {
+      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (client)");
+      return Promise.resolve({ data: { status: true, data: [] } });
+    }
+
     if (error.response) {
       const status = error.response.status;
 
       if (status === 401 || status === 403) {
-        // Token hết hạn hoặc không hợp lệ
         toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        localStorage.removeItem("token_donor");
+        localStorage.removeItem("user_donor");
 
-        // Dùng setTimeout để tránh xung đột trong luồng toast
         setTimeout(() => {
           window.location.href = "/dang-nhap";
         }, 1500);

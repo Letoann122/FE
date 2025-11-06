@@ -1,4 +1,3 @@
-// src/api/baseRequestAdmin.js
 import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 
@@ -25,6 +24,12 @@ baseRequestAdmin.interceptors.request.use(
 baseRequestAdmin.interceptors.response.use(
   (response) => response,
   (error) => {
+    // ✅ Nếu đang bật DEV MODE thì bỏ qua toàn bộ lỗi xác thực
+    if (import.meta.env.VITE_SKIP_TOKEN === "true") {
+      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (admin)");
+      return Promise.resolve({ data: { status: true, data: [] } });
+    }
+
     if (error.response) {
       const status = error.response.status;
 

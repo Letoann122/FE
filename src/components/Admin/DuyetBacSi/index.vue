@@ -9,6 +9,7 @@
       </p>
     </div>
 
+    <!-- 🔍 Tìm kiếm -->
     <div class="mb-4 border-bottom">
       <div class="col-md-12 col-lg-3 d-flex gap-1 mb-4">
         <input
@@ -23,6 +24,7 @@
       </div>
     </div>
 
+    <!-- 📋 Bảng danh sách -->
     <div class="table-responsive bg-white rounded shadow-sm">
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
@@ -71,11 +73,13 @@
     </div>
 
     <div class="text-start mt-4">
-      <small class="text-muted">Tổng số bác sĩ chờ duyệt: {{ list_bac_si.length }}</small>
+      <small class="text-muted">
+        Tổng số bác sĩ chờ duyệt: {{ list_bac_si.length }}
+      </small>
     </div>
   </div>
 
-  <!-- ✅ Modal duyệt bác sĩ -->
+  <!-- ✅ Modal Duyệt -->
   <div
     class="modal fade"
     id="approveModal"
@@ -87,12 +91,7 @@
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-danger text-white">
           <h5 class="modal-title" id="approveModalLabel">Xác nhận duyệt bác sĩ</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <p>
@@ -119,6 +118,7 @@
     </div>
   </div>
 
+  <!-- ❌ Modal Từ chối -->
   <div
     class="modal fade"
     id="rejectModal"
@@ -130,12 +130,7 @@
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-secondary text-white">
           <h5 class="modal-title" id="rejectModalLabel">Xác nhận từ chối bác sĩ</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <p>
@@ -164,16 +159,14 @@
 </template>
 
 <script>
-import axios from "axios";
+import baseRequestAdmin from "../../../core/baseRequestAdmin";
 
 export default {
   name: "DoctorApproval",
   data() {
     return {
       list_bac_si: [],
-      tim_kiem: {
-        noi_dung_tim: "",
-      },
+      tim_kiem: { noi_dung_tim: "" },
       selectedDoctor: {},
     };
   },
@@ -181,69 +174,87 @@ export default {
     this.loadData();
   },
   methods: {
+    // 🔄 Load danh sách bác sĩ chờ duyệt
     loadData() {
-      axios
-        .get("http://localhost:4000/api/doctors/pending")
+      baseRequestAdmin
+        .get("admin/doctors/pending")
         .then((res) => {
           if (res.data.status) {
             this.list_bac_si = res.data.data;
           } else {
-            this.$toast.error("Không thể tải danh sách bác sĩ!");
+            this.$toast.error(res.data.message || "Không thể tải danh sách bác sĩ!");
           }
         })
-        .catch(() => {
-          this.$toast.error("Không thể tải danh sách bác sĩ!");
+        .catch((error) => {
+          const message =
+            error.response?.data?.message || "Không thể tải danh sách bác sĩ!";
+          this.$toast.error(message);
         });
     },
+
+    // 🔍 Tìm kiếm bác sĩ
     searchDoctor() {
       const keyword = this.tim_kiem.noi_dung_tim.trim();
       if (!keyword) {
         this.$toast.info("Vui lòng nhập tên bác sĩ cần tìm!");
         return;
       }
-      axios
-        .post("http://localhost:4000/api/doctors/search", this.tim_kiem)
+      baseRequestAdmin
+        .post("admin/doctors/search", this.tim_kiem)
         .then((res) => {
           if (res.data.status) {
             this.list_bac_si = res.data.data;
           } else {
             this.list_bac_si = [];
+            this.$toast.info("Không tìm thấy bác sĩ phù hợp!");
           }
         })
-        .catch(() => {
-          this.$toast.error("Lỗi khi tìm kiếm bác sĩ!");
+        .catch((error) => {
+          const message =
+            error.response?.data?.message || "Lỗi khi tìm kiếm bác sĩ!";
+          this.$toast.error(message);
         });
     },
+
+    // ✅ Duyệt bác sĩ
     confirmApprove(id) {
-      axios
-        .put(`http://localhost:4000/api/doctors/${id}/approve`)
+      baseRequestAdmin
+        .put(`admin/doctors/${id}/approve`)
         .then((res) => {
           if (res.data.status) {
             this.$toast.success("Duyệt bác sĩ thành công!");
             this.loadData();
           } else {
-            this.$toast.error("Không thể duyệt bác sĩ!");
+            this.$toast.error(res.data.message || "Không thể duyệt bác sĩ!");
           }
         })
-        .catch(() => {
-          this.$toast.error("Lỗi khi duyệt bác sĩ!");
+        .catch((error) => {
+          const message =
+            error.response?.data?.message || "Lỗi khi duyệt bác sĩ!";
+          this.$toast.error(message);
         });
     },
+
+    // ❌ Từ chối bác sĩ
     confirmReject(id) {
-      axios
-        .put(`http://localhost:4000/api/doctors/${id}/reject`)
+      baseRequestAdmin
+        .put(`admin/doctors/${id}/reject`)
         .then((res) => {
           if (res.data.status) {
             this.$toast.info("Đã từ chối bác sĩ.");
             this.loadData();
           } else {
-            this.$toast.error("Không thể từ chối bác sĩ!");
+            this.$toast.error(res.data.message || "Không thể từ chối bác sĩ!");
           }
         })
-        .catch(() => {
-          this.$toast.error("Lỗi khi từ chối bác sĩ!");
+        .catch((error) => {
+          const message =
+            error.response?.data?.message || "Lỗi khi từ chối bác sĩ!";
+          this.$toast.error(message);
         });
     },
+
+    // 🗓️ Format ngày
     formatDate(date) {
       if (!date) return "-";
       return new Date(date).toLocaleDateString("vi-VN");
@@ -251,10 +262,12 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .table {
   font-size: 15px;
 }
+
 .modal-content {
   border-radius: 1rem;
 }
