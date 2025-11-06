@@ -25,6 +25,13 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
+   {
+    path: "/admin/appoint-control",
+    component: () => import("../components/Admin/AppointControl/index.vue"),
+    meta: { layout: "admin" },
+    //  beforeEnter: checkAdmin,
+  },
+
   
 //hospital
   {
