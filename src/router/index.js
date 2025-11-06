@@ -6,7 +6,7 @@ import checkdonor from "./checkdonor";
 const routes = [
   { path: "/", redirect: "/trang-chu" },
 
-//admin
+  //admin
   {
     path: "/admin/trang-chu",
     component: () => import("../components/Admin/trangchu/index.vue"),
@@ -25,13 +25,6 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
-   {
-    path: "/admin/appoint-control",
-    component: () => import("../components/Admin/AppointControl/index.vue"),
-    meta: { layout: "admin" },
-    //  beforeEnter: checkAdmin,
-  },
-
   
 //hospital
   {
@@ -49,7 +42,8 @@ const routes = [
   {
     path: "/Hospital/blood-inventory/:id",
     name: "BloodBatchDetail",
-    component: () => import("../components/Hospital/BloodBatchDetail/index.vue"),
+    component: () =>
+      import("../components/Hospital/BloodBatchDetail/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
@@ -75,7 +69,8 @@ const routes = [
   },
   {
     path: "/Hospital/campaign-management",
-    component: () => import("../components/Hospital/CampaignManagement/index.vue"),
+    component: () =>
+      import("../components/Hospital/CampaignManagement/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
@@ -92,7 +87,7 @@ const routes = [
     beforeEnter: checkDoctor,
   },
 
-//donor
+  //donor
   {
     path: "/trang-chu",
     component: () => import("../components/trangchu/index.vue"),
@@ -105,7 +100,8 @@ const routes = [
   },
   {
     path: "/register",
-    component: () => import("../components/Client/Registerdonateblood/index.vue"),
+    component: () =>
+      import("../components/Client/Registerdonateblood/index.vue"),
     meta: { layout: "client" },
   },
   {
@@ -131,7 +127,8 @@ const routes = [
   },
   {
     path: "/blood-donation-history",
-    component: () => import("../components/Client/blooddonationhistory/index.vue"),
+    component: () =>
+      import("../components/Client/blooddonationhistory/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkdonor,
   },
@@ -143,7 +140,8 @@ const routes = [
   },
   {
     path: "/register-blooddonation",
-    component: () => import("../components/Client/Register_blooddonation/index.vue"),
+    component: () =>
+      import("../components/Client/Register_blooddonation/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkdonor,
   },

@@ -49,9 +49,9 @@ export default {
   data() {
     return { user: {} };
   },
-  mounted() {
-    this.checkTokenDoctor();
-  },
+//   mounted() {
+//     this.checkTokenDoctor();
+//   },
   methods: {
     async checkTokenDoctor() {
       try {
