@@ -1,21 +1,30 @@
 <template>
   <div class="container my-4">
-    <div class="row mb-3">
-      <div class="col">
-        <a href="#" class="btn btn-outline-secondary me-2">
-          <i class="bi bi-arrow-left"></i>
-        </a>
-        <span class="h4 fw-bold">Chi tiết Donor</span>
-      </div>
-      <div class="col text-end">
+    <nav aria-label="breadcrumb" class="mb-2">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <router-link to="/Hospital/donor-management">Quản lý Donor</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            Chi tiết Donor
+        </li>
+    </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Chi tiết Donor</h2>
+        <p class="text-muted mb-0">Thông tin đầy đủ và lịch sử hiến máu.</p>
+    </div>
+    <div class="text-end">
         <button class="btn btn-outline-secondary me-2">
-          <i class="bi bi-pencil-square me-1"></i> Cập nhật thông tin
+            <i class="bi bi-pencil-square me-1"></i> Cập nhật thông tin
         </button>
         <button class="btn btn-danger">
-          <i class="bi bi-lock-fill me-1"></i> Khóa tài khoản
+            <i class="bi bi-lock-fill me-1"></i> Khóa tài khoản
         </button>
-      </div>
     </div>
+</div>
 
     <div class="row g-4">
       <!-- Cột trái: Thông tin donor -->
