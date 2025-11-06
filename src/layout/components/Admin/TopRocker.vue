@@ -36,9 +36,9 @@ export default {
   data() {
     return { user: {} };
   },
-  mounted() {
-    this.checkTokenAdmin();
-  },
+//   mounted() {
+//     this.checkTokenAdmin();
+//   },
   methods: {
     async checkTokenAdmin() {
       try {
