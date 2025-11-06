@@ -2,7 +2,7 @@
     <div class="blood-stock-log-wrapper">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/hospital/blood-stock">Quản lý kho máu</router-link></li>
+                <li class="breadcrumb-item"><router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link></li>
                 <li class="breadcrumb-item active" aria-current="page">Nhật ký kho máu</li>
             </ol>
         </nav>
