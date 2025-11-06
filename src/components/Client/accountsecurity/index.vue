@@ -12,6 +12,7 @@
             >
               <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
             </router-link>
+
             <router-link
               to="/blood-donation-history"
               class="list-group-item list-group-item-action rounded-3 my-1"
@@ -19,6 +20,7 @@
             >
               <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
             </router-link>
+
             <router-link
               to="/account-security"
               class="list-group-item list-group-item-action rounded-3 my-1"
@@ -144,5 +146,25 @@ export default {
 .list-group-item.active {
   background-color: #ffecec !important;
   color: #dc3545 !important;
+}
+
+.list-group-item:hover {
+  background-color: #fff0f0 !important;
+}
+
+.form-check-input {
+  width: 2em;
+  height: 1em;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.badge {
+  font-size: 0.8rem;
+  border-radius: 6px;
+  padding: 4px 8px;
 }
 </style>

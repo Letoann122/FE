@@ -19,7 +19,12 @@
           </div>
         </div>
       </div>
+
+
+      <div class="col-md-9 col-lg-9">
+
       <div class="col-md-8 col-lg-9">
+
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <h4 class="fw-bold mb-1">
@@ -78,6 +83,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 </template>
 

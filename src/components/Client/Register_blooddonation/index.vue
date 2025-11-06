@@ -6,14 +6,14 @@
     </p>
     <div class="row g-4">
       <!-- Form đăng ký -->
-      <div class="col-lg-6">
+      <div class="col-lg-6" >
         <div class="card bg-white shadow p-4 rounded-4">
           <h5 class="fw-bold">Thông tin đặt lịch</h5>
           <p class="text-muted">Vui lòng điền đầy đủ thông tin</p>
 
           <form @submit.prevent="handleRegister">
             <!-- Thông tin cá nhân -->
-            <h6 class="fw-bold text-danger mt-4 mb-2">
+            <h6 class="fw-bold text-danger mt-3 mb-2">
               <i class="bi bi-person-fill"></i> Thông tin cá nhân
             </h6>
             <div class="row g-3">
@@ -80,7 +80,7 @@
               <label class="form-label">Ghi chú</label>
               <textarea
                 class="form-control"
-                rows="2"
+                rows="4"
                 v-model="form.medicalHistory"
                 placeholder="Tình trạng sức khỏe, thuốc đang sử dụng..."
               ></textarea>
