@@ -50,7 +50,8 @@
                         <form class="row g-3">
                             <div class="col-md-6">
                                 <label for="campaignName" class="form-label">Tên chiến dịch</label>
-                                <input type="text" class="form-control" id="campaignName" placeholder="Nhập tên chiến dịch">
+                                <input type="text" class="form-control" id="campaignName"
+                                    placeholder="Nhập tên chiến dịch">
                             </div>
                             <div class="col-md-6">
                                 <label for="campaignType" class="form-label">Loại chiến dịch</label>
@@ -67,13 +68,14 @@
                                 <label for="endDate" class="form-label">Ngày kết thúc</label>
                                 <input type="date" class="form-control" id="endDate">
                             </div>
-                             <div class="col-md-12">
+                            <div class="col-md-12">
                                 <label for="location" class="form-label">Địa điểm tổ chức</label>
                                 <input type="text" class="form-control" id="location" placeholder="Nhập địa điểm">
                             </div>
                             <div class="col-md-12">
                                 <label for="description" class="form-label">Mô tả / Ghi chú</label>
-                                <textarea class="form-control" id="description" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+                                <textarea class="form-control" id="description" rows="3"
+                                    placeholder="Nhập mô tả chi tiết"></textarea>
                             </div>
                             <div class="col-12 text-end">
                                 <button type="submit" class="btn btn-danger">Tạo chiến dịch mới</button>
@@ -105,11 +107,12 @@
                                         <td>{{ campaign.time }}</td>
                                         <td>{{ campaign.location }}</td>
                                         <td>{{ campaign.registrations }} người</td>
-                                        <td><span :class="['badge', campaign.statusClass]">{{ campaign.status }}</span></td>
+                                        <td><span :class="['badge', campaign.statusClass]">{{ campaign.status }}</span>
+                                        </td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-outline-primary me-1">Chi tiết</a>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary me-1">Sửa</a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger">Đóng</a>
+                                            <router-link :to="`/hospital/campaigns/${campaign.id}`" class="btn btn-sm btn-outline-primary me-1">Chi tiết</router-link>
+                                            <a href="#" class="btn btn-sm btn-outline-primary me-1">Sửa</a>
+                                            <a href="#" class="btn btn-sm btn-outline-primary me-1">Đóng</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -119,8 +122,9 @@
                 </div>
 
                 <div class="card shadow-sm">
-                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Danh sách lịch hẹn</h5>
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Danh sách lịch hẹn
+                        </h5>
                         <button class="btn btn-success btn-sm">
                             <i class="bi bi-download me-2"></i>Xuất danh sách
                         </button>
@@ -140,7 +144,8 @@
                                 <tbody>
                                     <tr v-for="appt in appointments" :key="appt.id">
                                         <td class="fw-bold">{{ appt.donorName }}</td>
-                                        <td><span class="badge bg-danger-light text-danger p-2">{{ appt.bloodType }}</span></td>
+                                        <td><span class="badge bg-danger-light text-danger p-2">{{ appt.bloodType
+                                                }}</span></td>
                                         <td>{{ appt.dateTime }}</td>
                                         <td>{{ appt.campaign }}</td>
                                         <td><span :class="['badge', appt.statusClass]">{{ appt.status }}</span></td>
@@ -157,8 +162,10 @@
         <div class="card shadow-sm mt-4" style="background-color: #fef2f2; border: 1px solid #fde2e2;">
             <div class="card-body text-center py-5">
                 <h3 class="fw-bold">Tổ chức chiến dịch hiến máu – Kêu gọi cộng đồng cùng hành động</h3>
-                <p class="lead text-muted my-3">Mỗi giọt máu là một sự sống. Hãy tạo chiến dịch hiến máu để kết nối những trái tim nhân ái.</p>
-                <button class="btn btn-danger btn-lg"><i class="bi bi-droplet-half me-2"></i>Tạo chiến dịch ngay</button>
+                <p class="lead text-muted my-3">Mỗi giọt máu là một sự sống. Hãy tạo chiến dịch hiến máu để kết nối
+                    những trái tim nhân ái.</p>
+                <button class="btn btn-danger btn-lg"><i class="bi bi-droplet-half me-2"></i>Tạo chiến dịch
+                    ngay</button>
             </div>
         </div>
     </div>
@@ -187,31 +194,38 @@ export default {
 .form-label {
     font-weight: 500;
 }
+
 .badge {
     padding: 0.5em 0.75em;
     font-size: 0.75rem;
     font-weight: 600;
 }
+
 .badge-blue {
     color: #0d6efd;
     background-color: #cfe2ff;
 }
+
 .badge-red {
     color: #dc3545;
     background-color: #f8d7da;
 }
+
 .badge-green {
     color: #198754;
     background-color: #d1e7dd;
 }
+
 .badge-gray {
     color: #6c757d;
     background-color: #e2e3e5;
 }
+
 .badge-yellow {
     color: #664d03;
     background-color: #fff3cd;
 }
+
 .bg-danger-light {
     background-color: #fde2e2 !important;
 }
