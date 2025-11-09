@@ -1,36 +1,49 @@
 <template>
-  <div class="container my-5">
-    <div class="row d-flex align-items-stretch">
-      <div class="col-md-3" >
-        <div class="sidebar bg-white border rounded-4 shadow-sm p-4 h-100">
-          <router-link
-            v-for="(item, index) in menu"
-            :key="index"
-            :to="item.route"
-            class="menu-item d-flex align-items-center px-3 py-2 rounded mb-2 text-decoration-none"
-            :class="{ active: $route.path === item.route }"
-          >
-            <i :class="item.icon" class="me-2"></i>
-            <span>{{ item.label }}</span>
-          </router-link>
+  <div class="container-fluid bg-body-tertiary py-5">
+    <div class="row justify-content-center g-4">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-lg-2">
+        <div class="card border-0 shadow-sm rounded-4 p-2">
+          <div class="list-group list-group-flush">
+            <router-link
+              to="/profile"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
+            </router-link>
+            <router-link
+              to="/blood-donation-history"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
+            </router-link>
+            <router-link
+              to="/account-security"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
+              <i class="bi bi-shield-lock-fill me-2"></i> Bảo mật tài khoản
+            </router-link>
+          </div>
         </div>
       </div>
 
-      <div class="col-md-9">
-        <div class="card shadow-sm border-0 rounded-4 bg-white p-4 h-100">
-          <div class="mb-3">
-            <i class="bi bi-arrow-counterclockwise fs-3 text-danger"></i>
-            <h5 class="d-inline ms-2 fw-bold">Lịch sử hiến máu</h5>
-            <p class="text-muted mb-0">
-              Theo dõi toàn bộ hành trình hiến máu của bạn
-            </p>
-          </div>
+      <!-- Content -->
+      <div class="col-md-9 col-lg-9">
+        <div class="card shadow-sm border-0 rounded-4 bg-white p-4">
+          <h4 class="fw-bold mb-1">
+            <i class="bi bi-arrow-counterclockwise me-2 text-danger"></i>
+            Lịch sử hiến máu
+          </h4>
+          <p class="text-muted mb-3">Theo dõi toàn bộ hành trình hiến máu của bạn</p>
+          <hr class="border border-1 border-light-subtle my-3" />
 
+          
           <div class="row g-3 mb-4">
             <div v-for="(item, index) in stats" :key="index" class="col-md-4">
-              <div
-                class="card border-0 shadow-sm rounded-4 py-3 px-4 d-flex align-items-center"
-              >
+              <div class="card border-0 shadow-sm rounded-4 py-3 px-4 d-flex align-items-center">
                 <div
                   :class="[
                     'icon-box rounded-circle d-flex align-items-center justify-content-center me-3',
@@ -48,6 +61,7 @@
             </div>
           </div>
 
+         
           <div class="card border-0 shadow-sm rounded-4 mb-4 p-3">
             <div class="row g-2 align-items-center">
               <div class="col-md-2">
@@ -74,13 +88,14 @@
                 />
               </div>
               <div class="col-md-2 text-end">
-                <button class="btn btn-danger w-100" style="height: 40px;">
+                <button class="btn btn-danger w-100" style="height: 40px">
                   <i class="bi bi-download me-2"></i>Xuất dữ liệu
                 </button>
               </div>
             </div>
           </div>
 
+          <!-- Table section -->
           <div class="card border-0 shadow-sm rounded-4">
             <div class="table-responsive">
               <table class="table align-middle mb-0">
@@ -97,10 +112,9 @@
                     <td>{{ item.date }}</td>
                     <td>{{ item.location }}</td>
                     <td>
-                      <span
-                        class="badge bg-light text-danger fw-semibold px-3 py-2"
-                        >{{ item.amount }}</span
-                      >
+                      <span class="badge bg-light text-danger fw-semibold px-3 py-2">
+                        {{ item.amount }}
+                      </span>
                     </td>
                     <td>{{ item.note }}</td>
                   </tr>
@@ -122,24 +136,6 @@ export default {
   name: "LichSuHienMau",
   data() {
     return {
-      menu: [
-        {
-          label: "Hồ sơ cá nhân",
-          icon: "bi bi-person-fill text-danger",
-          route: "/profile",
-        },
-        {
-          label: "Lịch sử hiến máu",
-          icon: "bi bi-arrow-counterclockwise text-danger",
-          route: "/blood-donation-history",
-        },
-        {
-          label: "Bảo mật tài khoản",
-          icon: "bi bi-shield-shaded text-danger",
-          route: "/account-security",
-        },
-      ],
-
       stats: [
         {
           label: "Tổng số lần hiến",
@@ -193,25 +189,9 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #f9fafc;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  color: #333;
-  font-weight: 500;
-  transition: 0.3s;
-}
-.menu-item.active {
-  background-color: #fff0f0;
-  color: #dc3545;
-  font-weight: 600;
-  border-left: 4px solid #dc3545;
-}
-.menu-item:hover {
-  background-color: #f8f9fa;
+.list-group-item.active {
+  background-color: #ffecec !important;
+  color: #dc3545 !important;
 }
 
 .bg-light-danger {
