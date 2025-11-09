@@ -1,42 +1,39 @@
 <template>
-    <div class="wrapper">
-        <TheHeader />
-
-        <main class="main-content">
-            <div class="container-fluid py-4 px-lg-5"> 
-                <slot></slot>
-            </div>
-        </main>
-        
-        <TheFooter />
-    </div>
+  <div class="hospital-wrapper">
+    <TheHeader />
+    <main>
+      <router-view />
+    </main>
+    <TheFooter />
+  </div>
 </template>
 
 <script>
 import TheHeader from "../../components/Hospital/TheHeader.vue";
 import TheFooter from "../../components/Hospital/TheFooter.vue";
+import "../../../assets/js/bootstrap.bundle.min.js";
 
 export default {
-    name: "HospitalLayout",
-    components: {
-        TheHeader,
-        TheFooter,
-    },
+  name: "HospitalLayout",
+  components: {
+    TheHeader,
+    TheFooter,
+  },
 };
 </script>
 
-<style scoped>
-.wrapper {
+<style>
+@import "../../../assets/css/bootstrap.min.css";
+@import "../../../assets/css/all.min.css"; 
+
+.hospital-wrapper {
+  background-color: #f5f6f7; /* hoặc #f7f7f8 để sáng hơn */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh; 
 }
 
-.page-wrapper {
-  flex-grow: 1; 
-}
-
-.page-content {
-    padding: 20px; 
+main {
+  flex: 1;
 }
 </style>

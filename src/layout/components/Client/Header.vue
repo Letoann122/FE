@@ -84,9 +84,9 @@ export default {
       stickyOffset: 10,
     };
   },
-  // mounted() {
-  //   this.checkLogin();
-  // },
+  mounted() {
+    this.checkLogin();
+  },
   methods: {
     async checkLogin() {
       const token = localStorage.getItem("token_donor");

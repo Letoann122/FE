@@ -34,6 +34,18 @@ const routes = [
   
 //hospital
   {
+    path: "/Hospital/profile",
+    component: () => import("../components/Hospital/Profile/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
+    path: "/Hospital/doi-mat-khau",
+    component: () => import("../components/Hospital/DoiMatKhau/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
     path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),
     meta: { layout: "Hospital" },
