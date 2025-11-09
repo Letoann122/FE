@@ -189,7 +189,7 @@ const routes = [
     path: "/forgot-pasword",
     component: () => import("../components/Client/Forgotpassword/index.vue"),
     meta: { layout: "blank" },
-  },
+  },  
   {
     path: "/change-password",
     component: () => import("../components/Client/Changepassword/index.vue"),

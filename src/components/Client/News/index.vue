@@ -140,9 +140,13 @@
       Mỗi giọt máu hiến tặng là một cơ hội cứu sống. Hãy tham gia cộng đồng hiến
       máu ngay hôm nay!
     </p>
-    <button class="btn btn-danger btn-lg rounded-pill">
-      ❤️ Đăng ký hiến máu ngay
-    </button>
+    <router-link
+  to="/register"
+  class="btn btn-danger btn-lg rounded-pill text-decoration-none d-inline-block"
+>
+  ❤️ Đăng ký hiến máu ngay
+</router-link>
+
   </div>
 </template>
 
