@@ -25,8 +25,13 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
-  
-//hospital
+  {
+    path: "/admin/tao-chien-dich",
+    component: () => import("../components/Admin/TaoChienLuoc/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
+  },
+  //hospital
   {
     path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),

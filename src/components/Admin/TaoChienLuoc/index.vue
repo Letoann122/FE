@@ -1,6 +1,6 @@
 <template>
   <div class="container py-5">
-    <!-- Tiêu đề -->
+    <!-- 🩸 TIÊU ĐỀ -->
     <div class="mb-4 border-bottom pb-3">
       <h3 class="fw-bold text-danger">
         <i class="bi bi-megaphone-fill me-2"></i> Tạo Chiến Dịch Hiến Máu
@@ -10,7 +10,7 @@
       </p>
     </div>
 
-    <!-- Form tạo chiến dịch -->
+    <!-- 🧩 FORM TẠO CHIẾN DỊCH -->
     <form @submit.prevent="submitCampaign" class="bg-white p-4 rounded shadow-sm">
       <div class="mb-3">
         <label class="form-label fw-semibold">Tiêu đề chiến dịch</label>
@@ -64,11 +64,12 @@
       </div>
     </form>
 
-    <!-- Danh sách chiến dịch -->
+    <!-- 📋 DANH SÁCH CHIẾN DỊCH -->
     <div class="mt-5">
       <h5 class="fw-bold mb-3">
         <i class="bi bi-list-ul me-2 text-danger"></i> Danh sách chiến dịch hiện có
       </h5>
+
       <div class="table-responsive bg-white rounded shadow-sm">
         <table class="table table-hover align-middle mb-0">
           <thead class="table-light">
@@ -77,6 +78,7 @@
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Khẩn cấp</th>
+              <th>Người tạo</th>
               <th>Ngày tạo</th>
             </tr>
           </thead>
@@ -89,11 +91,12 @@
                 <span v-if="c.is_emergency" class="badge bg-danger">Có</span>
                 <span v-else class="badge bg-secondary">Không</span>
               </td>
+              <td>{{ c.creator?.full_name || "Admin" }}</td>
               <td>{{ formatDate(c.created_at) }}</td>
             </tr>
 
             <tr v-if="campaigns.length === 0">
-              <td colspan="5" class="text-center text-muted py-4">
+              <td colspan="6" class="text-center text-muted py-4">
                 Chưa có chiến dịch nào được tạo.
               </td>
             </tr>
@@ -105,7 +108,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import baseRequestAdmin from "../../../core/baseRequestAdmin";
 
 export default {
   name: "CampaignCreate",
@@ -130,7 +133,7 @@ export default {
   methods: {
     async fetchCampaigns() {
       try {
-        const res = await axios.get("http://localhost:4000/api/campaigns");
+        const res = await baseRequestAdmin.get("/Campaigns");
         if (res.data.status) {
           this.campaigns = res.data.data;
         } else {
@@ -141,10 +144,9 @@ export default {
         this.$toast.error("Lỗi kết nối khi tải chiến dịch!");
       }
     },
-
     async submitCampaign() {
       try {
-        const res = await axios.post("http://localhost:4000/api/admin/campaigns", this.form);
+        const res = await baseRequestAdmin.post("/admin/Campaigns", this.form);
 
         if (res.data.status) {
           this.$toast.success("✅ Tạo chiến dịch thành công!");
@@ -161,12 +163,11 @@ export default {
         }
       } catch (err) {
         console.error("❌ Lỗi khi tạo chiến dịch:", err);
-        this.$toast.error("Lỗi kết nối đến server!");
+        this.$toast.error("Lỗi kết nối đến server hoặc token hết hạn!");
       }
     },
-
     formatDate(date) {
-      if (!date) return "";
+      if (!date) return "-";
       return new Date(date).toLocaleDateString("vi-VN");
     },
   },
@@ -178,7 +179,16 @@ form {
   max-width: 700px;
   margin: 0 auto;
 }
+
 .table th {
   font-weight: 600;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+button.btn {
+  font-weight: 500;
 }
 </style>

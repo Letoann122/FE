@@ -135,7 +135,7 @@ export default {
 
   methods: {
     loadData() {
-      const token = localStorage.getItem("admin_token");
+      const token = localStorage.getItem("token_admin");
       if (!token) {
         this.$toast?.error("Bạn chưa đăng nhập với quyền Admin!");
         return;
