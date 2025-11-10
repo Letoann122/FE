@@ -140,7 +140,7 @@ export default {
                 const res = await baseRequestDoctor.put("/doctor/profile", this.profile);
                 if (res.data.status) {
                     this.$toast?.success(res.data.message || "Cập nhật hồ sơ thành công!");
-                    this.loadProfile(); // chỉ load lại dữ liệu
+                    this.loadProfile(); 
                 } else {
                     this.$toast?.error(res.data.message || "Không thể cập nhật hồ sơ!");
                 }

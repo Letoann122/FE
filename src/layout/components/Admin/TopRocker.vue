@@ -47,18 +47,18 @@ export default {
           this.user = { full_name: res.data.ho_ten };
         } else {
           toast.error(res.data.message);
-          this.$router.push("/dang-nhap");
+          this.$router.push("/login");
         }
       } catch (err) {
         toast.error("Phiên đăng nhập đã hết hạn!");
         localStorage.removeItem("token_admin");
-        this.$router.push("/dang-nhap");
+        this.$router.push("/login");
       }
     },
     async logout() {
       localStorage.removeItem("token_admin");
       toast.success("Đăng xuất thành công!");
-      this.$router.push("/dang-nhap");
+      this.$router.push("/login");
     },
   },
 };

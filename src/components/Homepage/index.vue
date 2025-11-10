@@ -41,7 +41,7 @@
           trực tuyến an toàn, tiện lợi, minh bạch
         </p>
         <div class="mt-4 mb-5">
-          <router-link to="/dang-ky" class="btn btn-danger me-3">
+          <router-link to="/register" class="btn btn-danger me-3">
             Bắt đầu ngay
           </router-link>
 

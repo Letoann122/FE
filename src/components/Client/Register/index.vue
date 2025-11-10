@@ -93,7 +93,7 @@
         </form>
 
         <p class="text-center mt-3">
-          Đã có tài khoản? <router-link to="/dang-nhap" class="text-danger fw-bold">Đăng nhập ngay</router-link>
+          Đã có tài khoản? <router-link to="/login" class="text-danger fw-bold">Đăng nhập ngay</router-link>
         </p>
       </div>
 
