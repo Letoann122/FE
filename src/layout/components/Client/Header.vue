@@ -14,20 +14,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/trang-chu" exact-active-class="active">Trang chủ</router-link>
+              <router-link class="nav-link" to="/home-page" exact-active-class="active">Trang chủ</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/About" exact-active-class="active">Giới thiệu</router-link>
+              <router-link class="nav-link" to="/about" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
+              <router-link class="nav-link" to="/register" exact-active-class="active">Đăng ký hiến máu</router-link>
             </li>
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
                 lịch</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/News" exact-active-class="active">Tin tức & chiến dịch</router-link>
+              <router-link class="nav-link" to="/news" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
 
             <li class="nav-item dropdown mx-3">
@@ -43,8 +43,8 @@
             </li>
           </ul>
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">Đăng nhập</router-link>
-            <router-link class="btn btn-danger" to="/dang-ky">Đăng ký</router-link>
+            <router-link class="btn btn-outline-secondary me-2" to="/home-page">Đăng nhập</router-link>
+            <router-link class="btn btn-danger" to="/register">Đăng ký</router-link>
           </div>
           <div v-else class="dropdown">
             <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-secondary fw-semibold"
@@ -112,7 +112,7 @@ export default {
       localStorage.removeItem("token_donor");
       this.isLoggedIn = false;
       toast.success("Đăng xuất thành công!");
-      this.$router.push("/trang-chu");
+      this.$router.push("/home-page");
     },
   },
 };

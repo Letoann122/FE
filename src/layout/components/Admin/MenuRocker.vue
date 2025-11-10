@@ -171,12 +171,12 @@
                 <div class="menu-title">Số lượng người hiến</div>
               </router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link" to="/admin/appoint-control">
-                <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn
-              </router-link>
-            </li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <router-link class="nav-link" to="/admin/appoint-control">
+            <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn
+          </router-link>
         </li>
       </ul>
     </nav>
