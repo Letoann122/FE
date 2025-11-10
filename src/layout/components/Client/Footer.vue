@@ -2,7 +2,6 @@
   <footer class="bg-dark text-white pt-5 pb-3 mt-5">
     <div class="container">
       <div class="row gy-4">
-        <!-- Cột 1: Giới thiệu -->
         <div class="col-md-4">
           <h5 class="fw-bold text-white mb-3">
             <i class="bi bi-droplet-fill text-danger me-2"></i> Smart Blood Donation
@@ -22,8 +21,6 @@
             </a>
           </div>
         </div>
-
-        <!-- Cột 2: Liên kết nhanh -->
         <div class="col-md-2">
           <h6 class="fw-bold text-white mb-3">Liên kết nhanh</h6>
           <ul class="list-unstyled">
@@ -49,8 +46,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- Cột 3: Hỗ trợ -->
         <div class="col-md-3">
           <h6 class="fw-bold text-white mb-3">Hỗ trợ</h6>
           <ul class="list-unstyled">
@@ -76,8 +71,6 @@
             </li>
           </ul>
         </div>
-
-        <!-- Cột 4: Liên hệ -->
         <div class="col-md-3">
           <h6 class="fw-bold text-white mb-3">Liên hệ</h6>
           <p class="text-white-50 mb-2">
@@ -91,37 +84,31 @@
           </p>
         </div>
       </div>
-
-      <!-- Dòng bản quyền -->
       <div class="text-center mt-4 pt-3 border-top border-secondary text-white-50 small">
         © 2025 Smart Blood Donation System. Tất cả quyền được bảo lưu.
       </div>
     </div>
   </footer>
 </template>
-
 <style scoped>
 .footer-link {
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   transition: all 0.3s;
 }
-
 .footer-link:hover {
-  color: #dc3545; /* đỏ bootstrap */
+  color: #dc3545;
   text-decoration: underline;
 }
-
 .hover-icon:hover {
   color: #dc3545;
   transform: scale(1.2);
   transition: 0.3s ease;
 }
 .list-unstyled :hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
 </style>
 
 <script>

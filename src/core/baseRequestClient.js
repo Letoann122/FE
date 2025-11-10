@@ -39,7 +39,7 @@ baseRequestClient.interceptors.response.use(
         localStorage.removeItem("user_donor");
 
         setTimeout(() => {
-          window.location.href = "/dang-nhap";
+          window.location.href = "/login";
         }, 1500);
       } else if (status >= 500) {
         toast.error("Lỗi máy chủ. Vui lòng thử lại sau!");

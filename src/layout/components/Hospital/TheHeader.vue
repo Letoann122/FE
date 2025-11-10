@@ -65,7 +65,7 @@
 
           <!-- Khi chưa đăng nhập -->
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">
+            <router-link class="btn btn-outline-secondary me-2" to="/login">
               Đăng nhập
             </router-link>
           </div>
@@ -141,7 +141,7 @@ export default {
         localStorage.removeItem("token_doctor");
         this.isLoggedIn = false;
         this.$toast.error("Phiên đăng nhập đã hết hạn!");
-        this.$router.push("/dang-nhap");
+        this.$router.push("/login");
       }
     },
 
@@ -149,7 +149,7 @@ export default {
       localStorage.removeItem("token_doctor");
       this.isLoggedIn = false;
       this.$toast.success("Đăng xuất thành công!");
-      this.$router.push("/dang-nhap");
+      this.$router.push("/login");
     },
 
     handleSticky() {

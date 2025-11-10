@@ -2,7 +2,7 @@
   <div class="top-wrapper">
     <nav ref="nav" class="navbar navbar-expand-lg bg-white" :class="{ 'fixed-top shadow-sm': isSticky }">
       <div class="container-fluid">
-        <router-link class="navbar-brand fw-bold ms-3" to="/trang-chu">
+        <router-link class="navbar-brand fw-bold ms-3" to="/home-page">
           <i class="fa-solid fa-heart text-danger"></i> Smart Blood Donation
         </router-link>
 
@@ -105,7 +105,7 @@ export default {
         localStorage.removeItem("token_donor");
         this.isLoggedIn = false;
         toast.error("Phiên đăng nhập đã hết hạn!");
-        this.$router.push("/dang-nhap");
+        this.$router.push("/login");
       }
     },
     logout() {
