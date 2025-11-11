@@ -19,7 +19,12 @@
           </div>
         </div>
       </div>
+
+
+      <div class="col-md-9 col-lg-9">
+
       <div class="col-md-8 col-lg-9">
+
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <h4 class="fw-bold mb-1">
@@ -79,6 +84,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -105,7 +111,7 @@ export default {
   methods: {
     async loadProfile() {
       try {
-        const res = await baseRequestClient.get("/profile");
+        const res = await baseRequestClient.get("/donor/profile");
         if (res.data.status) {
           this.profile = res.data.data;
         } else {
@@ -125,7 +131,7 @@ export default {
           this.$toast?.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
           return;
         }
-        const res = await baseRequestClient.put("/profile", this.profile);
+        const res = await baseRequestClient.put("/donor/profile", this.profile);
         if (res.data.status) {
           this.$toast?.success(
             res.data.message || "Cập nhật hồ sơ thành công!"

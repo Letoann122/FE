@@ -3,15 +3,15 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster();
 
-const baseRequestAdmin = axios.create({
+const baseRequestHospital = axios.create({
   baseURL: "http://localhost:4000/api",
   timeout: 8000,
 });
 
 // 🧩 Gắn token vào mọi request
-baseRequestAdmin.interceptors.request.use(
+baseRequestHospital.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token_admin");
+    const token = localStorage.getItem("token_doctor");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -21,12 +21,12 @@ baseRequestAdmin.interceptors.request.use(
 );
 
 // ⚙️ Xử lý lỗi trả về từ BE
-baseRequestAdmin.interceptors.response.use(
+baseRequestHospital.interceptors.response.use(
   (response) => response,
   (error) => {
-    // ✅ Nếu đang bật DEV MODE thì bỏ qua toàn bộ lỗi xác thực
+    // ✅ DEV MODE: bỏ qua thông báo token lỗi
     if (import.meta.env.VITE_SKIP_TOKEN === "true") {
-      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (admin)");
+      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (hospital)");
       return Promise.resolve({ data: { status: true, data: [] } });
     }
 
@@ -34,9 +34,9 @@ baseRequestAdmin.interceptors.response.use(
       const status = error.response.status;
 
       if (status === 401 || status === 403) {
-        toast.error("Phiên đăng nhập admin đã hết hạn. Vui lòng đăng nhập lại!");
-        localStorage.removeItem("token_admin");
-        localStorage.removeItem("user_admin");
+        toast.error("Phiên đăng nhập bệnh viện đã hết hạn. Vui lòng đăng nhập lại!");
+        localStorage.removeItem("token_doctor");
+        localStorage.removeItem("user_doctor");
 
         setTimeout(() => {
           window.location.href = "/login";
@@ -51,8 +51,9 @@ baseRequestAdmin.interceptors.response.use(
     } else {
       toast.error("Không thể kết nối đến máy chủ!");
     }
+
     return Promise.reject(error);
   }
 );
 
-export default baseRequestAdmin;
+export default baseRequestHospital;

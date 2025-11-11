@@ -2,7 +2,7 @@
   <div class="top-wrapper">
     <nav ref="nav" class="navbar navbar-expand-lg bg-white" :class="{ 'fixed-top shadow-sm': isSticky }">
       <div class="container-fluid">
-        <router-link class="navbar-brand fw-bold ms-3" to="/trang-chu">
+        <router-link class="navbar-brand fw-bold ms-3" to="/home-page">
           <i class="fa-solid fa-heart text-danger"></i> Smart Blood Donation
         </router-link>
 
@@ -14,20 +14,20 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/trang-chu" exact-active-class="active">Trang chủ</router-link>
+              <router-link class="nav-link" to="/home-page" exact-active-class="active">Trang chủ</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/About" exact-active-class="active">Giới thiệu</router-link>
+              <router-link class="nav-link" to="/about" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
+              <router-link class="nav-link" to="/register" exact-active-class="active">Đăng ký hiến máu</router-link>
             </li>
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
                 lịch</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/News" exact-active-class="active">Tin tức & chiến dịch</router-link>
+              <router-link class="nav-link" to="/news" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
 
             <li class="nav-item dropdown mx-3">
@@ -43,8 +43,8 @@
             </li>
           </ul>
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">Đăng nhập</router-link>
-            <router-link class="btn btn-danger" to="/dang-ky">Đăng ký</router-link>
+            <router-link class="btn btn-outline-secondary me-2" to="/home-page">Đăng nhập</router-link>
+            <router-link class="btn btn-danger" to="/register">Đăng ký</router-link>
           </div>
           <div v-else class="dropdown">
             <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-secondary fw-semibold"
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import baseRequestClient from "../../../core/baseRequestClient";
+import baseRequestDonor from "../../../core/baseRequestClient";
 import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster({ position: "top-right", duration: 3000 });
@@ -77,69 +77,42 @@ export default {
   name: "TopSBD",
   data() {
     return {
+      isLoggedIn: false,
+      user: {},
       isSticky: false,
       navHeight: 0,
       stickyOffset: 10,
-      isLoggedIn: false,
-      user: {},
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.measure();
-      window.addEventListener("scroll", this.onScroll, { passive: true });
-      window.addEventListener("resize", this.measure);
-    });
     this.checkLogin();
   },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.onScroll);
-    window.removeEventListener("resize", this.measure);
-  },
   methods: {
-    onScroll() {
-      this.isSticky = window.scrollY > this.stickyOffset;
-    },
-    measure() {
-      if (this.$refs.nav) this.navHeight = this.$refs.nav.offsetHeight || 64;
-    },
-
     async checkLogin() {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        this.isLoggedIn = false;
-        return;
-      }
+      const token = localStorage.getItem("token_donor");
+      if (!token) return;
+
       try {
-        const res = await baseRequestClient.get("/profile");
+        const res = await baseRequestDonor.get("donor/check-token");
         if (res.data.status) {
           this.isLoggedIn = true;
-          this.user = res.data.data;
+          this.user = { full_name: res.data.ho_ten };
         } else {
+          localStorage.removeItem("token_donor");
           this.isLoggedIn = false;
-          localStorage.clear();
         }
-      } catch (err) {
+      } catch {
+        localStorage.removeItem("token_donor");
         this.isLoggedIn = false;
-        localStorage.clear();
-        toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+        toast.error("Phiên đăng nhập đã hết hạn!");
+        this.$router.push("/login");
       }
     },
-    async logout() {
-      try {
-        await baseRequestClient.get("/logout");
-        localStorage.clear();
-        this.isLoggedIn = false;
-        toast.success("Đăng xuất thành công!");
-        this.$router.push("/dang-nhap");
-      } catch (err) {
-        toast.error("Có lỗi khi đăng xuất!");
-      }
-    },
-  },
-  watch: {
-    "$route.fullPath"() {
-      this.$nextTick(this.measure);
+    logout() {
+      localStorage.removeItem("token_donor");
+      this.isLoggedIn = false;
+      toast.success("Đăng xuất thành công!");
+      this.$router.push("/home-page");
     },
   },
 };

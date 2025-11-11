@@ -118,7 +118,7 @@
                                                     <span :class="['badge rounded-pill', donor.status === 'Hoạt động' ? 'bg-success-light text-success' : 'bg-warning-light text-warning']">{{ donor.status }}</span>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-sm btn-outline-danger">Xem chi tiết</button>
+                                                    <Router-Link :to="`/Hospital/donor-management/${donor.id}`" class="btn btn-sm btn-outline-danger">Xem chi tiết</Router-Link>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -157,6 +157,8 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 export default {
     name: 'QuanLyDonor',
     data() {
