@@ -33,6 +33,26 @@ const routes = [
   },
   //hospital
   {
+    path: "/admin/appoint-control",
+    component: () => import("../components/Admin/AppointControl/index.vue"),
+    meta: { layout: "admin" },
+    // beforeEnter: checkAdmin,
+  },
+
+  //hospital
+  {
+    path: "/Hospital/profile",
+    component: () => import("../components/Hospital/Profile/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
+    path: "/Hospital/doi-mat-khau",
+    component: () => import("../components/Hospital/DoiMatKhau/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
     path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),
     meta: { layout: "Hospital" },
@@ -94,8 +114,8 @@ const routes = [
 
   //donor
   {
-    path: "/trang-chu",
-    component: () => import("../components/trangchu/index.vue"),
+    path: "/home-page",
+    component: () => import("../components/Homepage/index.vue"),
     meta: { layout: "client" },
   },
   {
@@ -126,22 +146,22 @@ const routes = [
   },
   {
     path: "/profile",
-    component: () => import("../components/Client/profile/index.vue"),
+    component: () => import("../components/Client/Profile/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    //beforeEnter: checkdonor,
   },
   {
     path: "/blood-donation-history",
     component: () =>
-      import("../components/Client/blooddonationhistory/index.vue"),
+      import("../components/Client/Blooddonationhistory/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    //beforeEnter: checkdonor,
   },
   {
     path: "/account-security",
-    component: () => import("../components/Client/accountsecurity/index.vue"),
+    component: () => import("../components/Client/Accountsecurity/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    // beforeEnter: checkdonor,
   },
   {
     path: "/register-blooddonation",
@@ -152,7 +172,7 @@ const routes = [
   },
   {
     path: "/notification",
-    component: () => import("../components/Client/notification/index.vue"),
+    component: () => import("../components/Client/Notification/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkdonor,
   },
@@ -163,29 +183,29 @@ const routes = [
   },
 
   {
-    path: "/dang-nhap",
-    component: () => import("../components/Client/DangNhap/index.vue"),
+    path: "/login",
+    component: () => import("../components/Client/Login/index.vue"),
     meta: { layout: "blank" },
   },
   {
-    path: "/dang-ky",
-    component: () => import("../components/Client/Dangky/index.vue"),
+    path: "/register",
+    component: () => import("../components/Client/Register/index.vue"),
     meta: { layout: "blank" },
   },
   {
-    path: "/quen-mat-khau",
+    path: "/forgot-pasword",
     component: () => import("../components/Client/Forgotpassword/index.vue"),
     meta: { layout: "blank" },
   },
   {
-    path: "/doi-mat-khau",
-    component: () => import("../components/Client/DoiMatKhau/index.vue"),
+    path: "/change-password",
+    component: () => import("../components/Client/Changepassword/index.vue"),
     meta: { layout: "blank" },
   },
 
   {
     path: "/:pathMatch(.*)*",
-    component: () => import("../components/Client/not-found/index.vue"),
+    component: () => import("../components/Client/Notfound/index.vue"),
     meta: { layout: "client" },
   },
 ];

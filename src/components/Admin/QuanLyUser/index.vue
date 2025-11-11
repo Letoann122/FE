@@ -13,14 +13,17 @@
     <!-- Thanh tìm kiếm và lọc -->
     <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between border-bottom pb-3 mb-4">
       <div class="d-flex flex-wrap gap-3 align-items-center">
-        <!-- Ô tìm kiếm -->
         <div class="position-relative">
-          <input type="text" v-model="tim_kiem.noi_dung_tim" placeholder="Tìm kiếm người dùng..."
-            class="form-control ps-5" style="width: 250px;" />
+          <input
+            type="text"
+            v-model="tim_kiem.noi_dung_tim"
+            placeholder="Tìm kiếm người dùng..."
+            class="form-control ps-5"
+            style="width: 250px;"
+          />
           <i class="fas fa-search position-absolute top-50 translate-middle-y start-0 ms-2 text-muted"></i>
         </div>
 
-        <!-- Lọc vai trò -->
         <select class="form-select" style="width: auto;" v-model="tim_kiem.vai_tro">
           <option value="">Tất cả vai trò</option>
           <option value="doctor">Bác sĩ</option>
@@ -46,26 +49,36 @@
           <tr v-for="user in users" :key="user.id">
             <td>
               <div class="d-flex align-items-center">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
-                  class="rounded-circle me-2" width="40" height="40" alt="avatar" />
+                <img
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face"
+                  class="rounded-circle me-2"
+                  width="40"
+                  height="40"
+                  alt="avatar"
+                />
                 <span>{{ user.full_name }}</span>
               </div>
             </td>
             <td>{{ user.email }}</td>
             <td>
-              <span v-if="user.role === 'doctor'" class="badge bg-primary">
-                Doctor
-              </span>
-              <span v-else-if="user.role === 'donor'" class="badge bg-secondary">
-                Donor
-              </span>
+              <span v-if="user.role === 'doctor'" class="badge bg-primary">Doctor</span>
+              <span v-else-if="user.role === 'donor'" class="badge bg-secondary">Donor</span>
             </td>
             <td>{{ formatDate(user.created_at) }}</td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary me-1">
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                @click="openEditModal(user)"
+              >
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-sm btn-outline-danger" @click="deleteUser(user)">
+              <button
+                class="btn btn-sm btn-outline-danger ms-1"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+                @click="selectedUser = user"
+              >
                 <i class="fas fa-trash-alt"></i>
               </button>
             </td>
@@ -82,26 +95,89 @@
       </table>
     </div>
 
-    <!-- Phân trang -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <p class="mb-0 text-muted small">
-        Hiển thị {{ users.length }} / {{ pagination.totalItems }} người dùng
-      </p>
-      <div class="d-flex align-items-center gap-2" v-if="pagination.totalPages > 1">
-        <button class="btn btn-outline-secondary btn-sm" :disabled="pagination.currentPage === 1"
-          @click="changePage(pagination.currentPage - 1)">
-          <i class="fas fa-chevron-left"></i>
-        </button>
+    <!-- MODAL UPDATE -->
+    <div
+      class="modal fade"
+      id="editUserModal"
+      tabindex="-1"
+      aria-labelledby="editUserModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+              <i class="fas fa-user-edit me-2"></i> Cập nhật người dùng
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
 
-        <button v-for="page in pagination.totalPages" :key="page" class="btn btn-outline-secondary btn-sm"
-          :class="{ active: page === pagination.currentPage }" @click="changePage(page)">
-          {{ page }}
-        </button>
+          <div class="modal-body p-4" v-if="editingUser">
+            <form @submit.prevent="saveChanges">
+              <div class="row g-3">
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Họ và tên</label>
+                  <input type="text" class="form-control" v-model="editingUser.full_name" />
+                </div>
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Email</label>
+                  <input type="email" class="form-control" v-model="editingUser.email" />
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Vai trò</label>
+                  <select class="form-select" v-model="editingUser.role">
+                    <option value="doctor">Bác sĩ</option>
+                    <option value="donor">Người hiến máu</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Ngày tham gia</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    :value="formatDate(editingUser.created_at)"
+                    disabled
+                  />
+                </div>
+              </div>
 
-        <button class="btn btn-outline-secondary btn-sm" :disabled="pagination.currentPage === pagination.totalPages"
-          @click="changePage(pagination.currentPage + 1)">
-          <i class="fas fa-chevron-right"></i>
-        </button>
+              <div class="d-flex justify-content-end mt-4">
+                <button class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">
+                  Hủy
+                </button>
+                <button class="btn btn-primary" type="submit">
+                  <i class="fas fa-save me-1"></i> Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL XÓA -->
+    <div
+      class="modal fade"
+      id="confirmDeleteModal"
+      tabindex="-1"
+      aria-labelledby="confirmDeleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title">Xác nhận xóa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            Bạn có chắc chắn muốn xóa người dùng
+            <strong>{{ selectedUser?.full_name }}</strong> không?
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button class="btn btn-danger" @click="confirmDelete">Xóa</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -109,6 +185,7 @@
 
 <script>
 import axios from "axios";
+import * as bootstrap from "bootstrap";
 
 export default {
   name: "UserManagement",
@@ -116,41 +193,35 @@ export default {
   data() {
     return {
       users: [],
-      tim_kiem: {
-        noi_dung_tim: "",
-        vai_tro: "",
-      },
-      pagination: {
-        currentPage: 1,
-        totalPages: 1,
-        totalItems: 0,
-        limit: 5,
-      },
+      selectedUser: null,
+      editingUser: null,
+      editModalInstance: null,
+      deleteModalInstance: null,
+      tim_kiem: { noi_dung_tim: "", vai_tro: "" },
+      pagination: { currentPage: 1, totalPages: 1, totalItems: 0, limit: 5 },
     };
   },
 
   mounted() {
     this.loadData();
+    const editEl = document.getElementById("editUserModal");
+    const deleteEl = document.getElementById("confirmDeleteModal");
+    if (editEl) this.editModalInstance = new bootstrap.Modal(editEl);
+    if (deleteEl) this.deleteModalInstance = new bootstrap.Modal(deleteEl);
   },
 
   methods: {
     loadData() {
       const token = localStorage.getItem("token_admin");
-      if (!token) {
-        this.$toast?.error("Bạn chưa đăng nhập với quyền Admin!");
-        return;
-      }
-
-      const params = {
-        page: this.pagination.currentPage,
-        limit: this.pagination.limit,
-        search: this.tim_kiem.noi_dung_tim.trim(),
-        role: this.tim_kiem.vai_tro,
-      };
-
+      if (!token) return this.$toast?.error("Bạn chưa đăng nhập!");
       axios
         .get("http://localhost:4000/api/admin/users", {
-          params,
+          params: {
+            page: this.pagination.currentPage,
+            limit: this.pagination.limit,
+            search: this.tim_kiem.noi_dung_tim.trim(),
+            role: this.tim_kiem.vai_tro,
+          },
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
@@ -158,69 +229,66 @@ export default {
             this.users = res.data.data;
             this.pagination.totalItems = res.data.totalItems;
             this.pagination.totalPages = res.data.totalPages;
-            this.pagination.currentPage = res.data.currentPage;
-          } else {
-            this.$toast?.error("Không thể tải danh sách người dùng!");
           }
         })
-        .catch(() => {
-          this.$toast?.error("Lỗi kết nối khi tải người dùng!");
-        });
+        .catch(() => this.$toast?.error("Không thể tải danh sách người dùng!"));
     },
 
-    deleteUser(user) {
-      if (!confirm(`Bạn có chắc chắn muốn xóa người dùng ${user.full_name}?`)) {
-        return;
-      }
+    openEditModal(user) {
+      this.editingUser = { ...user };
+      this.editModalInstance?.show();
+    },
 
-      const token = localStorage.getItem("admin_token");
-      if (!token) {
-        this.$toast?.error("Bạn chưa đăng nhập Admin!");
-        return;
-      }
-
+    saveChanges() {
+      const token = localStorage.getItem("token_admin");
+      if (!this.editingUser) return;
       axios
-        .delete(`http://localhost:4000/api/admin/users/${user.id}`, {
+        .put(`http://localhost:4000/api/admin/users/${this.editingUser.id}`, this.editingUser, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
           if (res.data.status) {
-            this.$toast?.success("Xóa người dùng thành công!");
+            this.$toast?.success("Cập nhật người dùng thành công!");
+            this.editModalInstance?.hide();
+            this.loadData();
+          } else {
+            this.$toast?.error(res.data.message || "Không thể cập nhật!");
+          }
+        })
+        .catch(() => this.$toast?.error("Lỗi khi cập nhật người dùng!"));
+    },
+
+    confirmDelete() {
+      const token = localStorage.getItem("token_admin");
+      if (!this.selectedUser) return;
+      axios
+        .delete(`http://localhost:4000/api/admin/users/${this.selectedUser.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          if (res.data.status) {
+            this.$toast?.success("Đã xóa người dùng!");
+            this.deleteModalInstance?.hide();
             this.loadData();
           } else {
             this.$toast?.error(res.data.message || "Xóa thất bại!");
           }
         })
-        .catch(() => {
-          this.$toast?.error("Lỗi kết nối khi xóa người dùng!");
-        });
-    },
-
-    handleFilterChange() {
-      this.pagination.currentPage = 1;
-      this.loadData();
-    },
-
-    changePage(page) {
-      if (page > 0 && page <= this.pagination.totalPages) {
-        this.pagination.currentPage = page;
-        this.loadData();
-      }
+        .catch(() => this.$toast?.error("Lỗi khi xóa người dùng!"));
     },
 
     formatDate(dateString) {
       if (!dateString) return "";
-      const date = new Date(dateString);
-      return date.toLocaleDateString("vi-VN");
+      return new Date(dateString).toLocaleDateString("vi-VN");
     },
   },
 
   watch: {
-    "tim_kiem.noi_dung_tim": function () {
-      this.handleFilterChange();
+    "tim_kiem.noi_dung_tim"() {
+      this.loadData();
     },
-    "tim_kiem.vai_tro": function () {
-      this.handleFilterChange();
+    "tim_kiem.vai_tro"() {
+      this.loadData();
     },
   },
 };
@@ -230,5 +298,27 @@ export default {
 .active {
   background-color: #0d6efd;
   color: #fff;
+}
+.modal-content {
+  border-radius: 12px;
+}
+.modal-header {
+  border-bottom: none;
+  padding: 16px 24px;
+}
+.modal-body {
+  background-color: #f8f9fa;
+  border-radius: 0 0 12px 12px;
+}
+.form-label {
+  font-weight: 600;
+  color: #333;
+}
+.btn-primary {
+  background-color: #0d6efd;
+  border: none;
+}
+.btn-primary:hover {
+  background-color: #0b5ed7;
 }
 </style>
