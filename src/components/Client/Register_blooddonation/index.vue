@@ -1,98 +1,64 @@
 <template>
   <div class="container py-5">
-    <!-- 🩸 Tiêu đề -->
     <div class="mb-4 border-bottom pb-3">
       <h3 class="fw-bold text-danger">
         <i class="bi bi-calendar2-heart me-2"></i> Đặt lịch hiến máu
       </h3>
       <p class="text-muted mb-0">Đăng ký lịch hẹn tại các điểm hiến máu gần bạn.</p>
     </div>
-
     <div class="row g-4">
-      <!-- 📝 FORM ĐĂNG KÝ -->
       <div class="col-lg-6">
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-2">Thông tin đặt lịch</h5>
           <p class="text-muted">Vui lòng điền đầy đủ thông tin bên dưới</p>
-
-          <form @submit.prevent="handleRegister">
+          <form @submit.prevent="handleRegister" novalidate>
             <div class="row g-3">
               <div class="col-lg-12">
                 <label class="form-label">Họ và tên *</label>
-                <input
-                  type="text"
-                  v-model.trim="form.full_name"
-                  class="form-control"
-                  placeholder="Nguyễn Văn A"
-                  required
-                />
+                <input type="text" v-model.trim="form.full_name" class="form-control" placeholder="Nguyễn Văn A" />
               </div>
-
               <div class="col-lg-6">
                 <label class="form-label">Nhóm máu *</label>
-                <select class="form-select" v-model="form.blood_group" required>
+                <select class="form-select" v-model="form.blood_group">
                   <option value="" disabled>Chọn nhóm máu</option>
                   <option v-for="group in bloodGroups" :key="group" :value="group">{{ group }}</option>
                 </select>
               </div>
-
               <div class="col-lg-6">
                 <label class="form-label">Địa điểm hiến máu *</label>
-                <select class="form-select" v-model="form.donation_site_id" required>
+                <select class="form-select" v-model="form.donation_site_id">
                   <option disabled value="">Chọn địa điểm</option>
                   <option v-for="site in donation_sites" :key="site.id" :value="String(site.id)">
                     {{ site.name }} – {{ site.hospital_name || 'Bệnh viện' }}
                   </option>
                 </select>
               </div>
-
               <div class="col-lg-6">
                 <label class="form-label">Ngày hiến *</label>
-                <input
-                  type="date"
-                  v-model="form.date"
-                  class="form-control"
-                  :min="minDate"
-                  required
-                />
+                <input type="date" v-model="form.date" class="form-control" :min="minDate" />
               </div>
-
               <div class="col-lg-6">
                 <label class="form-label">Khung giờ *</label>
-                <select class="form-select" v-model="form.time_slot" required>
+                <select class="form-select" v-model="form.time_slot">
                   <option disabled value="">Chọn khung giờ</option>
                   <option>7:00 - 11:00</option>
                   <option>13:00 - 17:00</option>
                 </select>
               </div>
-
               <div class="col-lg-12">
                 <label class="form-label d-block mb-2">Dung tích máu hiến *</label>
                 <div class="d-flex gap-4 flex-wrap">
-                  <div v-for="vol in ['250ml','350ml','450ml']" :key="vol" class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      :id="vol"
-                      :value="vol"
-                      v-model="form.volume"
-                      required
-                    />
+                  <div v-for="vol in ['250ml', '350ml', '450ml']" :key="vol" class="form-check">
+                    <input class="form-check-input" type="radio" :id="vol" :value="vol" v-model="form.volume" />
                     <label class="form-check-label" :for="vol">{{ vol }}</label>
                   </div>
                 </div>
               </div>
-
               <div class="col-lg-12">
                 <label class="form-label">Ghi chú</label>
-                <textarea
-                  v-model.trim="form.note"
-                  class="form-control"
-                  rows="3"
-                  placeholder="Tình trạng sức khỏe, thuốc đang sử dụng..."
-                ></textarea>
+                <textarea v-model.trim="form.note" class="form-control" rows="3"
+                  placeholder="Tình trạng sức khỏe, thuốc đang sử dụng..."></textarea>
               </div>
-
               <div class="text-end mt-4">
                 <button class="btn btn-danger me-2" type="submit" :disabled="submitting">
                   {{ submitting ? 'Đang gửi...' : 'Đăng ký' }}
@@ -105,41 +71,27 @@
           </form>
         </div>
       </div>
-
-      <!-- 🏥 THÔNG TIN ĐỊA ĐIỂM -->
       <div class="col-lg-6" v-if="selectedSite">
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-3">
             <i class="bi bi-geo-alt-fill text-danger me-2"></i>
             Địa điểm hiến máu đã chọn
           </h5>
-
           <div class="d-flex justify-content-between align-items-start border rounded-3 p-3 bg-white">
             <div class="me-3">
               <p class="fw-semibold mb-1">{{ selectedSite.name }}</p>
               <small class="text-secondary d-block mb-1">{{ selectedSite.address }}</small>
               <small class="text-muted">({{ selectedSite.hospital_name || 'Bệnh viện' }})</small>
             </div>
-            <span
-              class="badge rounded-pill px-3 py-2"
-              :class="selectedSite.is_active ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-muted'"
-            >
+            <span class="badge rounded-pill px-3 py-2"
+              :class="selectedSite.is_active ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-muted'">
               {{ selectedSite.is_active ? 'Đang hoạt động' : 'Tạm ngưng' }}
             </span>
           </div>
-
           <div class="mt-3 rounded overflow-hidden shadow-sm">
-            <iframe
-              :src="mapEmbedUrl(selectedSite)"
-              width="100%"
-              height="220"
-              style="border:0"
-              allowfullscreen
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+            <iframe :src="mapEmbedUrl(selectedSite)" width="100%" height="220" style="border:0" allowfullscreen
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           </div>
-
           <div class="d-flex gap-2 mt-3">
             <button class="btn btn-outline-danger btn-sm" @click="openInMaps(selectedSite)">
               <i class="bi bi-map me-1"></i> Mở Google Maps
@@ -150,7 +102,6 @@
           </div>
         </div>
       </div>
-
       <div class="col-lg-6" v-else>
         <div class="card p-4 shadow-sm border-0 rounded-4 text-center text-muted">
           <i class="bi bi-geo-alt fs-3 d-block mb-2"></i>
@@ -213,8 +164,6 @@ export default {
     clearSelectedSite() {
       this.form.donation_site_id = "";
     },
-
-    // ===== Data loaders (đổi sang /donor/...) =====
     prefillFromProfile() {
       this.loadingProfile = true;
       baseRequestClient
@@ -233,7 +182,6 @@ export default {
         })
         .finally(() => (this.loadingProfile = false));
     },
-
     loadDonationSites() {
       baseRequestClient
         .get("/donor/donation-sites")
@@ -246,8 +194,6 @@ export default {
           this.$toast?.error(msg);
         });
     },
-
-    // ===== helpers =====
     getStartTimeFromSlot(slot) {
       if (!slot) return "";
       const first = String(slot).split("-")[0].trim();
@@ -261,32 +207,37 @@ export default {
       if (!dateStr || !hhmmss) return "";
       return `${dateStr} ${hhmmss}`;
     },
-
-    // ===== submit =====
     handleRegister() {
-      if (
-        !this.form.full_name ||
-        !this.form.blood_group ||
-        !this.form.donation_site_id ||
-        !this.form.date ||
-        !this.form.time_slot ||
-        !this.form.volume
-      ) {
-        this.$toast?.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
+      if (!this.form.donation_site_id) {
+        this.$toast?.error("Vui lòng chọn địa điểm hiến máu!");
         return;
       }
-
+      if (!this.form.time_slot) {
+        this.$toast?.error("Vui lòng chọn khung giờ hiến máu!");
+        return;
+      }
+      if (!this.form.date) {
+        this.$toast?.error("Vui lòng chọn ngày hiến máu!");
+        return;
+      }
+      if (this.form.date < this.minDate) {
+        this.$toast?.error("Ngày hiến không hợp lệ");
+        return;
+      }
+      if (!this.form.volume) {
+        this.$toast?.error("Vui lòng chọn dung tích máu hiến!");
+        return;
+      }
       const scheduled_at = this.buildScheduledAt(this.form.date, this.form.time_slot);
       if (!scheduled_at) {
         this.$toast?.error("Vui lòng chọn ngày & khung giờ hợp lệ!");
         return;
       }
-
       const payload = {
         donation_site_id: Number(this.form.donation_site_id),
-        scheduled_at,                     // "YYYY-MM-DD HH:mm:ss"
-        time_slot: this.form.time_slot,   // để BE check slot
-        volume: this.form.volume,         // "250ml" | "350ml" | "450ml"
+        scheduled_at,
+        time_slot: this.form.time_slot,
+        volume: this.form.volume,
         notes: this.form.note || null,
       };
 
@@ -303,12 +254,10 @@ export default {
           }
         })
         .catch((err) => {
-          // ƯU TIÊN message tổng quát từ BookingDonationRequest
           const msg = err?.response?.data?.message;
           if (msg) {
             this.$toast?.error(msg);
           } else {
-            // fallback: bung từng lỗi chi tiết nếu có
             const errs = err?.response?.data?.errors;
             if (errs && typeof errs === "object") {
               Object.values(errs).forEach((arr) => {
@@ -322,7 +271,6 @@ export default {
         })
         .finally(() => (this.submitting = false));
     },
-
     resetForm() {
       this.form = {
         full_name: "",
@@ -338,9 +286,11 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.table { font-size: 15px; }
+.table {
+  font-size: 15px;
+}
+
 .form-check-input:checked {
   background-color: #dc3545;
   border-color: #dc3545;
