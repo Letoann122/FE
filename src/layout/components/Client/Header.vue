@@ -20,16 +20,15 @@
               <router-link class="nav-link" to="/about" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/register" exact-active-class="active">Đăng ký hiến máu</router-link>
-            </li>
-            <li class="nav-item mx-3">
               <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
                 lịch</router-link>
             </li>
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/news" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
-
+            <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/guide-health" exact-active-class="active">Hướng dẫn sức khoẻ</router-link>
+            </li>
             <li class="nav-item dropdown mx-3">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
