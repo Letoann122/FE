@@ -125,12 +125,6 @@ const routes = [
     meta: { layout: "client" },
   },
   {
-    path: "/register",
-    component: () =>
-      import("../components/Client/Registerdonateblood/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
     path: "/news",
     component: () => import("../components/Client/News/index.vue"),
     meta: { layout: "client" },
