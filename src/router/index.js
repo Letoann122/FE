@@ -4,7 +4,7 @@ import checkAdmin from "./checkadmin";
 import checkdonor from "./checkdonor";
 
 const routes = [
-  { path: "/", redirect: "/trang-chu" },
+  { path: "/", redirect: "/home-page" },
 
   //admin
   {
@@ -31,8 +31,6 @@ const routes = [
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
-
-  //hospital
   {
     path: "/admin/appoint-control",
     component: () => import("../components/Admin/AppointControl/index.vue"),
@@ -112,7 +110,12 @@ const routes = [
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
-
+  {
+    path: "/Hospital/check-booking",
+    component: () => import("../components/Hospital/CheckBooking/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
   //donor
   {
     path: "/home-page",
