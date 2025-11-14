@@ -1,7 +1,6 @@
 <template>
   <div class="container py-4">
     <div class="row g-4">
-      <!-- 🔍 Cột trái: Tìm kiếm & lọc -->
       <div class="col-lg-4">
         <div class="card shadow-sm border-0 rounded-4">
           <div class="card-body">
@@ -11,48 +10,33 @@
             </h5>
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
-              <input
-                type="text"
-                class="form-control"
-                v-model="filters.appointment_code"
-                placeholder="Nhập mã lịch hiến máu..."
-              />
+              <input type="text" class="form-control" v-model="filters.appointment_code" placeholder="Nhập mã lịch hiến máu..." />
             </div>
-
             <div class="mb-3">
               <label class="form-label small">Ngày hiến máu</label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="filters.date"
-              />
+              <input type="date" class="form-control" v-model="filters.date" />
             </div>
-
-            <button class="btn btn-danger w-100" @click="applyFilter">
-              <i class="bi bi-funnel me-1"></i>
+            <button class="btn btn-danger w-100" @click="applyFilter" :disabled="loadingList">
+              <span v-if="loadingList" class="spinner-border spinner-border-sm me-1"></span>
+              <i v-else class="bi bi-funnel me-1"></i>
               Lọc lịch hiến máu
             </button>
-
             <hr />
-
             <p class="small text-muted mb-1">
               Tổng số lịch hiến máu:
-              <strong>{{ appointments.length }}</strong>
+              <strong>{{ totalAppointments }}</strong>
             </p>
             <p class="small text-muted mb-0">
               Đang hiển thị:
-              <strong>{{ filteredAppointments.length }}</strong> lịch
+              <strong>{{ appointments.length }}</strong> lịch
             </p>
           </div>
         </div>
       </div>
 
-      <!-- 📋 Cột phải: Danh sách lịch hiến máu -->
       <div class="col-lg-8">
         <div class="card shadow-sm border-0 rounded-4">
-          <div
-            class="card-header bg-white border-0 d-flex justify-content-between align-items-center"
-          >
+          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
             <div>
               <h5 class="mb-0 fw-bold text-danger">
                 <i class="bi bi-droplet-half me-2"></i>
@@ -64,19 +48,19 @@
             </div>
           </div>
           <div class="card-body p-0">
-            <div
-              v-if="filteredAppointments.length === 0"
-              class="p-4 text-center text-muted"
-            >
+            <div v-if="!loadingList && appointments.length === 0" class="p-4 text-center text-muted">
               <i class="bi bi-inbox me-1"></i>
               Không có lịch hiến máu nào phù hợp.
             </div>
-
+            <div v-else-if="loadingList" class="p-4 text-center text-muted">
+              <div class="spinner-border text-danger"></div>
+              <div class="mt-2 small">Đang tải dữ liệu...</div>
+            </div>
             <div v-else class="table-responsive table-wrapper">
               <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
-                    <th style="width: 70px">ID</th>
+                    <th style="width: 70px">STT</th>
                     <th>Mã lịch</th>
                     <th>Người hiến máu</th>
                     <th>Số điện thoại</th>
@@ -85,28 +69,33 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="item in filteredAppointments" :key="item.id">
-                    <td>#{{ item.id }}</td>
-                    <td>
-                      <span class="badge bg-light text-dark border">
-                        {{ item.appointment_code }}
-                      </span>
-                    </td>
+                  <tr v-for="(item, index) in appointments" :key="item.id">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item.appointment_code }}</td>
                     <td>{{ item.donor_name }}</td>
                     <td>{{ item.donor_phone }}</td>
-                    <td>
-                      <span
-                        class="badge px-3"
-                        :class="statusBadgeClass(item.status)"
-                      >
-                        {{ statusLabel(item.status) }}
-                      </span>
+                    <td class="text-center">
+                      <button v-if="item.status === 'REQUESTED'" class="btn btn-warning btn-sm w-100">
+                        Chờ duyệt
+                      </button>
+                      <button v-else-if="item.status === 'APPROVED'" class="btn btn-success btn-sm w-100">
+                        Đã duyệt
+                      </button>
+                      <button v-else-if="item.status === 'REJECTED'" class="btn btn-secondary btn-sm w-100">
+                        Đã từ chối
+                      </button>
+                      <button v-else-if="item.status === 'CANCELLED'" class="btn btn-dark btn-sm w-100">
+                        Đã hủy
+                      </button>
+                      <button v-else-if="item.status === 'BOOKED'" class="btn btn-info btn-sm w-100">
+                        Đã đặt
+                      </button>
+                      <button v-else class="btn btn-light btn-sm w-100">
+                        {{ item.status }}
+                      </button>
                     </td>
                     <td class="text-end">
-                      <button
-                        class="btn btn-sm btn-outline-primary"
-                        @click="openDetail(item)"
-                      >
+                      <button class="btn btn-sm btn-outline-primary" @click="openDetail(item)">
                         <i class="bi bi-eye me-1"></i>
                         Xem chi tiết
                       </button>
@@ -120,12 +109,9 @@
       </div>
     </div>
 
-    <!-- 🩸 Modal chi tiết lịch hiến máu -->
     <div v-if="selectedAppointment" class="custom-modal-backdrop">
       <div class="custom-modal">
-        <div
-          class="d-flex justify-content-between align-items-start mb-3"
-        >
+        <div class="d-flex justify-content-between align-items-start mb-3">
           <div>
             <h5 class="fw-bold mb-1">
               <i class="bi bi-droplet-half text-danger me-2"></i>
@@ -136,25 +122,32 @@
               <strong>{{ selectedAppointment.appointment_code }}</strong>
             </small>
           </div>
-          <button
-            class="btn btn-sm btn-outline-secondary"
-            @click="closeModal"
-            :disabled="actionLoading"
-          >
+          <button class="btn btn-sm btn-outline-secondary" @click="closeModal" :disabled="actionLoading">
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
 
         <div class="mb-3">
-          <span
-            class="badge px-3 py-2"
-            :class="statusBadgeClass(selectedAppointment.status)"
-          >
-            {{ statusLabel(selectedAppointment.status) }}
-          </span>
+          <button v-if="selectedAppointment.status === 'REQUESTED'" class="btn btn-warning btn-sm">
+            Chờ duyệt
+          </button>
+          <button v-else-if="selectedAppointment.status === 'APPROVED'" class="btn btn-success btn-sm">
+            Đã duyệt
+          </button>
+          <button v-else-if="selectedAppointment.status === 'REJECTED'" class="btn btn-secondary btn-sm">
+            Đã từ chối
+          </button>
+          <button v-else-if="selectedAppointment.status === 'CANCELLED'" class="btn btn-dark btn-sm">
+            Đã hủy
+          </button>
+          <button v-else-if="selectedAppointment.status === 'BOOKED'" class="btn btn-info btn-sm">
+            Đã đặt
+          </button>
+          <button v-else class="btn btn-light btn-sm">
+            {{ selectedAppointment.status }}
+          </button>
         </div>
 
-        <!-- Thông tin chia cột -->
         <div class="row g-3 mb-3">
           <div class="col-md-6">
             <div class="mb-2">
@@ -225,63 +218,28 @@
           </div>
         </div>
 
-        <!-- Lý do từ chối (chỉ hiện khi bấm Từ chối) -->
         <div v-if="showRejectReason" class="mb-3">
           <label class="form-label small">Lý do từ chối</label>
-          <textarea
-            v-model="rejectReason"
-            rows="3"
-            class="form-control"
-            placeholder="Nhập lý do từ chối..."
-          ></textarea>
+          <textarea v-model="rejectReason" rows="3" class="form-control" placeholder="Nhập lý do từ chối..."></textarea>
         </div>
 
-        <!-- Hành động -->
-        <div
-          class="d-flex justify-content-between align-items-center mt-3"
-        >
+        <div class="d-flex justify-content-between align-items-center mt-3">
           <small class="text-muted">
             Bác sĩ phụ trách:
             <strong>{{ selectedAppointment.doctor_name }}</strong>
           </small>
           <div class="d-flex gap-2">
-            <button
-              v-if="selectedAppointment.status === 'REQUESTED'"
-              class="btn btn-success btn-sm"
-              @click="approveSelected"
-              :disabled="actionLoading"
-            >
-              <span
-                v-if="actionLoading && actionType === 'approve'"
-                class="spinner-border spinner-border-sm me-1"
-              ></span>
+            <button v-if="selectedAppointment.status === 'REQUESTED'" class="btn btn-success btn-sm" @click="approveSelected" :disabled="actionLoading">
+              <span v-if="actionLoading && actionType === 'approve'" class="spinner-border spinner-border-sm me-1"></span>
               <i class="bi bi-check2-circle me-1"></i>
               Duyệt
             </button>
-
-            <button
-              v-if="selectedAppointment.status === 'REQUESTED'"
-              class="btn btn-outline-danger btn-sm"
-              @click="toggleReject"
-              :disabled="actionLoading"
-            >
+            <button v-if="selectedAppointment.status === 'REQUESTED'" class="btn btn-outline-danger btn-sm" @click="toggleReject" :disabled="actionLoading">
               <i class="bi bi-x-circle me-1"></i>
               Từ chối
             </button>
-
-            <button
-              v-if="
-                selectedAppointment.status === 'REQUESTED' &&
-                showRejectReason
-              "
-              class="btn btn-danger btn-sm"
-              @click="submitReject"
-              :disabled="actionLoading"
-            >
-              <span
-                v-if="actionLoading && actionType === 'reject'"
-                class="spinner-border spinner-border-sm me-1"
-              ></span>
+            <button v-if="selectedAppointment.status === 'REQUESTED' && showRejectReason" class="btn btn-danger btn-sm" @click="submitReject" :disabled="actionLoading">
+              <span v-if="actionLoading && actionType === 'reject'" class="spinner-border spinner-border-sm me-1"></span>
               Xác nhận từ chối
             </button>
           </div>
@@ -292,6 +250,8 @@
 </template>
 
 <script>
+import baseRequestDoctor from '../../../core/baseRequestDoctor';
+
 export default {
   data() {
     return {
@@ -299,110 +259,52 @@ export default {
         appointment_code: "",
         date: "",
       },
-      // 🔹 Fake data: đã đổi appointment_code & status theo format mới
-      appointments: [
-        {
-          id: 1,
-          appointment_code: "HM000001",
-          status: "REQUESTED",
-          scheduled_date: "2025-11-20",
-          time_range: "08:00 - 09:00",
-          donation_site_name: "Điểm hiến máu Quận 1",
-          hospital_name: "BV Truyền Máu Huyết Học",
-          preferred_volume_ml: 350,
-          donor_name: "Nguyễn Văn A",
-          donor_phone: "0912 345 678",
-          donor_email: "nguyenvana@example.com",
-          blood_group: "O+",
-          notes: "Lần hiến thứ 3 trong năm.",
-          doctor_name: "BS. Lê Hoài Nam",
-        },
-        {
-          id: 2,
-          appointment_code: "HM000002",
-          status: "APPROVED",
-          scheduled_date: "2025-11-18",
-          time_range: "09:00 - 10:00",
-          donation_site_name: "Điểm hiến máu Quận 7",
-          hospital_name: "BV Quận 7",
-          preferred_volume_ml: 250,
-          donor_name: "Trần Thị B",
-          donor_phone: "0987 654 321",
-          donor_email: "tranthib@example.com",
-          blood_group: "A-",
-          notes: "",
-          doctor_name: "BS. Phạm Minh Tâm",
-        },
-        {
-          id: 3,
-          appointment_code: "HM000003",
-          status: "REJECTED",
-          scheduled_date: "2025-11-19",
-          time_range: "13:30 - 14:30",
-          donation_site_name: "Điểm hiến máu Thủ Đức",
-          hospital_name: "BV Thủ Đức",
-          preferred_volume_ml: 300,
-          donor_name: "Lê Văn C",
-          donor_phone: "0903 123 456",
-          donor_email: "levanc@example.com",
-          blood_group: "B+",
-          notes: "Đang theo dõi huyết áp.",
-          doctor_name: "BS. Nguyễn Hữu Long",
-        },
-      ],
-      filteredAppointments: [],
+      appointments: [],
+      totalAppointments: 0,
+      loadingList: false,
       selectedAppointment: null,
       showRejectReason: false,
       rejectReason: "",
       actionLoading: false,
-      actionType: null, // 'approve' | 'reject'
+      actionType: null,
     };
   },
-  created() {
-    this.filteredAppointments = this.appointments;
+  mounted() {
+    this.loadAppointments(); // load all
   },
   methods: {
+    // load danh sách, có thể truyền param filter
+    loadAppointments(params = {}) {
+      this.loadingList = true;
+      baseRequestDoctor
+        .get("doctor/donation-appointments", { params })
+        .then((res) => {
+          if (res.data && res.data.status) {
+            const rows = res.data.data || [];
+            this.appointments = rows;
+            this.totalAppointments = rows.length;
+          } else if (res.data && res.data.message) {
+            this.$toast && this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          const list = Object.values(err.response?.data?.errors || {});
+          list.forEach((v) => this.$toast && this.$toast.error(v[0]));
+        })
+        .finally(() => {
+          this.loadingList = false;
+        });
+    },
+
     applyFilter() {
-      const code = this.filters.appointment_code.trim().toLowerCase();
-      const date = this.filters.date;
-
-      this.filteredAppointments = this.appointments.filter((item) => {
-        const matchCode = code
-          ? item.appointment_code.toLowerCase().includes(code)
-          : true;
-        const matchDate = date ? item.scheduled_date === date : true;
-        return matchCode && matchDate;
-      });
-    },
-
-    statusLabel(status) {
-      switch (status) {
-        case "APPROVED":
-          return "Đã duyệt";
-        case "REJECTED":
-          return "Đã từ chối";
-        case "CANCELLED":
-          return "Đã hủy";
-        case "REQUESTED":
-        case "pending": // fallback nếu BE lỡ trả "pending"
-        default:
-          return "Chờ duyệt";
+      const params = {};
+      if (this.filters.appointment_code) {
+        params.appointment_code = this.filters.appointment_code;
       }
-    },
-
-    statusBadgeClass(status) {
-      switch (status) {
-        case "APPROVED":
-          return "bg-success";
-        case "REJECTED":
-          return "bg-secondary";
-        case "CANCELLED":
-          return "bg-dark";
-        case "REQUESTED":
-        case "pending":
-        default:
-          return "bg-warning text-dark";
+      if (this.filters.date) {
+        params.date = this.filters.date;
       }
+      this.loadAppointments(params);
     },
 
     openDetail(item) {
@@ -422,31 +324,34 @@ export default {
 
     toggleReject() {
       this.showRejectReason = !this.showRejectReason;
-      if (!this.showRejectReason) {
-        this.rejectReason = "";
-      }
+      if (!this.showRejectReason) this.rejectReason = "";
     },
 
     approveSelected() {
       if (!this.selectedAppointment) return;
       this.actionLoading = true;
       this.actionType = "approve";
+      const payload = { id: this.selectedAppointment.id };
 
-      setTimeout(() => {
-        this.selectedAppointment.status = "APPROVED";
-
-        const index = this.appointments.findIndex(
-          (a) => a.id === this.selectedAppointment.id
-        );
-        if (index !== -1) {
-          this.appointments[index].status = "APPROVED";
-        }
-        this.applyFilter();
-
-        this.$toast && this.$toast.success("Duyệt lịch hiến máu thành công!");
-        this.actionLoading = false;
-        this.actionType = null;
-      }, 700);
+      baseRequestDoctor
+        .post("doctor/donation-appointments/approve", payload)
+        .then((res) => {
+          if (res.data && res.data.status) {
+            this.$toast && this.$toast.success(res.data.message);
+            this.loadAppointments();
+            this.selectedAppointment.status = "APPROVED";
+          } else if (res.data && res.data.message) {
+            this.$toast && this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          const list = Object.values(err.response?.data?.errors || {});
+          list.forEach((v) => this.$toast && this.$toast.error(v[0]));
+        })
+        .finally(() => {
+          this.actionLoading = false;
+          this.actionType = null;
+        });
     },
 
     submitReject() {
@@ -457,37 +362,41 @@ export default {
       }
       this.actionLoading = true;
       this.actionType = "reject";
+      const payload = {
+        id: this.selectedAppointment.id,
+        rejected_reason: this.rejectReason,
+      };
 
-      setTimeout(() => {
-        this.selectedAppointment.status = "REJECTED";
-        this.selectedAppointment.rejected_reason = this.rejectReason;
-
-        const index = this.appointments.findIndex(
-          (a) => a.id === this.selectedAppointment.id
-        );
-        if (index !== -1) {
-          this.appointments[index].status = "REJECTED";
-          this.appointments[index].rejected_reason = this.rejectReason;
-        }
-        this.applyFilter();
-
-        this.$toast && this.$toast.success("Đã từ chối lịch hiến máu");
-        this.actionLoading = false;
-        this.actionType = null;
-        this.closeModal();
-      }, 700);
+      baseRequestDoctor
+        .post("doctor/donation-appointments/reject", payload)
+        .then((res) => {
+          if (res.data && res.data.status) {
+            this.$toast && this.$toast.success(res.data.message);
+            this.loadAppointments();
+            this.closeModal();
+          } else if (res.data && res.data.message) {
+            this.$toast && this.$toast.error(res.data.message);
+          }
+        })
+        .catch((err) => {
+          const list = Object.values(err.response?.data?.errors || {});
+          list.forEach((v) => this.$toast && this.$toast.error(v[0]));
+        })
+        .finally(() => {
+          this.actionLoading = false;
+          this.actionType = null;
+        });
     },
   },
 };
 </script>
+
 
 <style scoped>
 .table-wrapper {
   max-height: 430px;
   overflow-y: auto;
 }
-
-/* Modal custom dùng Bootstrap style nhưng control bằng Vue */
 .custom-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -497,7 +406,6 @@ export default {
   justify-content: center;
   z-index: 1050;
 }
-
 .custom-modal {
   background: #ffffff;
   border-radius: 1rem;
@@ -509,3 +417,4 @@ export default {
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
 }
 </style>
+  
