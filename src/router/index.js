@@ -116,6 +116,12 @@ const routes = [
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
+  {
+    path: "/Hospital/donation-complete",
+    component: () => import("../components/Hospital/DonationComplete/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
   //donor
   {
     path: "/home-page",

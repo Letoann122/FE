@@ -42,7 +42,7 @@
             </li>
           </ul>
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/home-page">Đăng nhập</router-link>
+            <router-link class="btn btn-outline-secondary me-2" to="/login">Đăng nhập</router-link>
             <router-link class="btn btn-danger" to="/register">Đăng ký</router-link>
           </div>
           <div v-else class="dropdown">

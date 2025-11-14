@@ -11,13 +11,21 @@
             </h5>
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
-              <input type="text" class="form-control" v-model="filters.appointment_code"
-                placeholder="Nhập mã lịch hiến máu..." />
+              <input
+                type="text"
+                class="form-control"
+                v-model="filters.appointment_code"
+                placeholder="Nhập mã lịch hiến máu..."
+              />
             </div>
 
             <div class="mb-3">
               <label class="form-label small">Ngày hiến máu</label>
-              <input type="date" class="form-control" v-model="filters.date" />
+              <input
+                type="date"
+                class="form-control"
+                v-model="filters.date"
+              />
             </div>
 
             <button class="btn btn-danger w-100" @click="applyFilter">
@@ -42,7 +50,9 @@
       <!-- 📋 Cột phải: Danh sách lịch hiến máu -->
       <div class="col-lg-8">
         <div class="card shadow-sm border-0 rounded-4">
-          <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+          <div
+            class="card-header bg-white border-0 d-flex justify-content-between align-items-center"
+          >
             <div>
               <h5 class="mb-0 fw-bold text-danger">
                 <i class="bi bi-droplet-half me-2"></i>
@@ -54,7 +64,10 @@
             </div>
           </div>
           <div class="card-body p-0">
-            <div v-if="filteredAppointments.length === 0" class="p-4 text-center text-muted">
+            <div
+              v-if="filteredAppointments.length === 0"
+              class="p-4 text-center text-muted"
+            >
               <i class="bi bi-inbox me-1"></i>
               Không có lịch hiến máu nào phù hợp.
             </div>
@@ -82,12 +95,18 @@
                     <td>{{ item.donor_name }}</td>
                     <td>{{ item.donor_phone }}</td>
                     <td>
-                      <span class="badge px-3" :class="statusBadgeClass(item.status)">
+                      <span
+                        class="badge px-3"
+                        :class="statusBadgeClass(item.status)"
+                      >
                         {{ statusLabel(item.status) }}
                       </span>
                     </td>
                     <td class="text-end">
-                      <button class="btn btn-sm btn-outline-primary" @click="openDetail(item)">
+                      <button
+                        class="btn btn-sm btn-outline-primary"
+                        @click="openDetail(item)"
+                      >
                         <i class="bi bi-eye me-1"></i>
                         Xem chi tiết
                       </button>
@@ -104,7 +123,9 @@
     <!-- 🩸 Modal chi tiết lịch hiến máu -->
     <div v-if="selectedAppointment" class="custom-modal-backdrop">
       <div class="custom-modal">
-        <div class="d-flex justify-content-between align-items-start mb-3">
+        <div
+          class="d-flex justify-content-between align-items-start mb-3"
+        >
           <div>
             <h5 class="fw-bold mb-1">
               <i class="bi bi-droplet-half text-danger me-2"></i>
@@ -115,13 +136,20 @@
               <strong>{{ selectedAppointment.appointment_code }}</strong>
             </small>
           </div>
-          <button class="btn btn-sm btn-outline-secondary" @click="closeModal" :disabled="actionLoading">
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            @click="closeModal"
+            :disabled="actionLoading"
+          >
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
 
         <div class="mb-3">
-          <span class="badge px-3 py-2" :class="statusBadgeClass(selectedAppointment.status)">
+          <span
+            class="badge px-3 py-2"
+            :class="statusBadgeClass(selectedAppointment.status)"
+          >
             {{ statusLabel(selectedAppointment.status) }}
           </span>
         </div>
@@ -200,35 +228,60 @@
         <!-- Lý do từ chối (chỉ hiện khi bấm Từ chối) -->
         <div v-if="showRejectReason" class="mb-3">
           <label class="form-label small">Lý do từ chối</label>
-          <textarea v-model="rejectReason" rows="3" class="form-control" placeholder="Nhập lý do từ chối..."></textarea>
+          <textarea
+            v-model="rejectReason"
+            rows="3"
+            class="form-control"
+            placeholder="Nhập lý do từ chối..."
+          ></textarea>
         </div>
 
         <!-- Hành động -->
-        <div class="d-flex justify-content-between align-items-center mt-3">
+        <div
+          class="d-flex justify-content-between align-items-center mt-3"
+        >
           <small class="text-muted">
             Bác sĩ phụ trách:
             <strong>{{ selectedAppointment.doctor_name }}</strong>
           </small>
           <div class="d-flex gap-2">
-            <button v-if="selectedAppointment.status === 'pending'" class="btn btn-success btn-sm"
-              @click="approveSelected" :disabled="actionLoading">
-              <span v-if="actionLoading && actionType === 'approve'"
-                class="spinner-border spinner-border-sm me-1"></span>
+            <button
+              v-if="selectedAppointment.status === 'REQUESTED'"
+              class="btn btn-success btn-sm"
+              @click="approveSelected"
+              :disabled="actionLoading"
+            >
+              <span
+                v-if="actionLoading && actionType === 'approve'"
+                class="spinner-border spinner-border-sm me-1"
+              ></span>
               <i class="bi bi-check2-circle me-1"></i>
               Duyệt
             </button>
 
-            <button v-if="selectedAppointment.status === 'pending'" class="btn btn-outline-danger btn-sm"
-              @click="toggleReject" :disabled="actionLoading">
+            <button
+              v-if="selectedAppointment.status === 'REQUESTED'"
+              class="btn btn-outline-danger btn-sm"
+              @click="toggleReject"
+              :disabled="actionLoading"
+            >
               <i class="bi bi-x-circle me-1"></i>
               Từ chối
             </button>
 
-            <button v-if="
-              selectedAppointment.status === 'pending' && showRejectReason
-            " class="btn btn-danger btn-sm" @click="submitReject" :disabled="actionLoading">
-              <span v-if="actionLoading && actionType === 'reject'"
-                class="spinner-border spinner-border-sm me-1"></span>
+            <button
+              v-if="
+                selectedAppointment.status === 'REQUESTED' &&
+                showRejectReason
+              "
+              class="btn btn-danger btn-sm"
+              @click="submitReject"
+              :disabled="actionLoading"
+            >
+              <span
+                v-if="actionLoading && actionType === 'reject'"
+                class="spinner-border spinner-border-sm me-1"
+              ></span>
               Xác nhận từ chối
             </button>
           </div>
@@ -242,17 +295,16 @@
 export default {
   data() {
     return {
-      // filter trên UI
       filters: {
         appointment_code: "",
         date: "",
       },
-      // danh sách fake để test UI
+      // 🔹 Fake data: đã đổi appointment_code & status theo format mới
       appointments: [
         {
           id: 1,
-          appointment_code: "HM2025-001",
-          status: "pending",
+          appointment_code: "HM000001",
+          status: "REQUESTED",
           scheduled_date: "2025-11-20",
           time_range: "08:00 - 09:00",
           donation_site_name: "Điểm hiến máu Quận 1",
@@ -267,8 +319,8 @@ export default {
         },
         {
           id: 2,
-          appointment_code: "HM2025-002",
-          status: "approved",
+          appointment_code: "HM000002",
+          status: "APPROVED",
           scheduled_date: "2025-11-18",
           time_range: "09:00 - 10:00",
           donation_site_name: "Điểm hiến máu Quận 7",
@@ -283,8 +335,8 @@ export default {
         },
         {
           id: 3,
-          appointment_code: "HM2025-003",
-          status: "rejected",
+          appointment_code: "HM000003",
+          status: "REJECTED",
           scheduled_date: "2025-11-19",
           time_range: "13:30 - 14:30",
           donation_site_name: "Điểm hiến máu Thủ Đức",
@@ -307,7 +359,6 @@ export default {
     };
   },
   created() {
-    // ban đầu hiển thị hết
     this.filteredAppointments = this.appointments;
   },
   methods: {
@@ -326,13 +377,14 @@ export default {
 
     statusLabel(status) {
       switch (status) {
-        case "approved":
+        case "APPROVED":
           return "Đã duyệt";
-        case "rejected":
+        case "REJECTED":
           return "Đã từ chối";
-        case "cancelled":
+        case "CANCELLED":
           return "Đã hủy";
-        case "pending":
+        case "REQUESTED":
+        case "pending": // fallback nếu BE lỡ trả "pending"
         default:
           return "Chờ duyệt";
       }
@@ -340,12 +392,13 @@ export default {
 
     statusBadgeClass(status) {
       switch (status) {
-        case "approved":
+        case "APPROVED":
           return "bg-success";
-        case "rejected":
+        case "REJECTED":
           return "bg-secondary";
-        case "cancelled":
+        case "CANCELLED":
           return "bg-dark";
+        case "REQUESTED":
         case "pending":
         default:
           return "bg-warning text-dark";
@@ -353,7 +406,6 @@ export default {
     },
 
     openDetail(item) {
-      // clone ra để tránh đụng reference nếu muốn
       this.selectedAppointment = { ...item };
       this.showRejectReason = false;
       this.rejectReason = "";
@@ -380,16 +432,14 @@ export default {
       this.actionLoading = true;
       this.actionType = "approve";
 
-      // fake call API
       setTimeout(() => {
-        this.selectedAppointment.status = "approved";
+        this.selectedAppointment.status = "APPROVED";
 
-        // cập nhật lại trong list
         const index = this.appointments.findIndex(
           (a) => a.id === this.selectedAppointment.id
         );
         if (index !== -1) {
-          this.appointments[index].status = "approved";
+          this.appointments[index].status = "APPROVED";
         }
         this.applyFilter();
 
@@ -408,16 +458,15 @@ export default {
       this.actionLoading = true;
       this.actionType = "reject";
 
-      // fake call API
       setTimeout(() => {
-        this.selectedAppointment.status = "rejected";
+        this.selectedAppointment.status = "REJECTED";
         this.selectedAppointment.rejected_reason = this.rejectReason;
 
         const index = this.appointments.findIndex(
           (a) => a.id === this.selectedAppointment.id
         );
         if (index !== -1) {
-          this.appointments[index].status = "rejected";
+          this.appointments[index].status = "REJECTED";
           this.appointments[index].rejected_reason = this.rejectReason;
         }
         this.applyFilter();

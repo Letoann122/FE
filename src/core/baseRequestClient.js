@@ -31,7 +31,9 @@ baseRequestClient.interceptors.response.use(
     }
 
     if (error.response) {
-      const status = error.response.status;
+      const { status, data } = error.response || {};
+      const hasValidationErrors =
+        status === 422 && data && data.errors && typeof data.errors === "object";
 
       if (status === 401 || status === 403) {
         toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
@@ -43,14 +45,16 @@ baseRequestClient.interceptors.response.use(
         }, 1500);
       } else if (status >= 500) {
         toast.error("Lỗi máy chủ. Vui lòng thử lại sau!");
-      } else if (error.response.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
+      } else if (!hasValidationErrors && data?.message) {
+        // ❗ Chỉ toast message chung khi KHÔNG phải lỗi validate 422
+        toast.error(data.message);
+      } else if (!hasValidationErrors) {
         toast.error("Có lỗi xảy ra!");
       }
     } else {
       toast.error("Không thể kết nối đến máy chủ!");
     }
+
     return Promise.reject(error);
   }
 );
