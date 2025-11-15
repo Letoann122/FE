@@ -152,20 +152,20 @@ const routes = [
     path: "/profile",
     component: () => import("../components/Client/Profile/index.vue"),
     meta: { layout: "client" },
-    //beforeEnter: checkdonor,
+    beforeEnter: checkdonor,
   },
   {
     path: "/blood-donation-history",
     component: () =>
       import("../components/Client/Blooddonationhistory/index.vue"),
     meta: { layout: "client" },
-    //beforeEnter: checkdonor,
+    beforeEnter: checkdonor,
   },
   {
     path: "/account-security",
     component: () => import("../components/Client/Accountsecurity/index.vue"),
     meta: { layout: "client" },
-    // beforeEnter: checkdonor,
+    beforeEnter: checkdonor,
   },
   {
     path: "/register-blooddonation",
@@ -197,7 +197,7 @@ const routes = [
     meta: { layout: "blank" },
   },
   {
-    path: "/forgot-pasword",
+    path: "/forgot-password",
     component: () => import("../components/Client/Forgotpassword/index.vue"),
     meta: { layout: "blank" },
   },
