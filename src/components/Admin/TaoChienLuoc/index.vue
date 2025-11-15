@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import baseRequestAdmin from "../../../core/baseRequestAdmin";
 
 export default {
   name: "CampaignCreate",
@@ -120,6 +120,8 @@ export default {
         is_emergency: false,
       },
       campaigns: [],
+      loadingList: false,
+      submitting: false,
     };
   },
 
@@ -129,26 +131,40 @@ export default {
 
   methods: {
     async fetchCampaigns() {
+      this.loadingList = true;
       try {
-        const res = await axios.get("http://localhost:4000/api/campaigns");
+        // /api/admin/Campaigns (router.use("/admin", verifyToken('admin'), adminRouter))
+        const res = await baseRequestAdmin.get("/admin/Campaigns");
+
         if (res.data.status) {
-          this.campaigns = res.data.data;
+          this.campaigns = res.data.data || [];
         } else {
-          this.$toast.error("Không thể tải danh sách chiến dịch!");
+          this.$toast.error(res.data.message || "Không thể tải danh sách chiến dịch!");
         }
       } catch (error) {
-        console.error("❌ Lỗi khi tải chiến dịch:", error);
+        console.error(" Lỗi khi tải chiến dịch:", error);
         this.$toast.error("Lỗi kết nối khi tải chiến dịch!");
+      } finally {
+        this.loadingList = false;
       }
     },
 
     async submitCampaign() {
+      if (!this.form.title || !this.form.content || !this.form.start_date || !this.form.end_date) {
+        this.$toast.error("Vui lòng nhập đầy đủ thông tin chiến dịch!");
+        return;
+      }
+
+      this.submitting = true;
+
       try {
-        const res = await axios.post("http://localhost:4000/api/admin/campaigns", this.form);
+        const res = await baseRequestAdmin.post("/admin/Campaigns", this.form);
 
         if (res.data.status) {
-          this.$toast.success("✅ Tạo chiến dịch thành công!");
-          this.fetchCampaigns();
+          this.$toast.success(" Tạo chiến dịch thành công!");
+          // reload list
+          await this.fetchCampaigns();
+          // reset form
           this.form = {
             title: "",
             content: "",
@@ -157,11 +173,13 @@ export default {
             is_emergency: false,
           };
         } else {
-          this.$toast.error(res.data.message || "⚠️ Không thể tạo chiến dịch!");
+          this.$toast.error(res.data.message || " Không thể tạo chiến dịch!");
         }
       } catch (err) {
-        console.error("❌ Lỗi khi tạo chiến dịch:", err);
+        console.error("Lỗi khi tạo chiến dịch:", err);
         this.$toast.error("Lỗi kết nối đến server!");
+      } finally {
+        this.submitting = false;
       }
     },
 
@@ -172,6 +190,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 form {

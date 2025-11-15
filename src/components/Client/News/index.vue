@@ -1,5 +1,4 @@
 <template>
-  <!-- Banner -->
   <section class="position-relative text-center d-flex align-items-center justify-content-center">
     <img src="../../../assets/img/banner2.jpg" alt="Banner hiến máu" class="w-100" style="height: 500px; opacity: 0.5" />
     <div class="position-absolute">
@@ -8,10 +7,8 @@
     </div>
   </section>
 
-  <!-- Content -->
   <div class="container-fluid my-5">
     <div class="row g-4">
-      <!-- Bộ lọc -->
       <div class="col-lg-2">
         <div class="bg-white p-3 rounded shadow-sm border">
           <h6 class="fw-bold mb-3">Bộ lọc theo thời gian</h6>
@@ -75,7 +72,6 @@
             </div>
           </div>
 
-          <!-- Phân trang -->
           <nav class="mt-4" v-if="totalPages > 1">
             <ul class="pagination justify-content-center mb-0">
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -96,7 +92,6 @@
           </nav>
         </div>
 
-        <!-- Chiến dịch -->
         <div class="card border-0 bg-white mt-4 shadow-sm">
           <div class="card-header bg-danger text-white fw-bold">
             <i class="bi bi-heart-pulse me-2"></i>Chiến dịch hiến máu
@@ -159,7 +154,7 @@ export default {
           this.totalPages = res.data.totalPages;
         }
       } catch (err) {
-        console.error("❌ Lỗi tải tin tức:", err);
+        console.error("Lỗi tải tin tức:", err);
         this.$toast?.error("Không thể tải tin tức!");
       }
     },

@@ -11,7 +11,7 @@ export default function (to, from, next) {
   const token = localStorage.getItem("token_admin");
 
   if (!token) {
-    toaster.error("Vui lòng đăng nhập tài khoản quản trị!");
+    toaster.error("Vui lòng đăng nhập tài khoản admin!");
     return next("/login");
   }
 

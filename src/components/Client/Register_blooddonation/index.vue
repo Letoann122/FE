@@ -1,5 +1,7 @@
 <template>
   <div class="container py-5">
+
+    <!-- HEADER -->
     <div class="mb-4 border-bottom pb-3">
       <h3 class="fw-bold text-danger">
         <i class="bi bi-calendar2-heart me-2"></i> Đặt lịch hiến máu
@@ -8,7 +10,11 @@
     </div>
 
     <div class="row g-4">
+
+      <!-- LEFT COLUMN (FORM + TABLE FULL WIDTH BELOW) -->
       <div class="col-lg-6">
+
+        <!-- FORM CARD -->
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-2">Thông tin đặt lịch</h5>
           <p class="text-muted">Vui lòng điền đầy đủ thông tin bên dưới</p>
@@ -83,76 +89,11 @@
 
             </div>
           </form>
-        </div>
-
-        <div class="card p-4 shadow-sm border-0 rounded-4 mt-4">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 class="fw-bold mb-0">
-              <i class="bi bi-clock-history text-danger me-2"></i>Lịch hiến máu của bạn
-            </h5>
-            <button class="btn btn-sm btn-outline-secondary" @click="loadMyAppointments" :disabled="loadingAppointments">
-              <span v-if="loadingAppointments" class="spinner-border spinner-border-sm me-1"></span>Tải lại
-            </button>
-          </div>
-
-          <div v-if="myAppointments.length === 0" class="text-muted small">
-            Bạn chưa có lịch hiến máu nào.
-          </div>
-
-          <div v-else class="table-responsive mt-2">
-            <table class="table table-sm align-middle mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>Mã lịch</th>
-                  <th>Ngày</th>
-                  <th>Điểm hiến</th>
-                  <th>Trạng thái</th>
-                  <th class="text-end">Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="a in myAppointments" :key="a.id">
-                  <td><span class="badge bg-light text-dark border">{{ a.appointment_code }}</span></td>
-                  <td>{{ formatDate(a.scheduled_at) }}</td>
-                  <td>{{ a.donation_site?.name }}</td>
-                  <td>
-                    <span
-                      class="badge"
-                      :class="{
-                        'bg-warning text-dark': a.status === 'REQUESTED',
-                        'bg-success': a.status === 'APPROVED',
-                        'bg-secondary': a.status === 'REJECTED',
-                        'bg-dark': a.status === 'CANCELLED',
-                        'bg-info': a.status === 'BOOKED'
-                      }">
-                      {{
-                        a.status === 'REQUESTED' ? 'Chờ duyệt' :
-                        a.status === 'APPROVED' ? 'Đã duyệt' :
-                        a.status === 'REJECTED' ? 'Đã từ chối' :
-                        a.status === 'CANCELLED' ? 'Đã hủy' :
-                        a.status === 'BOOKED' ? 'Đã đặt' : a.status
-                      }}
-                    </span>
-                  </td>
-                  <td class="text-end">
-                    <button
-                      v-if="['REQUESTED','APPROVED','BOOKED'].includes(a.status)"
-                      class="btn btn-sm btn-outline-danger"
-                      @click="cancelAppointment(a)"
-                      :disabled="submittingCancelId === a.id"
-                    >
-                      <span v-if="submittingCancelId === a.id" class="spinner-border spinner-border-sm me-1"></span>
-                      Huỷ
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
 
         </div>
       </div>
 
+      <!-- RIGHT PANEL: MAP -->
       <div class="col-lg-6" v-if="selectedSite">
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-3">
@@ -194,9 +135,83 @@
         </div>
       </div>
 
+      <!-- FULL WIDTH TABLE -->
+      <div class="col-lg-12 mt-4">
+        <div class="card p-4 shadow-sm border-0 rounded-4">
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="fw-bold mb-0">
+              <i class="bi bi-clock-history text-danger me-2"></i>Lịch hiến máu của bạn
+            </h5>
+
+            <button class="btn btn-sm btn-outline-secondary" @click="loadMyAppointments" :disabled="loadingAppointments">
+              <span v-if="loadingAppointments" class="spinner-border spinner-border-sm me-1"></span>
+              Tải lại
+            </button>
+          </div>
+
+          <div v-if="myAppointments.length === 0" class="text-muted small">
+            Bạn chưa có lịch hiến máu nào.
+          </div>
+
+          <div v-else class="table-responsive mt-3">
+            <table class="table table-hover align-middle">
+              <thead class="table-light">
+                <tr>
+                  <th>Mã lịch</th>
+                  <th>Ngày</th>
+                  <th>Điểm hiến</th>
+                  <th>Trạng thái</th>
+                  <th class="text-end">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="a in myAppointments" :key="a.id">
+                  <td><span class="badge bg-light text-dark border">{{ a.appointment_code }}</span></td>
+                  <td>{{ formatDate(a.scheduled_at) }}</td>
+                  <td>{{ a.donation_site?.name }}</td>
+                  <td>
+                    <span
+                      class="badge"
+                      :class="{
+                        'bg-warning text-dark': a.status === 'REQUESTED',
+                        'bg-success': a.status === 'APPROVED',
+                        'bg-secondary': a.status === 'REJECTED',
+                        'bg-dark': a.status === 'CANCELLED',
+                        'bg-info text-dark': a.status === 'BOOKED'
+                      }">
+                      {{
+                        a.status === 'REQUESTED' ? 'Chờ duyệt' :
+                        a.status === 'APPROVED' ? 'Đã duyệt' :
+                        a.status === 'REJECTED' ? 'Đã từ chối' :
+                        a.status === 'CANCELLED' ? 'Đã hủy' :
+                        a.status === 'BOOKED' ? 'Đã đặt' : a.status
+                      }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <button
+                      v-if="['REQUESTED','APPROVED','BOOKED'].includes(a.status)"
+                      class="btn btn-sm btn-outline-danger"
+                      @click="cancelAppointment(a)"
+                      :disabled="submittingCancelId === a.id"
+                    >
+                      <span v-if="submittingCancelId === a.id" class="spinner-border spinner-border-sm me-1"></span>
+                      Huỷ
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
+
 
 <script>
 import baseRequestClient from "../../../core/baseRequestClient"

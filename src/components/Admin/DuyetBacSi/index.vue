@@ -9,22 +9,15 @@
       </p>
     </div>
 
-    <!-- 🔍 Tìm kiếm -->
     <div class="mb-4 border-bottom">
       <div class="col-md-12 col-lg-3 d-flex gap-1 mb-4">
-        <input
-          type="text"
-          v-model="tim_kiem.noi_dung_tim"
-          class="form-control"
-          placeholder="Nhập tên bác sĩ..."
-        />
+        <input type="text" v-model="tim_kiem.noi_dung_tim" class="form-control" placeholder="Nhập tên bác sĩ..." />
         <button class="btn btn-primary text-nowrap" @click="searchDoctor">
           Tìm kiếm
         </button>
       </div>
     </div>
 
-    <!-- 📋 Bảng danh sách -->
     <div class="table-responsive bg-white rounded shadow-sm">
       <table class="table table-hover align-middle mb-0">
         <thead class="table-light">
@@ -45,20 +38,12 @@
             <td>{{ formatDate(doctor.birthday) }}</td>
             <td>{{ doctor.address }}</td>
             <td class="text-center">
-              <button
-                class="btn btn-primary me-2"
-                data-bs-toggle="modal"
-                data-bs-target="#approveModal"
-                @click="Object.assign(selectedDoctor, doctor)"
-              >
+              <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#approveModal"
+                @click="Object.assign(selectedDoctor, doctor)">
                 Duyệt
               </button>
-              <button
-                class="btn btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#rejectModal"
-                @click="Object.assign(selectedDoctor, doctor)"
-              >
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal"
+                @click="Object.assign(selectedDoctor, doctor)">
                 Từ chối
               </button>
             </td>
@@ -79,14 +64,7 @@
     </div>
   </div>
 
-  <!-- ✅ Modal Duyệt -->
-  <div
-    class="modal fade"
-    id="approveModal"
-    tabindex="-1"
-    aria-labelledby="approveModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-danger text-white">
@@ -105,12 +83,8 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-danger"
-            data-bs-dismiss="modal"
-            @click="confirmApprove(selectedDoctor.id)"
-          >
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+            @click="confirmApprove(selectedDoctor.id)">
             Xác nhận duyệt
           </button>
         </div>
@@ -118,14 +92,7 @@
     </div>
   </div>
 
-  <!-- ❌ Modal Từ chối -->
-  <div
-    class="modal fade"
-    id="rejectModal"
-    tabindex="-1"
-    aria-labelledby="rejectModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content border-0 shadow">
         <div class="modal-header bg-secondary text-white">
@@ -144,12 +111,8 @@
           </ul>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-            @click="confirmReject(selectedDoctor.id)"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+            @click="confirmReject(selectedDoctor.id)">
             Xác nhận từ chối
           </button>
         </div>
@@ -174,7 +137,6 @@ export default {
     this.loadData();
   },
   methods: {
-    // 🔄 Load danh sách bác sĩ chờ duyệt
     loadData() {
       baseRequestAdmin
         .get("admin/doctors/pending")
@@ -192,7 +154,6 @@ export default {
         });
     },
 
-    // 🔍 Tìm kiếm bác sĩ
     searchDoctor() {
       const keyword = this.tim_kiem.noi_dung_tim.trim();
       if (!keyword) {
@@ -216,7 +177,6 @@ export default {
         });
     },
 
-    // ✅ Duyệt bác sĩ
     confirmApprove(id) {
       baseRequestAdmin
         .put(`admin/doctors/${id}/approve`)
@@ -235,7 +195,6 @@ export default {
         });
     },
 
-    // ❌ Từ chối bác sĩ
     confirmReject(id) {
       baseRequestAdmin
         .put(`admin/doctors/${id}/reject`)
@@ -254,7 +213,6 @@ export default {
         });
     },
 
-    // 🗓️ Format ngày
     formatDate(date) {
       if (!date) return "-";
       return new Date(date).toLocaleDateString("vi-VN");
