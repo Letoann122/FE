@@ -35,7 +35,13 @@ const routes = [
     path: "/admin/appoint-control",
     component: () => import("../components/Admin/AppointControl/index.vue"),
     meta: { layout: "admin" },
-    // beforeEnter: checkAdmin,
+    beforeEnter: checkAdmin,
+  },
+  {
+    path: "/admin/kho-mau",
+    component: () => import("../components/Admin/BloodInventory/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
   },
 
   //hospital
@@ -118,7 +124,8 @@ const routes = [
   },
   {
     path: "/Hospital/donation-complete",
-    component: () => import("../components/Hospital/DonationComplete/index.vue"),
+    component: () =>
+      import("../components/Hospital/DonationComplete/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
