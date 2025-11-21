@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import checkDoctor from "./checkDoctor";
-import checkAdmin from "./checkadmin";
-import checkdonor from "./checkdonor";
+import checkAdmin from "./checkAdmin";
+import checkDonor from "./checkDonor";
 
 const routes = [
   { path: "/", redirect: "/home-page" },
@@ -159,33 +159,33 @@ const routes = [
     path: "/profile",
     component: () => import("../components/Client/Profile/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/blood-donation-history",
     component: () =>
       import("../components/Client/Blooddonationhistory/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/account-security",
     component: () => import("../components/Client/Accountsecurity/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/register-blooddonation",
     component: () =>
       import("../components/Client/Register_blooddonation/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/notification",
     component: () => import("../components/Client/Notification/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/contact",
