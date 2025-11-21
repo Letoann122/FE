@@ -3,15 +3,15 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster();
 
-const baseRequestHospital = axios.create({
+const baseRequestDoctor = axios.create({
   baseURL: "http://localhost:4000/api",
   timeout: 8000,
 });
 
-// 🧩 Gắn token vào mọi request
-baseRequestHospital.interceptors.request.use(
+// ==================== TOKEN CHUẨN CHO DOCTOR ====================
+baseRequestDoctor.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token_doctor");
+    const token = localStorage.getItem("token_doctor");   // 👈 đúng
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -20,13 +20,12 @@ baseRequestHospital.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ⚙️ Xử lý lỗi trả về từ BE
-baseRequestHospital.interceptors.response.use(
+// ==================== HANDLE ERROR ====================
+baseRequestDoctor.interceptors.response.use(
   (response) => response,
   (error) => {
-    // ✅ DEV MODE: bỏ qua thông báo token lỗi
     if (import.meta.env.VITE_SKIP_TOKEN === "true") {
-      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (hospital)");
+      console.log("⚙ DEV MODE: Bỏ qua lỗi token (doctor)");
       return Promise.resolve({ data: { status: true, data: [] } });
     }
 
@@ -34,7 +33,7 @@ baseRequestHospital.interceptors.response.use(
       const status = error.response.status;
 
       if (status === 401 || status === 403) {
-        toast.error("Phiên đăng nhập bệnh viện đã hết hạn. Vui lòng đăng nhập lại!");
+        toast.error("Phiên đăng nhập bác sĩ đã hết hạn. Vui lòng đăng nhập lại!");
         localStorage.removeItem("token_doctor");
         localStorage.removeItem("user_doctor");
 
@@ -42,7 +41,7 @@ baseRequestHospital.interceptors.response.use(
           window.location.href = "/login";
         }, 1500);
       } else if (status >= 500) {
-        toast.error("Lỗi máy chủ. Vui lòng thử lại sau!");
+        toast.error("Lỗi máy chủ, vui lòng thử lại!");
       } else if (error.response.data?.message) {
         toast.error(error.response.data.message);
       } else {
@@ -56,4 +55,4 @@ baseRequestHospital.interceptors.response.use(
   }
 );
 
-export default baseRequestHospital;
+export default baseRequestDoctor;
