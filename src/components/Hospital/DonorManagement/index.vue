@@ -1,259 +1,357 @@
 <template>
-    <div>
-        <div class="container-fluid mt-4">
-            <div class="row">
-                <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-                    <div class="position-sticky pt-3">
-                        <h6 class="sidebar-heading px-3 mt-4 mb-2 text-muted text-uppercase">
-                            <span><i class="bi bi-funnel-fill me-2"></i>Bộ lọc nhanh</span>
-                        </h6>
-                        <ul class="nav flex-column">
-                            <li class="nav-item px-3 py-2">
-                                <label for="blood-type" class="form-label small">Nhóm máu</label>
-                                <div class="d-flex flex-wrap">
-                                    <button v-for="group in bloodGroups" :key="group" class="btn btn-sm btn-outline-secondary me-2 mb-2 px-3">{{ group }}</button>
-                                </div>
-                            </li>
-                            <li class="nav-item px-3 py-2">
-                                <label for="last-donation" class="form-label small">Ngày hiến gần nhất</label>
-                                <select class="form-select form-select-sm" id="last-donation">
-                                    <option selected>Tất cả</option>
-                                    <option value="1">1 tháng trước</option>
-                                    <option value="3">3 tháng trước</option>
-                                </select>
-                            </li>
-                        </ul>
+  <div class="container-fluid my-4 px-4">
 
-                        <h6 class="sidebar-heading px-3 mt-4 mb-2 text-muted text-uppercase">
-                            <span><i class="bi bi-star-fill me-2"></i>Donor nổi bật</span>
-                        </h6>
-                        <ul class="nav flex-column mb-2">
-                            <li v-for="donor in featuredDonors" :key="donor.id" class="nav-item">
-                                <a class="nav-link text-dark" href="#">
-                                    <div class="d-flex align-items-center">
-                                        <img :src="donor.avatar" class="rounded-circle me-3" width="40" height="40" alt="Avatar">
-                                        <div>
-                                            <div class="fw-bold">{{ donor.name }}</div>
-                                            <small class="text-muted">{{ donor.details }}</small>
-                                        </div>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
+    <div class="row g-4">
 
-                        <div class="card text-center bg-light border-0 m-3 mt-4">
-                            <div class="card-body">
-                                <h5 class="card-title text-danger fs-2 fw-bold">1,247</h5>
-                                <p class="card-text text-muted">Người đăng ký</p>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
+      <!-- ===== FILTER ===== -->
+      <div class="col-lg-3">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body">
 
-                <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="card border-0">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center pt-3 pb-2 mb-3">
-                                <h5 class="card-title mb-0"><i class="bi bi-search me-2"></i>Tìm kiếm & Bộ lọc</h5>
-                                <button class="btn btn-danger">
-                                    <i class="bi bi-plus-lg me-2"></i>Thêm donor mới
-                                </button>
-                            </div>
-                            <form class="row g-3 align-items-center">
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Tìm kiếm theo tên hoặc số điện thoại...">
-                                </div>
-                                <div class="col-md-3">
-                                    <select class="form-select">
-                                        <option selected>Tất cả nhóm máu</option>
-                                        <option v-for="group in bloodGroups" :key="group" :value="group">{{ group }}</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-danger w-100">
-                                        <i class="bi bi-funnel me-2"></i>Lọc dữ liệu
-                                    </button>
-                                </div>
-                            </form>
+            <h5 class="fw-bold text-danger mb-3">
+              <i class="bi bi-funnel-fill me-2"></i>
+              Bộ lọc donor
+            </h5>
 
-                            <div class="mt-4">
-                                <h6 class="mb-3"><i class="bi bi-card-list me-2"></i>Danh sách Donor</h6>
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col"><input class="form-check-input" type="checkbox"></th>
-                                                <th scope="col">Tên Donor</th>
-                                                <th scope="col">Nhóm máu</th>
-                                                <th scope="col">Địa chỉ</th>
-                                                <th scope="col">Thông tin liên hệ</th>
-                                                <th scope="col">Số lần hiến</th>
-                                                <th scope="col">Lần hiến cuối</th>
-                                                <th scope="col">Trạng thái</th>
-                                                <th scope="col">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="donor in donors" :key="donor.id">
-                                                <td><input class="form-check-input" type="checkbox"></td>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <img :src="donor.avatar" class="rounded-circle me-3" width="40" height="40" alt="Avatar">
-                                                        <div>
-                                                            <div class="fw-bold">{{ donor.name }}</div>
-                                                            </div>
-                                                    </div>
-                                                </td>
-                                                <td><span class="badge bg-danger-light text-danger p-2">{{ donor.bloodType }}</span></td>
-                                                
-                                                <td>{{ donor.address }}</td>
+            <label class="form-label small">Tìm theo tên hoặc số điện thoại</label>
+            <input type="text" class="form-control mb-3" v-model="filters.keyword" />
 
-                                                <td>
-                                                    <div>{{ donor.phone }}</div>
-                                                    <small class="text-muted">{{ donor.email }}</small>
-                                                </td>
-                                                <td>{{ donor.age }}</td>
-                                                <td>{{ donor.lastDonation }}</td>
-                                                <td>
-                                                    <span :class="['badge rounded-pill', donor.status === 'Hoạt động' ? 'bg-success-light text-success' : 'bg-warning-light text-warning']">{{ donor.status }}</span>
-                                                </td>
-                                                <td>
-                                                    <Router-Link :to="`/Hospital/donor-management/${donor.id}`" class="btn btn-sm btn-outline-danger">Xem chi tiết</Router-Link>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+            <label class="form-label small">Nhóm máu</label>
+            <select class="form-select mb-3" v-model="filters.bloodType">
+              <option value="">Tất cả</option>
+              <option v-for="group in bloodGroups" :key="group" :value="group">
+                {{ group }}
+              </option>
+            </select>
 
-                                <nav class="d-flex justify-content-between align-items-center mt-3">
-                                    <span class="text-muted small">Hiển thị 1-10 của 1,247 donor</span>
-                                    <ul class="pagination mb-0">
-                                        <li class="page-item disabled">
-                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
-                                        </li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="#">Sau</a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </main>
-            </div>
+            <label class="form-label small">Ngày hiến từ</label>
+            <input type="date" class="form-control mb-3" v-model="filters.fromDate" />
+
+            <label class="form-label small">Ngày hiến đến</label>
+            <input type="date" class="form-control mb-4" v-model="filters.toDate" />
+
+            <button class="btn btn-danger w-100 fw-bold" @click="applyFilter">
+              <i class="bi bi-search me-2"></i> Lọc dữ liệu
+            </button>
+
+          </div>
         </div>
+      </div>
 
-        <div class="container-fluid bg-light-red py-5 mt-5">
-            <div class="container text-center">
-                <h2 class="fw-bold">Quản lý và phát triển cộng đồng người hiến máu</h2>
-                <p class="lead text-muted mb-4">Thêm mới người hiến máu, cập nhật thông tin và duy trì dữ liệu chính xác để hệ thống hoạt động hiệu quả</p>
-                <button class="btn btn-danger btn-lg"><i class="bi bi-droplet-half me-2"></i>Thêm donor mới</button>
+      <!-- ===== TABLE ===== -->
+      <div class="col-lg-9">
+        <div class="card shadow-sm border-0 rounded-4">
+          <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5 class="fw-bold mb-0">
+                <i class="bi bi-people me-2"></i>Danh sách Donor
+              </h5>
+
+              <!-- BTN OPEN MODAL -->
+              <button
+                class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#createDonorModal"
+              >
+                <i class="bi bi-plus-lg me-2"></i>Thêm donor mới
+              </button>
             </div>
+
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên Donor</th>
+                    <th>Nhóm máu</th>
+                    <th>Địa chỉ</th>
+                    <th>Liên hệ</th>
+                    <th>Lần cuối</th>
+                    <th>Số lần</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(value, index) in filteredDonors" :key="value.id">
+
+                    <td>{{ index + 1 }}</td>
+
+                    <td class="fw-bold">{{ value.name }}</td>
+
+                    <td>
+                      <span class="badge bg-danger-light text-danger p-2">
+                        {{ value.bloodType }}
+                      </span>
+                    </td>
+
+                    <td>{{ value.address }}</td>
+
+                    <td>
+                      <div>{{ value.phone }}</div>
+                      <small class="text-muted">{{ value.email }}</small>
+                    </td>
+
+                    <td>
+                      <span v-if="value.lastDonation !== 'Chưa hiến'">
+                        {{ value.lastDonation }}
+                      </span>
+                      <span v-else class="text-muted small fst-italic">Chưa hiến</span>
+                    </td>
+
+                    <td>{{ value.totalDonation }}</td>
+
+                    <td>
+                      <span
+                        :class="[
+                          'badge rounded-pill px-3',
+                          value.status === 'Hoạt động'
+                            ? 'bg-success-light text-success'
+                            : 'bg-warning-light text-warning'
+                        ]"
+                      >
+                        {{ value.status }}
+                      </span>
+                    </td>
+
+                    <td>
+                      <RouterLink
+                        :to="`/Hospital/donor-management/${value.id}`"
+                        class="btn btn-sm btn-outline-danger"
+                      >
+                        Xem chi tiết
+                      </RouterLink>
+                    </td>
+
+                  </tr>
+
+                  <tr v-if="filteredDonors.length === 0">
+                    <td colspan="9" class="text-center text-muted py-3">
+                      Không tìm thấy donor nào
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+          </div>
         </div>
+      </div>
+
     </div>
+
+    <!-- ========================================= -->
+    <!--                  MODAL                   -->
+    <!-- ========================================= -->
+    <div
+      class="modal fade"
+      id="createDonorModal"
+      tabindex="-1"
+      aria-labelledby="createDonorModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title fw-bold" id="createDonorModalLabel">
+              <i class="bi bi-person-plus-fill text-danger me-2"></i> Tạo donor mới
+            </h5>
+            <button class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Họ tên *</label>
+                <input type="text" class="form-control" v-model="newDonor.full_name" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Email *</label>
+                <input type="email" class="form-control" v-model="newDonor.email" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Số điện thoại *</label>
+                <input type="text" class="form-control" v-model="newDonor.phone" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Ngày sinh *</label>
+                <input type="date" class="form-control" v-model="newDonor.birthday" />
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Giới tính *</label>
+                <select class="form-select" v-model="newDonor.gender">
+                  <option value="Nam">Nam</option>
+                  <option value="Nữ">Nữ</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Nhóm máu *</label>
+                <select class="form-select" v-model="newDonor.blood_type_id">
+                  <option disabled value="">Chọn nhóm máu</option>
+                  <option v-for="bt in bloodTypeList" :key="bt.id" :value="bt.id">
+                    {{ bt.display }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-bold">Địa chỉ *</label>
+                <input type="text" class="form-control" v-model="newDonor.address" />
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button class="btn btn-danger fw-bold" @click="createNewDonor">
+              <i class="bi bi-check2-circle me-1"></i> Tạo donor
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
 
 export default {
-    name: 'QuanLyDonor',
-    data() {
-        return {
-            bloodGroups: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
-            featuredDonors: [
-                { id: 1, name: 'Nguyễn Văn A', details: 'O+, 28 tuổi', avatar: 'https://i.pravatar.cc/150?img=1' },
-                { id: 2, name: 'Trần Thị B', details: 'A+, 32 tuổi', avatar: 'https://i.pravatar.cc/150?img=2' },
-                { id: 3, name: 'Lê Văn C', details: 'B+, 25 tuổi', avatar: 'https://i.pravatar.cc/150?img=3' },
-            ],
-            donors: [
-                {
-                    id: 1,
-                    name: 'Nguyễn Văn A',
-                    address: 'Hà Nội',
-                    bloodType: 'A+',
-                    phone: '0987654321',
-                    email: 'nguyenvana@email.com',
-                    age: 28,
-                    lastDonation: '15/04/2025',
-                    status: 'Hoạt động',
-                    avatar: 'https://i.pravatar.cc/150?img=1'
-                },
-                {
-                    id: 2,
-                    name: 'Trần Thị B',
-                    address: 'TP. HCM',
-                    bloodType: 'O-',
-                    phone: '0123456789',
-                    email: 'tranthib@email.com',
-                    age: 32,
-                    lastDonation: '04/02/2025',
-                    status: 'Hoạt động',
-                    avatar: 'https://i.pravatar.cc/150?img=2'
-                },
-                {
-                    id: 3,
-                    name: 'Lê Minh C',
-                    address: 'Đà Nẵng',
-                    bloodType: 'B+',
-                    phone: '0912345678',
-                    email: 'leminhc@email.com',
-                    age: 25,
-                    lastDonation: '10/01/2025',
-                    status: 'Tạm ngừng',
-                    avatar: 'https://i.pravatar.cc/150?img=3'
-                },
-            ]
+  name: "QuanLyDonor",
+
+  data() {
+    return {
+      donors: [],
+      filteredDonors: [],
+
+      bloodGroups: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+
+      bloodTypeList: [
+        { id: 1, display: "A+" },
+        { id: 2, display: "A-" },
+        { id: 3, display: "B+" },
+        { id: 4, display: "B-" },
+        { id: 5, display: "AB+" },
+        { id: 6, display: "AB-" },
+        { id: 7, display: "O+" },
+        { id: 8, display: "O-" },
+      ],
+
+      newDonor: {
+        full_name: "",
+        email: "",
+        phone: "",
+        birthday: "",
+        gender: "Nam",
+        address: "",
+        blood_type_id: "",
+      },
+
+      filters: {
+        keyword: "",
+        bloodType: "",
+        fromDate: "",
+        toDate: "",
+      },
+    };
+  },
+
+  mounted() {
+    this.loadData();
+  },
+
+  methods: {
+    loadData() {
+      baseRequestDoctor.get("doctor/donors").then((res) => {
+        if (res.data?.status) {
+          this.donors = res.data.data;
+          this.filteredDonors = this.donors;
         }
-    }
-}
+      });
+    },
+
+    applyFilter() {
+      let result = [...this.donors];
+
+      if (this.filters.keyword.trim()) {
+        const key = this.filters.keyword.toLowerCase();
+        result = result.filter(
+          (d) =>
+            d.name.toLowerCase().includes(key) ||
+            d.phone.includes(this.filters.keyword)
+        );
+      }
+
+      if (this.filters.bloodType) {
+        result = result.filter((d) => d.bloodType === this.filters.bloodType);
+      }
+
+      if (this.filters.fromDate) {
+        result = result.filter(
+          (d) => d.lastDonation !== "Chưa hiến" && d.lastDonation >= this.filters.fromDate
+        );
+      }
+
+      if (this.filters.toDate) {
+        result = result.filter(
+          (d) => d.lastDonation !== "Chưa hiến" && d.lastDonation <= this.filters.toDate
+        );
+      }
+
+      this.filteredDonors = result;
+    },
+
+    createNewDonor() {
+      baseRequestDoctor
+        .post("doctor/donors/create", this.newDonor)
+        .then((res) => {
+          if (res.data.status) {
+            alert("Tạo donor thành công!");
+
+            this.loadData();
+
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById("createDonorModal")
+            );
+            modal.hide();
+          }
+        })
+        .catch(() => {
+          alert("Lỗi tạo donor!");
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
-body {
-    background-color: #f8f9fa;
-    font-family: 'Public Sans', sans-serif;
-}
-
-.sidebar {
-    height: 100vh;
-}
-
-.page-item.active .page-link {
-    background-color: #dc3545;
-    border-color: #dc3545;
-}
-
-.page-link {
-    color: #dc3545;
-}
-
-.page-link:hover {
-    color: #a71d2a;
-}
-
-.bg-light-red {
-    background-color: #fef2f2;
-}
-
 .badge.bg-danger-light {
-    background-color: #fde2e2 !important;
-    color: #c81e1e !important;
-    font-weight: 500;
+  background-color: #fde2e2 !important;
+  color: #c81e1e !important;
 }
 
 .badge.bg-success-light {
-    background-color: #def7ec !important;
-    color: #03543f !important;
-    font-weight: 500;
+  background-color: #def7ec !important;
+  color: #03543f !important;
 }
 
 .badge.bg-warning-light {
-    background-color: #fdf3e2 !important;
-    color: #723b13 !important;
-    font-weight: 500;
+  background-color: #fdf3e2 !important;
+  color: #723b13 !important;
 }
 </style>
