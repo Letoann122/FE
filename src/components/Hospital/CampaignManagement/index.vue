@@ -1,5 +1,5 @@
 <template>
-    <div class="campaign-management-page">
+    <div class="campaign-management-page container-fluid py-4">
         <div class="row g-4">
             <div class="col-lg-3">
                 <div class="card shadow-sm mb-4">
@@ -8,82 +8,108 @@
                             <i class="bi bi-funnel-fill me-2"></i>Bộ lọc
                         </h6>
                         <div class="mb-3">
-                            <label for="campaignTypeFilter" class="form-label small">Loại chiến dịch</label>
-                            <select id="campaignTypeFilter" class="form-select form-select-sm">
-                                <option selected>Tất cả</option>
-                                <option value="periodic">Định kỳ</option>
-                                <option value="emergency">Khẩn cấp</option>
+                            <label class="form-label small">Loại chiến dịch</label>
+                            <select v-model="filters.type" class="form-select form-select-sm" @change="loadCampaigns">
+                                <option value="">Tất cả</option>
+                                <option value="0">Định kỳ</option>
+                                <option value="1">Khẩn cấp</option>
                             </select>
                         </div>
                         <div>
-                            <label for="timeFilter" class="form-label small">Thời gian</label>
-                            <select id="timeFilter" class="form-select form-select-sm">
-                                <option selected>Tháng này</option>
+                            <label class="form-label small">Thời gian</label>
+                            <select v-model="filters.time" class="form-select form-select-sm" @change="loadCampaigns">
+                                <option value="this_month">Tháng này</option>
                                 <option value="last_month">Tháng trước</option>
                                 <option value="this_year">Năm nay</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h6 class="card-title mb-3">
                             <i class="bi bi-graph-up me-2"></i>Thống kê nhanh
                         </h6>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="d-flex justify-content-between mb-2">
                             <span class="text-muted">Tổng chiến dịch</span>
-                            <span class="fw-bold fs-5">24</span>
+                            <span class="fw-bold fs-5">{{ stats.totalCampaigns }}</span>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between">
                             <span class="text-muted">Donor đăng ký</span>
-                            <span class="fw-bold fs-5 text-danger">1,247</span>
+                            <span class="fw-bold fs-5 text-danger">
+                                {{ stats.totalRegistrations }}
+                            </span>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-9">
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
-                        <h5 class="card-title mb-4"><i class="bi bi-pencil-square me-2"></i>Tạo chiến dịch mới</h5>
-                        <form class="row g-3">
+                        <h5 class="card-title mb-4">
+                            <i class="bi bi-pencil-square me-2"></i>Tạo chiến dịch mới
+                        </h5>
+                        <form class="row g-3" @submit.prevent="createCampaign">
                             <div class="col-md-6">
-                                <label for="campaignName" class="form-label">Tên chiến dịch</label>
-                                <input type="text" class="form-control" id="campaignName"
-                                    placeholder="Nhập tên chiến dịch">
+                                <label class="form-label">Tên chiến dịch</label>
+                                <input v-model="form.title" type="text" class="form-control"
+                                    placeholder="Nhập tên chiến dịch" />
                             </div>
                             <div class="col-md-6">
-                                <label for="campaignType" class="form-label">Loại chiến dịch</label>
-                                <select id="campaignType" class="form-select">
-                                    <option selected>Định kỳ</option>
-                                    <option>Khẩn cấp</option>
+                                <label class="form-label">Loại chiến dịch</label>
+                                <select v-model="form.is_emergency" class="form-select">
+                                    <option value="0">Định kỳ</option>
+                                    <option value="1">Khẩn cấp</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="startDate" class="form-label">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" id="startDate">
+                                <label class="form-label">Ngày bắt đầu</label>
+                                <input v-model="form.start_date" type="date" class="form-control" />
                             </div>
                             <div class="col-md-6">
-                                <label for="endDate" class="form-label">Ngày kết thúc</label>
-                                <input type="date" class="form-control" id="endDate">
+                                <label class="form-label">Ngày kết thúc</label>
+                                <input v-model="form.end_date" type="date" class="form-control" />
                             </div>
                             <div class="col-md-12">
-                                <label for="location" class="form-label">Địa điểm tổ chức</label>
-                                <input type="text" class="form-control" id="location" placeholder="Nhập địa điểm">
+                                <label class="form-label">Loại địa điểm</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="custom"
+                                        v-model="form.locate_type">
+                                    <label class="form-check-label">Địa điểm tuỳ chỉnh</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="donation_site"
+                                        v-model="form.locate_type">
+                                    <label class="form-check-label">Chọn từ điểm hiến máu</label>
+                                </div>
+                            </div>
+                            <div v-if="form.locate_type === 'custom'" class="col-md-12">
+                                <label class="form-label">Địa điểm tổ chức</label>
+                                <input v-model="form.location" type="text" class="form-control"
+                                    placeholder="Nhập địa điểm" />
+                            </div>
+                            <div v-if="form.locate_type === 'donation_site'" class="col-md-12">
+                                <label class="form-label">Điểm hiến máu</label>
+                                <select v-model="form.donation_site_id" class="form-select">
+                                    <option value="">-- Chọn điểm hiến máu --</option>
+                                    <option v-for="site in donationSites" :key="site.id" :value="site.id">
+                                        {{ site.name }} – {{ site.address }}
+                                    </option>
+                                </select>
                             </div>
                             <div class="col-md-12">
-                                <label for="description" class="form-label">Mô tả / Ghi chú</label>
-                                <textarea class="form-control" id="description" rows="3"
+                                <label class="form-label">Mô tả</label>
+                                <textarea v-model="form.content" rows="3" class="form-control"
                                     placeholder="Nhập mô tả chi tiết"></textarea>
                             </div>
                             <div class="col-12 text-end">
-                                <button type="submit" class="btn btn-danger">Tạo chiến dịch mới</button>
+                                <button type="submit" class="btn btn-danger">
+                                    Tạo chiến dịch mới
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
-
                 <div class="card shadow-sm mb-4">
                     <div class="card-body">
                         <h5 class="card-title mb-3"><i class="bi bi-table me-2"></i>Danh sách chiến dịch</h5>
@@ -95,99 +121,169 @@
                                         <th>Loại</th>
                                         <th>Thời gian</th>
                                         <th>Địa điểm</th>
-                                        <th>Đăng ký</th>
                                         <th>Trạng thái</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="campaign in campaigns" :key="campaign.id">
-                                        <td class="fw-bold">{{ campaign.name }}</td>
-                                        <td><span :class="['badge', campaign.typeClass]">{{ campaign.type }}</span></td>
-                                        <td>{{ campaign.time }}</td>
-                                        <td>{{ campaign.location }}</td>
-                                        <td>{{ campaign.registrations }} người</td>
-                                        <td><span :class="['badge', campaign.statusClass]">{{ campaign.status }}</span>
+                                    <tr v-for="item in campaigns" :key="item.id">
+                                        <td class="fw-bold">{{ item.title }}</td>
+                                        <td>
+                                            <span :class="['badge', item.is_emergency ? 'badge-red' : 'badge-blue']">
+                                                {{ item.is_emergency ? "Khẩn cấp" : "Định kỳ" }}
+                                            </span>
+                                        </td>
+                                        <td>{{ formatRange(item.start_date, item.end_date) }}</td>
+                                        <td>
+                                            <span v-if="item.locate_type === 'custom'">
+                                                {{ item.location }}
+                                            </span>
+                                            <span v-else>
+                                                {{ item.donation_site?.name }}
+                                            </span>
                                         </td>
                                         <td>
-                                            <router-link :to="`/hospital/campaigns/${campaign.id}`" class="btn btn-sm btn-outline-primary me-1">Chi tiết</router-link>
-                                            <a href="#" class="btn btn-sm btn-outline-primary me-1">Sửa</a>
-                                            <a href="#" class="btn btn-sm btn-outline-primary me-1">Đóng</a>
+                                            <span :class="['badge', getStatusClass(item)]">
+                                                {{ getCampaignStatus(item) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <router-link :to="`/doctor/campaigns/${item.id}`"
+                                                class="btn btn-sm btn-outline-primary me-1">
+                                                Chi tiết
+                                            </router-link>
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0"><i class="bi bi-calendar-check-fill me-2"></i>Danh sách lịch hẹn
-                        </h5>
-                        <button class="btn btn-success btn-sm">
-                            <i class="bi bi-download me-2"></i>Xuất danh sách
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Tên Donor</th>
-                                        <th>Nhóm máu</th>
-                                        <th>Ngày/Giờ hẹn</th>
-                                        <th>Chiến dịch</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="appt in appointments" :key="appt.id">
-                                        <td class="fw-bold">{{ appt.donorName }}</td>
-                                        <td><span class="badge bg-danger-light text-danger p-2">{{ appt.bloodType
-                                                }}</span></td>
-                                        <td>{{ appt.dateTime }}</td>
-                                        <td>{{ appt.campaign }}</td>
-                                        <td><span :class="['badge', appt.statusClass]">{{ appt.status }}</span></td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
 
             </div>
-        </div>
 
-        <div class="card shadow-sm mt-4" style="background-color: #fef2f2; border: 1px solid #fde2e2;">
-            <div class="card-body text-center py-5">
-                <h3 class="fw-bold">Tổ chức chiến dịch hiến máu – Kêu gọi cộng đồng cùng hành động</h3>
-                <p class="lead text-muted my-3">Mỗi giọt máu là một sự sống. Hãy tạo chiến dịch hiến máu để kết nối
-                    những trái tim nhân ái.</p>
-                <button class="btn btn-danger btn-lg"><i class="bi bi-droplet-half me-2"></i>Tạo chiến dịch
-                    ngay</button>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
+
 export default {
-    name: 'CampaignManagementView',
+    name: "CampaignManagementView",
+
     data() {
         return {
-            campaigns: [
-                { id: 1, name: 'Hiến máu cứu người - Tháng 9', type: 'Định kỳ', typeClass: 'badge-blue', time: '15/09 - 20/09', location: 'Bệnh viện Chợ Rẫy', registrations: 156, status: 'Đang diễn ra', statusClass: 'badge-green' },
-                { id: 2, name: 'Khẩn cấp - Tai nạn giao thông', type: 'Khẩn cấp', typeClass: 'badge-red', time: '10/09 - 12/09', location: 'Bệnh viện Đà Nẵng', registrations: 82, status: 'Đã kết thúc', statusClass: 'badge-gray' },
-            ],
-            appointments: [
-                { id: 1, donorName: 'Nguyễn Văn An', bloodType: 'O+', dateTime: '15/09/2024 - 09:00', campaign: 'Hiến máu cứu người', status: 'Xác nhận', statusClass: 'badge-blue' },
-                { id: 2, donorName: 'Trần Thị Bình', bloodType: 'A+', dateTime: '15/09/2024 - 10:30', campaign: 'Hiến máu cứu người', status: 'Đã tham gia', statusClass: 'badge-green' },
-                { id: 3, donorName: 'Lê Văn Cường', bloodType: 'B+', dateTime: '16/09/2024 - 14:00', campaign: 'Hiến máu cứu người', status: 'Vắng mặt', statusClass: 'badge-yellow' },
-            ]
-        }
-    }
-}
+            campaigns: [],
+            donationSites: [],
+
+            stats: {
+                totalCampaigns: 0,
+                totalRegistrations: 0,
+            },
+
+            filters: {
+                type: "",
+                time: "this_month",
+            },
+
+            form: {
+                title: "",
+                content: "",
+                start_date: "",
+                end_date: "",
+                is_emergency: 0,
+                locate_type: "custom",
+                location: "",
+                donation_site_id: "",
+            },
+        };
+    },
+
+    mounted() {
+        this.loadCampaigns();
+        this.loadDonationSites();
+    },
+
+    methods: {
+        loadDonationSites() {
+            baseRequestDoctor.get("/doctor/donation-sites").then((res) => {
+                if (res.data.status) {
+                    this.donationSites = res.data.data;
+                }
+            });
+        },
+
+        loadCampaigns() {
+            baseRequestDoctor
+                .get("/doctor/campaigns", { params: this.filters })
+                .then((res) => {
+                    if (res.data.status) {
+                        this.campaigns = res.data.data;
+                        this.stats.totalCampaigns = res.data.data.length;
+                    }
+                });
+        },
+
+        createCampaign() {
+            if (!this.form.title || !this.form.start_date || !this.form.end_date) {
+                this.$toast.error("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            if (this.form.locate_type === "custom" && !this.form.location) {
+                this.$toast.error("Vui lòng nhập địa điểm!");
+                return;
+            }
+
+            if (this.form.locate_type === "donation_site" && !this.form.donation_site_id) {
+                this.$toast.error("Vui lòng chọn điểm hiến máu!");
+                return;
+            }
+
+            baseRequestDoctor.post("/doctor/campaigns", this.form).then((res) => {
+                if (res.data.status) {
+                    this.$toast.success("Tạo chiến dịch thành công!");
+                    this.loadCampaigns();
+
+                    this.form = {
+                        title: "",
+                        content: "",
+                        start_date: "",
+                        end_date: "",
+                        is_emergency: 0,
+                        locate_type: "custom",
+                        location: "",
+                        donation_site_id: "",
+                    };
+                }
+            });
+        },
+
+        formatRange(s, e) {
+            if (!s || !e) return "-";
+            const start = new Date(s).toLocaleDateString("vi-VN");
+            const end = new Date(e).toLocaleDateString("vi-VN");
+            return `${start} - ${end}`;
+        },
+
+        getCampaignStatus(item) {
+            const today = new Date();
+            if (new Date(item.end_date) < today) return "Đã kết thúc";
+            if (new Date(item.start_date) > today) return "Sắp diễn ra";
+            return "Đang diễn ra";
+        },
+
+        getStatusClass(item) {
+            const s = this.getCampaignStatus(item);
+            if (s === "Đã kết thúc") return "badge-gray";
+            if (s === "Sắp diễn ra") return "badge-yellow";
+            return "badge-green";
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -224,9 +320,5 @@ export default {
 .badge-yellow {
     color: #664d03;
     background-color: #fff3cd;
-}
-
-.bg-danger-light {
-    background-color: #fde2e2 !important;
 }
 </style>
