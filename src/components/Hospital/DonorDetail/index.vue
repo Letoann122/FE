@@ -1,19 +1,15 @@
 <template>
   <div class="container my-4">
-
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="fw-bold mb-1">Chi tiết Donor</h2>
         <p class="text-muted mb-0">Thông tin đầy đủ và lịch sử hiến máu.</p>
       </div>
     </div>
-
     <div v-if="!loaded" class="text-center py-5">
       <div class="spinner-border text-danger"></div>
     </div>
-
     <div v-else class="row g-4">
-      <!-- ========== LEFT INFO ========== -->
       <div class="col-lg-4">
         <div class="card text-center shadow-sm">
           <div class="bg-danger text-white p-3">
@@ -21,10 +17,8 @@
             <p class="mb-0 small">ID: {{ donor.id }}</p>
             <span class="badge bg-light text-danger">{{ donor.bloodType }}</span>
           </div>
-
           <div class="card-body text-start">
             <h6 class="text-secondary text-uppercase mb-2">Thông tin cá nhân</h6>
-
             <ul class="list-unstyled small">
               <li><i class="bi bi-calendar-event me-2"></i> Ngày sinh: {{ donor.birthday }}</li>
               <li><i class="bi bi-gender-ambiguous me-2"></i> Giới tính: {{ donor.gender }}</li>
@@ -32,9 +26,7 @@
               <li><i class="bi bi-envelope me-2"></i> Email: {{ donor.email }}</li>
               <li><i class="bi bi-geo-alt me-2"></i> Địa chỉ: {{ donor.address }}</li>
             </ul>
-
             <hr />
-
             <div class="d-flex justify-content-between align-items-center">
               <span class="text-muted small">Trạng thái</span>
               <span class="badge bg-success" v-if="donor.status === 'Hoạt động'">
@@ -47,11 +39,7 @@
           </div>
         </div>
       </div>
-
-      <!-- ========== RIGHT SIDE ========== -->
       <div class="col-lg-8">
-
-        <!-- HISTORY TABLE -->
         <div class="card mb-4 shadow-sm">
           <div class="card-header bg-white">
             <h6 class="fw-bold mb-0">
@@ -59,7 +47,6 @@
               Lịch sử hiến máu
             </h6>
           </div>
-
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-striped table-hover align-middle">
@@ -71,7 +58,6 @@
                     <th>Thể tích</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   <tr v-for="(item, i) in history" :key="i">
                     <td>{{ item.date }}</td>
@@ -79,7 +65,6 @@
                     <td>{{ item.hospital }}</td>
                     <td>{{ item.volume }} ml</td>
                   </tr>
-
                   <tr v-if="history.length === 0">
                     <td colspan="4" class="text-center text-muted py-3">
                       Chưa có lịch sử hiến máu
@@ -90,8 +75,6 @@
             </div>
           </div>
         </div>
-
-        <!-- LAST DONATION -->
         <div class="card mb-4 shadow-sm" v-if="lastDonation">
           <div class="card-header bg-white">
             <h6 class="fw-bold mb-0">
@@ -99,7 +82,6 @@
               Lần hiến gần nhất
             </h6>
           </div>
-
           <div class="card-body">
             <ul class="list-group list-group-flush small">
               <li class="list-group-item d-flex justify-content-between">
@@ -118,17 +100,11 @@
                 <strong>Thể tích:</strong>
                 <span>{{ lastDonation.volume }} ml</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between bg-light">
-                <strong>Ngày có thể hiến lại:</strong>
-                <span class="fw-bold text-danger">{{ nextDonationDate }}</span>
-              </li>
             </ul>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 
@@ -137,22 +113,18 @@ import baseRequestDoctor from "../../../core/baseRequestDoctor";
 
 export default {
   name: "DonorDetail",
-
   data() {
     return {
       loaded: false,
       donor: {},
       history: [],
       lastDonation: null,
-      nextDonationDate: null,
     };
   },
-
   mounted() {
     const id = this.$route.params.id;
     this.loadDetail(id);
   },
-
   methods: {
     loadDetail(id) {
       baseRequestDoctor.get(`doctor/donors/${id}`).then((res) => {
@@ -160,7 +132,6 @@ export default {
           this.donor = res.data.data.donor;
           this.history = res.data.data.history;
           this.lastDonation = res.data.data.lastDonation;
-          this.nextDonationDate = res.data.data.nextDonationDate;
           this.loaded = true;
         }
       });

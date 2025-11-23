@@ -105,6 +105,13 @@ const routes = [
     beforeEnter: checkDoctor,
   },
   {
+    path: "/Hospital/campaigns/:id",
+    component: () =>
+      import("../components/Hospital/CampaignDetailView/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
     path: "/Hospital/support",
     component: () => import("../components/Hospital/Support/index.vue"),
     meta: { layout: "Hospital" },
