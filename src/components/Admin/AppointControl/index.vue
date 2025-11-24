@@ -294,7 +294,12 @@ export default {
       this.modalInstance.hide();
     },
     remove(id) {
+      const confirmDelete = confirm(
+        "⚠️ Bạn có chắc chắn muốn xóa lịch hẹn này không?"
+      );
+      if (!confirmDelete) return;
       this.appointments = this.appointments.filter((a) => a.id !== id);
+      //this.appointments = this.appointments.filter((a) => a.id !== id);
     },
     approve(item) {
       item.status = "Đã duyệt";

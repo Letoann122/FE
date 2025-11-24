@@ -5,10 +5,12 @@
         <!-- Cột 1: Giới thiệu -->
         <div class="col-md-4">
           <h5 class="fw-bold text-white mb-3">
-            <i class="bi bi-droplet-fill text-danger me-2"></i> Smart Blood Donation
+            <i class="bi bi-droplet-fill text-danger me-2"></i> Smart Blood
+            Donation
           </h5>
           <p class="text-white-50">
-            Hệ thống hiến máu thông minh kết nối cộng đồng để cứu sống nhiều người hơn.
+            Hệ thống hiến máu thông minh kết nối cộng đồng để cứu sống nhiều
+            người hơn.
           </p>
           <div class="d-flex gap-3 mt-3">
             <a href="#" class="text-white-50 fs-5 hover-icon">
@@ -56,23 +58,24 @@
           <ul class="list-unstyled">
             <li class="mb-2">
               <router-link to="/guide-health" class="footer-link">
-                <i class="bi bi-heart-pulse me-2"></i>Hướng dẫn & chăm sóc sức khỏe
+                <i class="bi bi-heart-pulse me-2"></i>Hướng dẫn & chăm sóc sức
+                khỏe
               </router-link>
             </li>
             <li class="mb-2">
-              <a href="#" class="footer-link">
+              <router-link to="/fa-question" class="footer-link">
                 <i class="bi bi-question-circle me-2"></i>Câu hỏi thường gặp
-              </a>
+              </router-link>
             </li>
             <li class="mb-2">
-              <a href="#" class="footer-link">
+              <router-link to="/privacy-policy" class="footer-link">
                 <i class="bi bi-shield-lock me-2"></i>Chính sách bảo mật
-              </a>
+              </router-link>
             </li>
             <li>
-              <a href="#" class="footer-link">
+              <router-link to="/terms-use" class="footer-link">
                 <i class="bi bi-file-text me-2"></i>Điều khoản sử dụng
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -87,13 +90,16 @@
             <i class="bi bi-telephone-fill text-danger me-2"></i> 1900 1234
           </p>
           <p class="text-white-50 mb-0">
-            <i class="bi bi-geo-alt-fill text-danger me-2"></i> Hải Châu, Đà Nẵng
+            <i class="bi bi-geo-alt-fill text-danger me-2"></i> Hải Châu, Đà
+            Nẵng
           </p>
         </div>
       </div>
 
       <!-- Dòng bản quyền -->
-      <div class="text-center mt-4 pt-3 border-top border-secondary text-white-50 small">
+      <div
+        class="text-center mt-4 pt-3 border-top border-secondary text-white-50 small"
+      >
         © 2025 Smart Blood Donation System. Tất cả quyền được bảo lưu.
       </div>
     </div>
@@ -118,10 +124,9 @@
   transition: 0.3s ease;
 }
 .list-unstyled :hover {
-    cursor: pointer;
-    text-decoration: underline;
+  cursor: pointer;
+  text-decoration: underline;
 }
-
 </style>
 
 <script>

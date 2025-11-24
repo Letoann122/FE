@@ -195,7 +195,21 @@ const routes = [
     component: () => import("../components/Client/Changepassword/index.vue"),
     meta: { layout: "blank" },
   },
-
+  {
+    path: "/fa-question",
+    component: () => import("../components/Client/Faquestion/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/privacy-policy",
+    component: () => import("../components/Client/Privacypolicy/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/terms-use",
+    component: () => import("../components/Client/TermsofUse/index.vue"),
+    meta: { layout: "client" },
+  },
   {
     path: "/:pathMatch(.*)*",
     component: () => import("../components/Client/Notfound/index.vue"),
