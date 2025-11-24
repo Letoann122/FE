@@ -66,7 +66,7 @@ export default {
                 });
                 if (res.data.status) {
                     this.$toast.success("Đổi mật khẩu thành công! Mời bạn đăng nhập lại.");
-                    this.$router.push("/dang-nhap");
+                    this.$router.push("/login");
                 } else {
                     this.$toast.error(res.data.message || "Có lỗi xảy ra!");
                 }

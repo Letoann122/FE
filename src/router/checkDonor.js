@@ -11,7 +11,7 @@ export default function (to, from, next) {
   const token = localStorage.getItem("token_donor");
   if (!token) {
     toaster.error("Vui lòng đăng nhập tài khoản người hiến máu!");
-    return next("/dang-nhap");
+    return next("/login");
   }
 
   axios
@@ -27,11 +27,11 @@ export default function (to, from, next) {
         next();
       } else {
         toaster.error(res.data.message || "Phiên đăng nhập hết hạn!");
-        next("/dang-nhap");
+        next("/login");
       }
     })
     .catch(() => {
       toaster.error("Không thể xác thực tài khoản người hiến máu!");
-      next("/dang-nhap");
+      next("/login");
     });
 }

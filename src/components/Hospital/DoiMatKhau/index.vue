@@ -55,12 +55,11 @@
                                     </span>
                                     <span v-else>
                                         <span class="spinner-border spinner-border-sm me-2"></span>
-                                        Đang lưu...
+                                        Đang lưu
                                     </span>
                                 </button>
                                 <button type="button" class="btn btn-secondary ms-2" @click="resetForm"
-                                    :disabled="loading">
-                                    Huỷ
+                                    :disabled="loading">Huỷ
                                 </button>
                             </div>
                         </form>

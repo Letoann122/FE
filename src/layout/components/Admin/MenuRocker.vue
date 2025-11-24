@@ -2,11 +2,7 @@
   <div class="nav-container primary-menu">
     <div class="mobile-topbar-header">
       <div>
-        <img
-          src="../../../assets/images/logo-icon.png"
-          class="logo-icon"
-          alt="logo icon"
-        />
+        <img src="../../../assets/images/logo-icon.png" class="logo-icon" alt="logo icon" />
       </div>
       <div>
         <h4 class="logo-text">Admin</h4>
@@ -22,21 +18,36 @@
             <div class="menu-title">Dashboard</div>
           </router-link>
         </li>
-
-        <!-- Quản lý lịch hẹn -->
-
-        <!-- Quản lý Bác sĩ -->
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <router-link to="/admin/dang-ki-bac-si" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="menu-title">Đăng ký bác sĩ</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/quan-li-nguoi-dung" class="nav-link">
+            <div class="parent-icon"><i class="bx bx-home-circle"></i></div>
+            <div class="menu-title">Quản lý người dùng</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/tao-chien-dich" class="nav-link">
+            <div class="parent-icon"><i class="bx bx-home-circle"></i></div>
+            <div class="menu-title">Tạo chiến dịch</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/appoint-control" class="nav-link">
+            <div class="parent-icon"><i class="bi bi-calendar-check me-1"></i></div>
+            <div class="menu-title">Quản lý lịch hẹn</div>
+          </router-link>
+        </li>
+        
+        <li class="nav-item dropdown">
+          <!-- <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="bx bx-user-pin"></i></div>
             <div class="menu-title">Người hiến máu</div>
-          </a>
+          </a> -->
           <!-- <ul class="dropdown-menu">
                         <li class="nav-item">
                             <router-link to="/admin/bac-si" class="nav-link">
@@ -61,16 +72,10 @@
 
         <!-- Quản lý Bệnh nhân -->
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <!-- <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="fa-solid fa-hospital"></i></div>
             <div class="menu-title">Bệnh viện/ ngân hàng máu</div>
-          </a>
+          </a> -->
           <!-- <ul class="dropdown-menu">
                         <li class="nav-item">
                             <router-link to="/admin/benh-nhan" class="nav-link">
@@ -88,12 +93,7 @@
         </li>
 
         <!-- Quản lý Dịch vụ -->
-        <li class="nav-item dropdown">
-          <router-link to="/admin/chuyen-khoa" class="nav-link">
-            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
-            <div class="menu-title">Nội dung & tin tức</div>
-          </router-link>
-        </li>
+        
         <!-- Quản lý Phòng khám -->
         <!-- <li class="nav-item">
                     <router-link to="/admin/phong-kham" class="nav-link">
@@ -104,13 +104,7 @@
 
         <!-- Phân quyền -->
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="fa-solid fa-shield"></i></div>
             <div class="menu-title">Phân quyền</div>
           </a>
@@ -132,41 +126,26 @@
 
         <!-- Thống kê & Báo cáo -->
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="bx bx-bar-chart"></i></div>
             <div class="menu-title">Thống kê & Báo cáo</div>
           </a>
           <ul class="dropdown-menu">
             <li class="nav-item">
-              <router-link
-                to="/admin/thong-ke/lich-hen-chuyen-khoa"
-                class="nav-link"
-              >
+              <router-link to="/admin/thong-ke/lich-hen-chuyen-khoa" class="nav-link">
                 <div class="parent-icon"><i class="bx bx-calendar"></i></div>
                 <div class="menu-title">Lịch hẹn theo bác sĩ</div>
               </router-link>
             </li>
             <li class="nav-item">
-              <router-link
-                to="/admin/thong-ke/lich-hen-bac-si"
-                class="nav-link"
-              >
+              <router-link to="/admin/thong-ke/lich-hen-bac-si" class="nav-link">
                 <div class="parent-icon"><i class="bx bx-calendar"></i></div>
                 <div class="menu-title">Lịch hẹn theo người hiến</div>
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to="/admin/thong-ke/benh-nhan-chuyen-khoa"
-                class="nav-link"
-              >
+              <router-link to="/admin/thong-ke/benh-nhan-chuyen-khoa" class="nav-link">
                 <div class="parent-icon"><i class="bx bx-calendar"></i></div>
                 <div class="menu-title">Số lượng người hiến</div>
               </router-link>

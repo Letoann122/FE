@@ -42,6 +42,11 @@
               </router-link>
             </li>
             <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/Hospital/check-booking" exact-active-class="active">
+                Quản lý đặt lịch
+              </router-link>
+            </li>
+            <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/campaign-management" exact-active-class="active">
                 Chiến dịch
               </router-link>
@@ -56,16 +61,12 @@
                 Báo cáo
               </router-link>
             </li>
-            <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/settings" exact-active-class="active">
-                Cài đặt
-              </router-link>
-            </li>
+            
           </ul>
 
           <!-- Khi chưa đăng nhập -->
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">
+            <router-link class="btn btn-outline-secondary me-2" to="/login">
               Đăng nhập
             </router-link>
           </div>
@@ -141,7 +142,7 @@ export default {
         localStorage.removeItem("token_doctor");
         this.isLoggedIn = false;
         this.$toast.error("Phiên đăng nhập đã hết hạn!");
-        this.$router.push("/dang-nhap");
+        this.$router.push("/login");
       }
     },
 
@@ -149,7 +150,7 @@ export default {
       localStorage.removeItem("token_doctor");
       this.isLoggedIn = false;
       this.$toast.success("Đăng xuất thành công!");
-      this.$router.push("/dang-nhap");
+      this.$router.push("/login");
     },
 
     handleSticky() {

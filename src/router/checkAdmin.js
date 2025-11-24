@@ -4,7 +4,6 @@ import { createToaster } from "@meforma/vue-toaster";
 const toaster = createToaster({ position: "top-right" });
 
 export default function (to, from, next) {
-     // ✅ Nếu bật DEV MODE thì bỏ qua xác thực
   if (import.meta.env.VITE_SKIP_TOKEN === "true") {
     console.log("⚙️ DEV MODE: Bỏ qua checkToken (admin)");
     return next();
@@ -12,8 +11,8 @@ export default function (to, from, next) {
   const token = localStorage.getItem("token_admin");
 
   if (!token) {
-    toaster.error("Vui lòng đăng nhập tài khoản quản trị!");
-    return next("/dang-nhap");
+    toaster.error("Vui lòng đăng nhập tài khoản admin!");
+    return next("/login");
   }
 
   axios
@@ -28,11 +27,11 @@ export default function (to, from, next) {
         next();
       } else {
         toaster.error(res.data.message || "Phiên đăng nhập hết hạn!");
-        next("/dang-nhap");
+        next("/login");
       }
     })
     .catch(() => {
       toaster.error("Không thể xác thực Admin. Vui lòng đăng nhập lại!");
-      next("/dang-nhap");
+      next("/login");
     });
 }
