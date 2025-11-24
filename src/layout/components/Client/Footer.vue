@@ -91,15 +91,12 @@
 
 
       <!-- Dòng bản quyền -->
-      <div
-        class="text-center mt-4 pt-3 border-top border-secondary text-white-50 small"
-      >
-
       <div class="text-center mt-4 pt-3 border-top border-secondary text-white-50 small">
 
         © 2025 Smart Blood Donation System. Tất cả quyền được bảo lưu.
       </div>
-    </div>
+    
+    </div> 
   </footer>
 </template>
 <style scoped>

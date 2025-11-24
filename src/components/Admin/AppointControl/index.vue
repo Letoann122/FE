@@ -116,7 +116,7 @@ export default {
       if (!confirmDelete) return;
       this.appointments = this.appointments.filter((a) => a.id !== id);
       //this.appointments = this.appointments.filter((a) => a.id !== id);
-
+    },
 
     async approve(id) {
       try {
