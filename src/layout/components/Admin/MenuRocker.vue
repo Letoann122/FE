@@ -19,72 +19,29 @@
           </router-link>
         </li>
 
-        <!-- Quản lý lịch hẹn -->
-
-        <!-- Quản lý Bác sĩ -->
+        <!-- Người hiến máu -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="bx bx-user-pin"></i></div>
             <div class="menu-title">Người hiến máu</div>
           </a>
-          <!-- <ul class="dropdown-menu">
-                        <li class="nav-item">
-                            <router-link to="/admin/bac-si" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-list-ul"></i></div>
-                                <div class="menu-title">Danh sách Bác sĩ</div>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="/admin/bac-si/lich-lam-viec" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-calendar-check"></i></div>
-                                <div class="menu-title">Lịch làm việc</div>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="/admin/lich-hen" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-calendar"></i></div>
-                                <div class="menu-title">Lịch hẹn</div>
-                            </router-link>
-                        </li>
-                    </ul> -->
         </li>
 
-        <!-- Quản lý Bệnh nhân -->
+        <!-- Bệnh viện / ngân hàng máu -->
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="fa-solid fa-hospital"></i></div>
-            <div class="menu-title">Bệnh viện/ ngân hàng máu</div>
+            <div class="menu-title">Bệnh viện / ngân hàng máu</div>
           </a>
-          <!-- <ul class="dropdown-menu">
-                        <li class="nav-item">
-                            <router-link to="/admin/benh-nhan" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-list-ul"></i></div>
-                                <div class="menu-title">Danh sách Bệnh nhân</div>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="/admin/ho-so-benh-an" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-folder"></i></div>
-                                <div class="menu-title">Hồ sơ bệnh án</div>
-                            </router-link>
-                        </li>
-                    </ul> -->
         </li>
 
-        <!-- Quản lý Dịch vụ -->
-        <li class="nav-item dropdown">
-          <router-link to="/admin/chuyen-khoa" class="nav-link">
+        <!-- Nội dung & tin tức -->
+        <li class="nav-item">
+          <router-link to="/admin/content-management" class="nav-link">
             <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
             <div class="menu-title">Nội dung & tin tức</div>
           </router-link>
         </li>
-        <!-- Quản lý Phòng khám -->
-        <!-- <li class="nav-item">
-                    <router-link to="/admin/phong-kham" class="nav-link">
-                        <div class="parent-icon"><i class="bx bx-plus-medical"></i></div>
-                        <div class="menu-title">Phân quyền</div>
-                    </router-link>
-                </li> -->
 
         <!-- Phân quyền -->
         <li class="nav-item dropdown">
@@ -92,20 +49,6 @@
             <div class="parent-icon"><i class="fa-solid fa-shield"></i></div>
             <div class="menu-title">Phân quyền</div>
           </a>
-          <!-- <ul class="dropdown-menu">
-                        <li class="nav-item">
-                            <router-link to="/admin/nhan-vien" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-user"></i></div>
-                                <div class="menu-title">Nhân viên</div>
-                            </router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link to="/admin/phan-quyen" class="nav-link">
-                                <div class="parent-icon"><i class="bx bx-lock"></i></div>
-                                <div class="menu-title">Phân quyền</div>
-                            </router-link>
-                        </li>
-                    </ul> -->
         </li>
 
         <!-- Thống kê & Báo cáo -->
@@ -127,7 +70,6 @@
                 <div class="menu-title">Lịch hẹn theo người hiến</div>
               </router-link>
             </li>
-
             <li class="nav-item">
               <router-link to="/admin/thong-ke/benh-nhan-chuyen-khoa" class="nav-link">
                 <div class="parent-icon"><i class="bx bx-calendar"></i></div>
@@ -136,6 +78,8 @@
             </li>
           </ul>
         </li>
+
+        <!-- Quản lý lịch hẹn -->
         <li class="nav-item">
           <router-link class="nav-link" to="/admin/appoint-control">
             <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn

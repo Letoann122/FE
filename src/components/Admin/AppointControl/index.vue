@@ -1,6 +1,5 @@
 <template>
   <div class="container py-4">
-    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h3 class="fw-bold text-primary mb-0">
         <i class="bi bi-calendar-check-fill me-2 text-danger"></i>
@@ -11,7 +10,6 @@
       </button>
     </div>
 
-    <!-- Table -->
     <div class="card shadow-sm border-0 rounded-4">
       <div class="card-body p-3">
         <table class="table table-hover align-middle mb-0">
@@ -45,35 +43,23 @@
                 </span>
               </td>
               <td class="text-center">
-                <button
-                  class="btn btn-outline-success btn-sm me-1"
-                  @click="approve(item)"
-                >
+                <button class="btn btn-outline-success btn-sm me-1" @click="approve(item)">
                   <i class="bi bi-check-circle"></i>
                 </button>
-                <button
-                  class="btn btn-outline-danger btn-sm me-1"
-                  @click="reject(item)"
-                >
+                <button class="btn btn-outline-danger btn-sm me-1" @click="reject(item)">
                   <i class="bi bi-x-circle"></i>
                 </button>
-                <button
-                  class="btn btn-outline-primary btn-sm me-1"
-                  @click="edit(item)"
-                >
+                <button class="btn btn-outline-primary btn-sm me-1" @click="edit(item)">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button
-                  class="btn btn-outline-secondary btn-sm"
-                  @click="remove(item.id)"
-                >
+                <button class="btn btn-outline-secondary btn-sm" @click="remove(item.id)">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
             <tr v-if="appointments.length === 0">
               <td colspan="7" class="text-center text-muted py-3">
-                Không có lịch hẹn nào.
+                Chưa có lịch hẹn nào.
               </td>
             </tr>
           </tbody>
@@ -81,7 +67,6 @@
       </div>
     </div>
 
-    <!-- Modal -->
     <div
       class="modal fade"
       id="appointmentModal"
@@ -96,11 +81,7 @@
             <h5 class="modal-title" id="appointmentModalLabel">
               {{ isEdit ? "Chỉnh Sửa Lịch Hẹn" : "Thêm Lịch Hẹn Mới" }}
             </h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <form @submit.prevent="save">
@@ -116,12 +97,7 @@
               </div>
               <div class="mb-3">
                 <label class="form-label fw-semibold">Ngày Diễn Ra</label>
-                <input
-                  v-model="form.date"
-                  type="date"
-                  class="form-control"
-                  required
-                />
+                <input v-model="form.date" type="date" class="form-control" required />
               </div>
               <div class="mb-3">
                 <label class="form-label fw-semibold">Địa Điểm</label>
@@ -144,11 +120,7 @@
                 />
               </div>
               <div class="text-end">
-                <button
-                  type="button"
-                  class="btn btn-secondary me-2"
-                  data-bs-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
                   Hủy
                 </button>
                 <button type="submit" class="btn btn-primary">
@@ -170,88 +142,7 @@ export default {
   name: "AppointmentControl",
   data() {
     return {
-      appointments: [
-        {
-          id: 1,
-          name: "Hiến máu tại UBND Thành phố",
-          date: "2025-11-10",
-          location: "UBND Đà Nẵng",
-          organizer: "Đoàn Thanh Niên",
-          status: "Chờ duyệt",
-        },
-        {
-          id: 2,
-          name: "Ngày Hiến Máu Sinh Viên",
-          date: "2025-11-12",
-          location: "Đại học Duy Tân",
-          organizer: "Câu lạc bộ Tình Nguyện",
-          status: "Đã duyệt",
-        },
-        {
-          id: 3,
-          name: "Hiến Máu Cộng Đồng",
-          date: "2025-11-15",
-          location: "Trung tâm Liên Chiểu",
-          organizer: "Hội Chữ Thập Đỏ",
-          status: "Chờ duyệt",
-        },
-        {
-          id: 4,
-          name: "Hiến Máu Doanh Nghiệp",
-          date: "2025-11-18",
-          location: "Khuôn viên FPT Software",
-          organizer: "FPT CSR Team",
-          status: "Từ chối",
-        },
-        {
-          id: 5,
-          name: "Chương Trình Hiến Máu Bệnh Viện",
-          date: "2025-11-20",
-          location: "Bệnh viện Đà Nẵng",
-          organizer: "Ban Quản Lý Bệnh Viện",
-          status: "Đã duyệt",
-        },
-        {
-          id: 6,
-          name: "Tuần Lễ Hiến Máu Nhân Đạo",
-          date: "2025-11-23",
-          location: "Công viên Châu Á (Asia Park)",
-          organizer: "Thanh Niên Tình Nguyện",
-          status: "Chờ duyệt",
-        },
-        {
-          id: 7,
-          name: "Chiến Dịch Noel Hiến Máu",
-          date: "2025-12-05",
-          location: "Vincom Plaza Đà Nẵng",
-          organizer: "Hội Chữ Thập Đỏ Thành Phố",
-          status: "Chờ duyệt",
-        },
-        {
-          id: 8,
-          name: "Chiến Dịch Năm Mới",
-          date: "2026-01-02",
-          location: "Khu vực Cầu Rồng",
-          organizer: "Hiệp Hội Hiến Máu",
-          status: "Đã duyệt",
-        },
-        {
-          id: 9,
-          name: "Ngày Sức Khỏe Học Đường",
-          date: "2026-01-10",
-          location: "Trường THPT Phạm Phú Thứ",
-          organizer: "Phòng Giáo Dục",
-          status: "Chờ duyệt",
-        },
-        {
-          id: 10,
-          name: "Sự Kiện Cộng Đồng Quan Tâm",
-          date: "2026-01-15",
-          location: "UBND Phường Hòa Khánh",
-          organizer: "Hội Chữ Thập Đỏ Địa Phương",
-          status: "Đã duyệt",
-        },
-      ],
+      appointments: [],
       isEdit: false,
       form: {
         id: null,
@@ -280,10 +171,9 @@ export default {
     save() {
       if (this.isEdit) {
         const index = this.appointments.findIndex((a) => a.id === this.form.id);
-        this.appointments[index] = {
-          ...this.form,
-          status: this.appointments[index].status,
-        };
+        if (index !== -1) {
+          this.appointments[index] = { ...this.form, status: this.appointments[index].status };
+        }
       } else {
         this.appointments.push({
           ...this.form,

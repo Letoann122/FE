@@ -8,19 +8,19 @@ const routes = [
 
   //admin
   {
-    path: "/admin/trang-chu",
+    path: "/admin/home",
     component: () => import("../components/Admin/trangchu/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
   {
-    path: "/admin/quan-li-nguoi-dung",
+    path: "/admin/user-management",
     component: () => import("../components/Admin/QuanLyUser/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
   {
-    path: "/admin/dang-ki-bac-si",
+    path: "/admin/login-doctor",
     component: () => import("../components/Admin/DuyetBacSi/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
@@ -31,7 +31,19 @@ const routes = [
     meta: { layout: "admin" },
     // beforeEnter: checkAdmin,
   },
-  
+  {
+    path: "/admin/blood-inventory",
+    component: () => import("../components/Admin/BloodInventory/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
+    },
+  {
+    path: "/admin/content-management",
+    component: () => import("../components/Admin/ContentManagement/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
+  },
+
 //hospital
   {
     path: "/hospital/profile",
