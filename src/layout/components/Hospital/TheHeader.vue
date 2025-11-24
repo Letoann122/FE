@@ -42,6 +42,11 @@
               </router-link>
             </li>
             <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/Hospital/check-booking" exact-active-class="active">
+                Quản lý đặt lịch
+              </router-link>
+            </li>
+            <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/campaign-management" exact-active-class="active">
                 Chiến dịch
               </router-link>
@@ -56,11 +61,7 @@
                 Báo cáo
               </router-link>
             </li>
-            <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/settings" exact-active-class="active">
-                Cài đặt
-              </router-link>
-            </li>
+            
           </ul>
 
           <!-- Khi chưa đăng nhập -->

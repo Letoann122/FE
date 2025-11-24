@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import checkDoctor from "./checkDoctor";
-import checkAdmin from "./checkadmin";
-import checkdonor from "./checkdonor";
+import checkAdmin from "./checkAdmin";
+import checkDonor from "./checkDonor";
 
 const routes = [
   { path: "/", redirect: "/home-page" },
@@ -26,10 +26,16 @@ const routes = [
     beforeEnter: checkAdmin,
   },
   {
+    path: "/admin/create-campaign",
+    component: () => import("../components/Admin/TaoChienLuoc/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
+  },
+  {
     path: "/admin/appoint-control",
     component: () => import("../components/Admin/AppointControl/index.vue"),
     meta: { layout: "admin" },
-    // beforeEnter: checkAdmin,
+    beforeEnter: checkAdmin,
   },
   {
     path: "/admin/blood-inventory",
@@ -46,31 +52,31 @@ const routes = [
 
 //hospital
   {
-    path: "/hospital/profile",
+    path: "/Hospital/profile",
     component: () => import("../components/Hospital/Profile/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/change-password",
+    path: "/Hospital/doi-mat-khau",
     component: () => import("../components/Hospital/DoiMatKhau/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/dashboard",
+    path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/blood-inventory",
+    path: "/Hospital/blood-inventory",
     component: () => import("../components/Hospital/BloodInventory/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/blood-inventory/:id",
+    path: "/Hospital/blood-inventory/:id",
     name: "BloodBatchDetail",
     component: () =>
       import("../components/Hospital/BloodBatchDetail/index.vue"),
@@ -78,45 +84,64 @@ const routes = [
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/blood-inventory/log",
+    path: "/Hospital/blood-inventory/log",
     name: "BloodStockLog",
     component: () => import("../components/Hospital/BloodStockLog/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/donor-management",
+    path: "/Hospital/donor-management",
     component: () => import("../components/Hospital/DonorManagement/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/donor-management/:id",
+    path: "/Hospital/donor-management/:id",
     name: "DonorDetail",
     component: () => import("../components/Hospital/DonorDetail/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/campaign-management",
+    path: "/Hospital/campaign-management",
     component: () =>
       import("../components/Hospital/CampaignManagement/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/support",
+    path: "/Hospital/campaigns/:id",
+    component: () =>
+      import("../components/Hospital/CampaignDetailView/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
+    path: "/Hospital/support",
     component: () => import("../components/Hospital/Support/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
   {
-    path: "/hospital/report",
+    path: "/Hospital/report",
     component: () => import("../components/Hospital/Report/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
-
+  {
+    path: "/Hospital/check-booking",
+    component: () => import("../components/Hospital/CheckBooking/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
+    path: "/Hospital/donation-complete",
+    component: () =>
+      import("../components/Hospital/DonationComplete/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
   //donor
   {
     path: "/home-page",
@@ -128,12 +153,6 @@ const routes = [
     component: () => import("../components/Client/About/index.vue"),
     meta: { layout: "client" },
   },
-  // {
-  //   path: "/register",
-  //   component: () =>
-  //     import("../components/Client/Registerdonateblood/index.vue"),
-  //   meta: { layout: "client" },
-  // },
   {
     path: "/news",
     component: () => import("../components/Client/News/index.vue"),
@@ -153,33 +172,33 @@ const routes = [
     path: "/profile",
     component: () => import("../components/Client/Profile/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/blood-donation-history",
     component: () =>
       import("../components/Client/Blooddonationhistory/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/account-security",
     component: () => import("../components/Client/Accountsecurity/index.vue"),
     meta: { layout: "client" },
-   beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/register-blooddonation",
     component: () =>
       import("../components/Client/Register_blooddonation/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/notification",
     component: () => import("../components/Client/Notification/index.vue"),
     meta: { layout: "client" },
-    beforeEnter: checkdonor,
+    beforeEnter: checkDonor,
   },
   {
     path: "/contact",
@@ -201,13 +220,27 @@ const routes = [
     path: "/forgot-password",
     component: () => import("../components/Client/Forgotpassword/index.vue"),
     meta: { layout: "blank" },
-  },  
+  },
   {
     path: "/change-password",
     component: () => import("../components/Client/Changepassword/index.vue"),
     meta: { layout: "blank" },
   },
-
+  {
+    path: "/fa-question",
+    component: () => import("../components/Client/Faquestion/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/privacy-policy",
+    component: () => import("../components/Client/Privacypolicy/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/terms-use",
+    component: () => import("../components/Client/TermsofUse/index.vue"),
+    meta: { layout: "client" },
+  },
   {
     path: "/:pathMatch(.*)*",
     component: () => import("../components/Client/Notfound/index.vue"),

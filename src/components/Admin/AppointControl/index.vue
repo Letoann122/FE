@@ -136,7 +136,8 @@
 </template>
 
 <script>
-import { Modal } from "bootstrap";
+import baseRequestAdmin from "../../../core/baseRequestAdmin";
+import axios from "axios";
 
 export default {
   name: "AppointmentControl",
@@ -155,7 +156,7 @@ export default {
     };
   },
   mounted() {
-    this.modalInstance = new Modal(this.$refs.appointmentModal);
+    this.fetchAppointments();
   },
   methods: {
     openAddModal() {
@@ -181,35 +182,69 @@ export default {
           status: "Chờ duyệt",
         });
       }
-      this.modalInstance.hide();
     },
+
     remove(id) {
+      const confirmDelete = confirm(
+        "⚠️ Bạn có chắc chắn muốn xóa lịch hẹn này không?"
+      );
+      if (!confirmDelete) return;
       this.appointments = this.appointments.filter((a) => a.id !== id);
+      //this.appointments = this.appointments.filter((a) => a.id !== id);
     },
-    approve(item) {
-      item.status = "Đã duyệt";
+
+    async approve(id) {
+      try {
+        const res = await baseRequestAdmin.put(`/admin/appointments/${id}/approve`);
+        if (res.data.status) {
+          this.$toast.success("Duyệt lịch hẹn thành công!");
+          this.fetchAppointments();
+        }
+      } catch (err) {
+        console.error(err);
+        this.$toast.error("Không thể duyệt lịch hẹn!");
+      }
+
     },
-    reject(item) {
-      item.status = "Từ chối";
+
+    async reject(id) {
+      try {
+        const res = await baseRequestAdmin.put(`/admin/appointments/${id}/reject`);
+        if (res.data.status) {
+          this.$toast.info("Đã từ chối lịch hẹn.");
+          this.fetchAppointments();
+        }
+      } catch (err) {
+        console.error(err);
+        this.$toast.error("Không thể từ chối lịch hẹn!");
+      }
+    },
+
+    displayStatus(status) {
+      if (status === "approved") return "Đã duyệt";
+      if (status === "pending") return "Chờ duyệt";
+      if (status === "rejected") return "Từ chối";
+      return status;
+    },
+
+    statusClass(status) {
+      return {
+        "badge bg-success": status === "approved",
+        "badge bg-warning text-dark": status === "pending",
+        "badge bg-danger": status === "rejected",
+      };
+    },
+
+    formatDate(dateStr) {
+      return dateStr ? new Date(dateStr).toLocaleDateString("vi-VN") : "-";
     },
   },
 };
 </script>
 
 <style scoped>
-body {
-  background-color: #f8f9fa;
-}
 .table thead {
   background: linear-gradient(to right, #007bff, #17a2b8);
   color: white;
-}
-.btn-outline-success:hover,
-.btn-outline-danger:hover,
-.btn-outline-primary:hover {
-  color: white;
-}
-.modal-content {
-  border: none;
 }
 </style>

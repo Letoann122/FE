@@ -20,16 +20,15 @@
               <router-link class="nav-link" to="/about" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/register" exact-active-class="active">Đăng ký hiến máu</router-link>
-            </li>
-            <li class="nav-item mx-3">
               <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
                 lịch</router-link>
             </li>
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/news" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
-
+            <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/guide-health" exact-active-class="active">Hướng dẫn sức khoẻ</router-link>
+            </li>
             <li class="nav-item dropdown mx-3">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -43,7 +42,7 @@
             </li>
           </ul>
           <div v-if="!isLoggedIn" class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/home-page">Đăng nhập</router-link>
+            <router-link class="btn btn-outline-secondary me-2" to="/login">Đăng nhập</router-link>
             <router-link class="btn btn-danger" to="/register">Đăng ký</router-link>
           </div>
           <div v-else class="dropdown">

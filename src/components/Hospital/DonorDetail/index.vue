@@ -1,72 +1,50 @@
 <template>
   <div class="container my-4">
-    <nav aria-label="breadcrumb" class="mb-2">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <router-link to="/Hospital/donor-management">Quản lý Donor</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-            Chi tiết Donor
-        </li>
-    </ol>
-</nav>
-
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
         <h2 class="fw-bold mb-1">Chi tiết Donor</h2>
         <p class="text-muted mb-0">Thông tin đầy đủ và lịch sử hiến máu.</p>
+      </div>
     </div>
-    <div class="text-end">
-        <button class="btn btn-outline-secondary me-2">
-            <i class="bi bi-pencil-square me-1"></i> Cập nhật thông tin
-        </button>
-        <button class="btn btn-danger">
-            <i class="bi bi-lock-fill me-1"></i> Khóa tài khoản
-        </button>
+    <div v-if="!loaded" class="text-center py-5">
+      <div class="spinner-border text-danger"></div>
     </div>
-</div>
-
-    <div class="row g-4">
-      <!-- Cột trái: Thông tin donor -->
+    <div v-else class="row g-4">
       <div class="col-lg-4">
-        <div class="card text-center">
+        <div class="card text-center shadow-sm">
           <div class="bg-danger text-white p-3">
-            <img
-              src="https://via.placeholder.com/100"
-              class="rounded-circle border border-3 border-white mb-2"
-              alt="avatar"
-            />
-            <h5 class="fw-bold mb-0">Nguyễn Văn A</h5>
-            <p class="mb-0 small">ID: 00123</p>
-            <span class="badge bg-light text-danger">O+</span>
+            <h5 class="fw-bold mb-0">{{ donor.name }}</h5>
+            <p class="mb-0 small">ID: {{ donor.id }}</p>
+            <span class="badge bg-light text-danger">{{ donor.bloodType }}</span>
           </div>
-
           <div class="card-body text-start">
             <h6 class="text-secondary text-uppercase mb-2">Thông tin cá nhân</h6>
             <ul class="list-unstyled small">
-              <li><i class="bi bi-calendar-event me-2"></i> Ngày sinh: 12/03/1998</li>
-              <li><i class="bi bi-gender-ambiguous me-2"></i> Giới tính: Nam</li>
-              <li><i class="bi bi-telephone me-2"></i> SĐT: 0912 345 678</li>
-              <li><i class="bi bi-envelope me-2"></i> Email: a.nguyen@example.com</li>
-              <li><i class="bi bi-geo-alt me-2"></i> Địa chỉ: Đà Nẵng</li>
-              <li><i class="bi bi-person-badge me-2"></i> CCCD: 123456789</li>
+              <li><i class="bi bi-calendar-event me-2"></i> Ngày sinh: {{ donor.birthday }}</li>
+              <li><i class="bi bi-gender-ambiguous me-2"></i> Giới tính: {{ donor.gender }}</li>
+              <li><i class="bi bi-telephone me-2"></i> SĐT: {{ donor.phone }}</li>
+              <li><i class="bi bi-envelope me-2"></i> Email: {{ donor.email }}</li>
+              <li><i class="bi bi-geo-alt me-2"></i> Địa chỉ: {{ donor.address }}</li>
             </ul>
             <hr />
             <div class="d-flex justify-content-between align-items-center">
               <span class="text-muted small">Trạng thái</span>
-              <span class="badge bg-success">Hoạt động</span>
+              <span class="badge bg-success" v-if="donor.status === 'Hoạt động'">
+                Hoạt động
+              </span>
+              <span class="badge bg-warning text-dark" v-else>
+                Tạm ngừng
+              </span>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Cột phải -->
       <div class="col-lg-8">
-        <!-- Lịch sử hiến máu -->
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-sm">
           <div class="card-header bg-white">
             <h6 class="fw-bold mb-0">
-              <i class="bi bi-calendar-heart-fill text-danger me-2"></i>Lịch sử hiến máu
+              <i class="bi bi-calendar-heart-fill text-danger me-2"></i>
+              Lịch sử hiến máu
             </h6>
           </div>
           <div class="card-body">
@@ -76,49 +54,51 @@
                   <tr>
                     <th>Ngày hiến</th>
                     <th>Địa điểm</th>
-                    <th>Số lượng</th>
-                    <th>Trạng thái</th>
+                    <th>Bệnh viện</th>
+                    <th>Thể tích</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>12/09/2024</td>
-                    <td>Bệnh viện Đà Nẵng</td>
-                    <td>350 ml</td>
-                    <td><span class="badge bg-success">Hoàn thành</span></td>
+                  <tr v-for="(item, i) in history" :key="i">
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.site }}</td>
+                    <td>{{ item.hospital }}</td>
+                    <td>{{ item.volume }} ml</td>
                   </tr>
-                  <tr>
-                    <td>08/05/2024</td>
-                    <td>TT Hiến máu Huế</td>
-                    <td>350 ml</td>
-                    <td><span class="badge bg-warning text-dark">Đang xử lý</span></td>
+                  <tr v-if="history.length === 0">
+                    <td colspan="4" class="text-center text-muted py-3">
+                      Chưa có lịch sử hiến máu
+                    </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-
-        <!-- Ghi chú y tế -->
-        <div class="card">
+        <div class="card mb-4 shadow-sm" v-if="lastDonation">
           <div class="card-header bg-white">
             <h6 class="fw-bold mb-0">
-              <i class="bi bi-file-earmark-medical-fill text-danger me-2"></i>Ghi chú y tế
+              <i class="bi bi-heart-pulse-fill text-danger me-2"></i>
+              Lần hiến gần nhất
             </h6>
           </div>
           <div class="card-body">
-            <div class="alert alert-success">
-              <i class="bi bi-check-circle-fill me-2"></i> Đủ điều kiện hiến máu.
-            </div>
             <ul class="list-group list-group-flush small">
               <li class="list-group-item d-flex justify-content-between">
-                <strong>Lần kiểm tra gần nhất:</strong> 10/10/2024
+                <strong>Ngày hiến:</strong>
+                <span>{{ lastDonation.date }}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                <strong>Huyết áp:</strong> 120/80 mmHg
+                <strong>Địa điểm:</strong>
+                <span>{{ lastDonation.site }}</span>
               </li>
               <li class="list-group-item d-flex justify-content-between">
-                <strong>Cân nặng:</strong> 65 kg
+                <strong>Bệnh viện:</strong>
+                <span>{{ lastDonation.hospital }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <strong>Thể tích:</strong>
+                <span>{{ lastDonation.volume }} ml</span>
               </li>
             </ul>
           </div>
@@ -129,7 +109,33 @@
 </template>
 
 <script>
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
+
 export default {
   name: "DonorDetail",
+  data() {
+    return {
+      loaded: false,
+      donor: {},
+      history: [],
+      lastDonation: null,
+    };
+  },
+  mounted() {
+    const id = this.$route.params.id;
+    this.loadDetail(id);
+  },
+  methods: {
+    loadDetail(id) {
+      baseRequestDoctor.get(`doctor/donors/${id}`).then((res) => {
+        if (res.data.status) {
+          this.donor = res.data.data.donor;
+          this.history = res.data.data.history;
+          this.lastDonation = res.data.data.lastDonation;
+          this.loaded = true;
+        }
+      });
+    },
+  },
 };
 </script>
