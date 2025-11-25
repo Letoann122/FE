@@ -70,6 +70,12 @@ const routes = [
     beforeEnter: checkDoctor,
   },
   {
+    path: "/Hospital/blood-inventory-by-type",
+    component: () => import("../components/Hospital/BloodGroupDetail/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
     path: "/Hospital/blood-inventory/:id",
     name: "BloodBatchDetail",
     component: () =>
