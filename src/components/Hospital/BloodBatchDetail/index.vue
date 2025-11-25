@@ -1,441 +1,328 @@
 <template>
-
-    <div class="blood-batch-detail-wrapper">
-
-        <nav aria-label="breadcrumb" class="mb-4">
-
-            <ol class="breadcrumb">
-
-                <li class="breadcrumb-item"><router-link to="/Hospital/blood-inventory">Quản lí kho máu </router-link>
-                </li>
-
-                <li class="breadcrumb-item active" aria-current="page">Chi tiết lô máu #{{ batch.id }}</li>
-
-            </ol>
-
-        </nav>
-
-
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-
-            <div>
-
-                <h2 class="fw-bold mb-1">Chi tiết Lô máu #{{ batch.id }}</h2>
-
-                <p class="text-muted">Thông tin chi tiết và lộ trình của lô máu trong kho.</p>
-
-            </div>
-
-            <div>
-
-                <button class="btn btn-outline-secondary me-2"><i class="bi bi-printer-fill me-2"></i>In phiếu</button>
-
-                <button class="btn btn-danger"><i class="bi bi-pencil-fill me-2"></i>Chỉnh sửa</button>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="row g-4">
-
-            <div class="col-12">
-
-                <div class="row g-3 mb-4">
-
-                    <div class="col-md-3" v-for="info in batch.infoCards" :key="info.label">
-
-                        <div class="card info-card h-100 shadow-sm border-0">
-
-                            <div class="card-body d-flex align-items-center">
-
-                                <div class="info-icon me-3" :class="info.colorClass">
-
-                                    <i :class="info.icon"></i>
-
-                                </div>
-
-                                <div>
-
-                                    <small class="text-muted">{{ info.label }}</small>
-
-                                    <p class="fw-bold mb-0">{{ info.value }}</p>
-
-                                    <small class="text-muted" v-if="info.subValue">{{ info.subValue }}</small>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="card shadow-sm border-0 mb-4">
-
-                    <div class="card-body">
-
-                        <h5 class="fw-bold mb-3">Trạng thái hiện tại</h5>
-
-                        <div class="d-flex align-items-center">
-
-                            <span class="badge status-badge status-ok me-3"><i
-                                    class="bi bi-check-circle-fill me-2"></i>Còn hạn sử dụng</span>
-
-                            <span class="text-muted small">Tình trạng: Bảo quản tốt | Nhiệt độ: 2-6°C</span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="card shadow-sm border-0 mb-4">
-
-                    <div class="card-body">
-
-                        <h5 class="fw-bold mb-3">Ghi chú quản lý</h5>
-
-                        <div class="alert alert-warning-light mb-0">
-
-                            <i class="bi bi-info-circle-fill me-2"></i>
-
-                            Lô máu được kiểm tra đầy đủ các chỉ số an toàn. Người hiến có tiền sử sức khỏe tốt.
-
-                            <p class="text-muted small mb-0 mt-2">Ghi chú bởi: BS. Trần Thị B - 15/01/2024</p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-
-                <div class="card shadow-sm border-0">
-
-                    <div class="card-body">
-
-                        <h5 class="fw-bold mb-4">Nhật ký lô máu</h5>
-
-                        <div class="timeline">
-
-                            <div v-for="(log, index) in batch.logs" :key="index" class="timeline-item">
-
-                                <div class="timeline-icon">
-
-                                    <i :class="log.icon"></i>
-
-                                </div>
-
-                                <div class="timeline-content">
-
-                                    <p class="fw-bold mb-1">{{ log.title }}</p>
-
-                                    <p class="text-muted small mb-1">{{ log.description }}</p>
-
-                                    <p class="text-muted very-small mb-0">Thực hiện bởi: {{ log.actor }}</p>
-
-                                </div>
-
-                                <div class="timeline-time">
-
-                                    {{ log.time }}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+  <div class="blood-batch-detail-wrapper container-fluid py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Chi tiết lô máu #{{ idText }}
+        </li>
+      </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-1">Chi tiết lô máu #{{ idText }}</h2>
+        <p class="text-muted">Thông tin chi tiết và lịch sử hoạt động của lô máu.</p>
+      </div>
     </div>
 
+    <!-- INFO CARDS -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3" v-for="card in infoCards" :key="card.label">
+        <div class="card info-card border-0 shadow-sm">
+          <div class="card-body d-flex align-items-center">
+            <div class="info-icon me-3" :class="card.class">
+              <i :class="card.icon"></i>
+            </div>
+            <div>
+              <small class="text-muted">{{ card.label }}</small>
+              <p class="fw-bold mb-0">{{ card.value }}</p>
+              <small v-if="card.sub" class="text-muted">{{ card.sub }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS CARD -->
+    <div class="card border-0 shadow-sm mb-4" v-if="loaded">
+      <div class="card-body d-flex align-items-center">
+        <span class="badge rounded-pill me-3" :class="uiStatus.badgeClass">
+          <i class="bi bi-circle-fill me-2"></i>{{ uiStatus.label }}
+        </span>
+        <span class="text-muted">
+          Hạn sử dụng: {{ formatDate(batch.expiry_date) }}
+        </span>
+      </div>
+    </div>
+
+    <!-- NOTE -->
+    <div class="card border-0 shadow-sm mb-4" v-if="loaded">
+      <div class="card-body">
+        <h5 class="fw-bold mb-3">Ghi chú</h5>
+        <div class="alert alert-warning-light mb-0">
+          <i class="bi bi-info-circle-fill me-2"></i>
+          {{ note }}
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="card border-0 shadow-sm" v-if="loaded">
+      <div class="card-body">
+        <h5 class="fw-bold mb-4">Nhật ký hoạt động</h5>
+
+        <div class="timeline">
+          <div v-for="(item, idx) in logs" :key="idx" class="timeline-item">
+            <div class="timeline-icon">
+              <i :class="item.icon"></i>
+            </div>
+
+            <div class="timeline-content">
+              <p class="fw-bold mb-1">{{ item.title }}</p>
+              <p class="text-muted small mb-1">{{ item.description }}</p>
+              <p class="very-small text-muted mb-0">
+                Người thực hiện: {{ item.actor }}
+              </p>
+            </div>
+
+            <div class="timeline-time">
+              {{ formatDateTime(item.time) }}
+            </div>
+          </div>
+
+          <p v-if="logs.length === 0" class="text-muted text-center py-3">
+            Chưa có nhật ký cho lô máu này.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </template>
 
-
-
 <script>
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
 
 export default {
+  name: "BloodBatchDetailView",
 
-    name: 'BloodBatchDetailView',
+  data() {
+    return {
+      id: null,
+      batch: {},
+      infoCards: [],
+      note: "",
+      logs: [],
+      loaded: false,
+    };
+  },
 
-    data() {
+  computed: {
+    idText() {
+      return this.id ? "BL" + this.id.toString().padStart(6, "0") : "";
+    },
 
-        return {
+    uiStatus() {
+      const b = this.batch || {};
+      const units = Number(b.units || 0);
 
-            batch: {
+      if (units <= 0) {
+        return { key: "empty", label: "Đã xuất hết", badgeClass: "bg-secondary" };
+      }
 
-                id: 'BL2024001',
+      const today = this.toDate0(new Date());
+      const exp = this.toDate0(b.expiry_date);
 
-                infoCards: [
+      if (exp && exp < today) return { key: "expired", label: "Hết hạn", badgeClass: "bg-danger" };
 
-                    { label: 'Nhóm máu', value: 'A+', subValue: 'Loại A, Rh dương', icon: 'bi bi-droplet-half', colorClass: 'icon-danger' },
+      if (exp) {
+        const days = (exp - today) / (1000 * 3600 * 24);
+        if (days <= 3) return { key: "expiring", label: "Sắp hết hạn", badgeClass: "bg-warning text-dark" };
+      }
 
-                    { label: 'Ngày hiến', value: '15/01/2024', subValue: 'Người hiến: Nguyễn Văn A', icon: 'bi bi-calendar-heart', colorClass: 'icon-primary' },
+      if (units < 5) return { key: "low", label: "Ít máu", badgeClass: "bg-secondary" };
 
-                    { label: 'Hạn sử dụng', value: '15/03/2024', subValue: 'Còn 28 ngày', icon: 'bi bi-hourglass-split', colorClass: 'icon-warning' },
+      return { key: "full", label: "Đầy đủ", badgeClass: "bg-success" };
+    },
+  },
 
-                    { label: 'Số lượng', value: '450ml', subValue: 'Đơn vị tiêu chuẩn', icon: 'bi bi-beaker', colorClass: 'icon-success' },
+  mounted() {
+    this.id = this.$route.params.id;
+    this.loadBatch();
+    this.loadLogs();
+  },
 
-                ],
+  methods: {
+    async loadBatch() {
+      try {
+        const res = await baseRequestDoctor.get(`/doctor/blood-inventory/${this.id}`);
+        if (res.data.status) {
+          this.batch = res.data.data || {};
+          this.setupInfoCards();
 
-                logs: [
+          const apiNote = this.batch.note?.trim();
+          this.note = apiNote || this.buildAutoNote();
 
-                    {
-
-                        icon: 'bi bi-box-arrow-in-down',
-
-                        title: 'Nhập kho',
-
-                        description: 'Lô máu được nhập vào kho sau khi hoàn thành các xét nghiệm.',
-
-                        actor: 'Nguyễn Văn C',
-
-                        time: '15/01/2024 - 09:30'
-
-                    },
-
-                    {
-
-                        icon: 'bi bi-clipboard2-check',
-
-                        title: 'Kiểm tra chất lượng',
-
-                        description: 'Tiến hành kiểm tra định kỳ chất lượng máu và điều kiện bảo quản.',
-
-                        actor: 'BS. Trần Thị B',
-
-                        time: '20/01/2024 - 14:15'
-
-                    },
-
-                    {
-
-                        icon: 'bi bi-pencil-square',
-
-                        title: 'Cập nhật ghi chú',
-
-                        description: 'Bổ sung thông tin về tình trạng sức khỏe người hiến.',
-
-                        actor: 'BS. Trần Thị B',
-
-                        time: '25/01/2024 - 11:45'
-
-                    },
-
-                ]
-
-            }
-
+          this.loaded = true;
+        } else {
+          this.$toast?.error("Không tải được dữ liệu lô máu!");
         }
+      } catch (e) {
+        this.$toast?.error("Lỗi tải chi tiết lô máu!");
+      }
+    },
 
-    }
+    async loadLogs() {
+      try {
+        const res = await baseRequestDoctor.get(`/doctor/blood-inventory/logs/${this.id}`);
+        if (res.data.status) this.logs = res.data.data || [];
+      } catch (e) {}
+    },
 
-}
+    setupInfoCards() {
+      this.infoCards = [
+        {
+          label: "Nhóm máu",
+          value: `${this.batch.blood_type?.abo || ""}${this.batch.blood_type?.rh || ""}` || "-",
+          icon: "bi bi-droplet-half",
+          class: "icon-danger",
+        },
+        {
+          label: "Ngày nhập",
+          value: this.formatDate(this.batch.donation_date),
+          icon: "bi bi-calendar-heart",
+          class: "icon-primary",
+        },
+        {
+          label: "Hạn sử dụng",
+          value: this.formatDate(this.batch.expiry_date),
+          icon: "bi bi-hourglass-split",
+          class: "icon-warning",
+        },
+        {
+          label: "Số lượng",
+          value: Number(this.batch.units || 0) + " túi",
+          icon: "bi bi-box-seam",
+          class: "icon-success",
+        },
+      ];
+    },
 
+    buildAutoNote() {
+      const units = Number(this.batch.units || 0);
+      if (units <= 0) return "Lô máu đã được xuất hết (0 túi).";
+
+      const today = this.toDate0(new Date());
+      const exp = this.toDate0(this.batch.expiry_date);
+
+      if (exp && exp < today) return "Lô máu đã hết hạn. Vui lòng kiểm tra quy trình xử lý.";
+      if (exp) {
+        const days = (exp - today) / (1000 * 3600 * 24);
+        if (days <= 3) return "Lô máu sắp hết hạn. Ưu tiên sử dụng theo FIFO.";
+      }
+      if (units < 5) return "Số lượng còn ít, cân nhắc nhập bổ sung.";
+      return "Không có ghi chú.";
+    },
+
+    toDate0(input) {
+      if (!input) return null;
+
+      const s = typeof input === "string" ? input : null;
+      if (s && /^\d{4}-\d{2}-\d{2}$/.test(s)) {
+        const [y, m, d] = s.split("-").map(Number);
+        const dt = new Date(y, m - 1, d);
+        dt.setHours(0, 0, 0, 0);
+        return dt;
+      }
+
+      const dt = new Date(input);
+      if (Number.isNaN(dt.getTime())) return null;
+      dt.setHours(0, 0, 0, 0);
+      return dt;
+    },
+
+    formatDate(date) {
+      if (!date) return "-";
+      const dt = this.toDate0(date);
+      return dt ? dt.toLocaleDateString("vi-VN") : "-";
+    },
+
+    formatDateTime(dt) {
+      if (!dt) return "-";
+      const d = new Date(dt);
+      if (Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleString("vi-VN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      });
+    },
+  },
+};
 </script>
-
-
 
 <style scoped>
 .breadcrumb a {
-
-    text-decoration: none;
-
-    color: #dc3545;
-
+  text-decoration: none;
+  color: #dc3545;
 }
-
 .breadcrumb a:hover {
-
-    text-decoration: underline;
-
+  text-decoration: underline;
 }
 
-
-
+/* INFO CARDS */
 .info-card .info-icon {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    width: 48px;
-
-    height: 48px;
-
-    border-radius: .5rem;
-
-    font-size: 1.5rem;
-
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
 }
+.icon-danger { background:#fde2e2; color:#c81e1e; }
+.icon-primary { background:#cfe2ff; color:#0d6efd; }
+.icon-warning { background:#fff3cd; color:#664d03; }
+.icon-success { background:#d1e7dd; color:#198754; }
 
-.icon-danger {
-    background-color: #fde2e2;
-    color: #c81e1e;
-}
-
-.icon-primary {
-    background-color: #cfe2ff;
-    color: #0d6efd;
-}
-
-.icon-warning {
-    background-color: #fff3cd;
-    color: #664d03;
-}
-
-.icon-success {
-    background-color: #d1e7dd;
-    color: #198754;
-}
-
-
-
-.status-badge {
-
-    padding: 0.5em 1em;
-
-    font-weight: 600;
-
-    border-radius: 20px;
-
-}
-
-.status-ok {
-
-    background-color: #d1e7dd;
-
-    color: #198754;
-
-}
-
-
-
-.alert-warning-light {
-
-    background-color: #fff3cd;
-
-    color: #664d03;
-
-    border: none;
-
-}
-
-
-
-/* Timeline styles */
-
-.timeline {
-
-    position: relative;
-
-}
-
+/* TIMELINE */
+.timeline { position: relative; }
 .timeline-item {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    position: relative;
-
-    padding-left: 50px;
-
-    padding-bottom: 2.5rem;
-
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding: 0 0 24px 64px;
 }
-
-.timeline-item:last-child {
-
-    padding-bottom: 0;
-
-}
-
+.timeline-item:last-child { padding-bottom: 0; }
 .timeline-item::before {
-
-    content: '';
-
-    position: absolute;
-
-    left: 19px;
-
-    top: 0;
-
-    width: 2px;
-
-    height: 100%;
-
-    background-color: #e9ecef;
-
+  content: "";
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #e9ecef;
 }
-
 .timeline-icon {
-
-    position: absolute;
-
-    left: 0;
-
-    top: 0;
-
-    width: 40px;
-
-    height: 40px;
-
-    border-radius: 50%;
-
-    background-color: #f8f9fa;
-
-    border: 2px solid #e9ecef;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 1.2rem;
-
-    color: #6c757d;
-
+  position: absolute;
+  left: 20px;
+  top: 2px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #6c757d;
 }
-
-.timeline-content {
-
-    flex: 1;
-
-}
-
+.timeline-content { flex: 1; }
 .timeline-time {
-
-    color: #6c757d;
-
-    font-size: 0.85rem;
-
+  min-width: 140px;
+  text-align: right;
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-left: 16px;
+  padding-top: 2px;
 }
-
-.very-small {
-
-    font-size: 0.75rem;
-
-}
+.very-small { font-size: 0.75rem; }
 </style>

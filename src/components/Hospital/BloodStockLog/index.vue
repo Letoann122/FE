@@ -1,169 +1,242 @@
 <template>
-    <div class="blood-stock-log-wrapper">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link></li>
-                <li class="breadcrumb-item active" aria-current="page">Nhật ký kho máu</li>
-            </ol>
-        </nav>
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold mb-1">Nhật ký Thao tác Kho máu</h2>
-                <p class="text-muted">Theo dõi lịch sử các thao tác trên hệ thống.</p>
-            </div>
-            <button class="btn btn-danger"><i class="bi bi-download me-2"></i>Xuất báo cáo</button>
-        </div>
-
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label">Loại thao tác</label>
-                        <select class="form-select">
-                            <option selected>Tất cả</option>
-                            <option>Nhập kho</option>
-                            <option>Xuất kho</option>
-                            <option>Kiểm tra</option>
-                            <option>Hủy</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Từ ngày</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Đến ngày</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Người thực hiện</label>
-                        <input type="text" class="form-control" placeholder="Tìm tên...">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card shadow-sm border-0">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold">Danh sách thao tác</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                                <th>Hành động</th>
-                                <th>Người thực hiện</th>
-                                <th>Ngày giờ</th>
-                                <th>Ghi chú</th>
-                                <th>Chi tiết</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="log in actionLogs" :key="log.id">
-                                <td>
-                                    <span class="badge" :class="log.actionClass">
-                                        <i :class="['me-2', log.icon]"></i>{{ log.action }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img :src="log.actor.avatar" class="rounded-circle me-2" width="30" height="30">
-                                        <div>
-                                            <div class="fw-bold small">{{ log.actor.name }}</div>
-                                            <div class="text-muted very-small">{{ log.actor.role }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>{{ log.timestamp }}</td>
-                                <td>{{ log.notes }}</td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-outline-secondary" title="Xem chi tiết">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer bg-white d-flex justify-content-between align-items-center">
-    <span class="text-muted small">Hiển thị 1-10 trong tổng số 247 kết quả</span>
-    
-    <nav aria-label="Page navigation">
-        <ul class="pagination pagination-sm mb-0">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" aria-label="Previous">
-                    <i class="bi bi-chevron-left"></i>
-                </a>
-            </li>
-
-            <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            
-            <li class="page-item disabled"><span class="page-link">...</span></li>
-
-            <li class="page-item"><a class="page-link" href="#">25</a></li>
-            
-            <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                    <i class="bi bi-chevron-right"></i>
-                </a>
-            </li>
-        </ul>
+  <div class="container-fluid py-4">
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link>
+        </li>
+        <li class="breadcrumb-item active">Nhật ký kho máu</li>
+      </ol>
     </nav>
+
+    <!-- TITLE -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-1">Nhật ký Thao tác Kho máu</h2>
+        <p class="text-muted">Theo dõi lịch sử mọi hoạt động trong kho máu.</p>
+      </div>
     </div>
+
+    <!-- FILTER -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label">Thao tác</label>
+          <select class="form-select" v-model="filterAction" @change="filterLogs">
+            <option value="all">Tất cả</option>
+            <option value="import">Nhập kho</option>
+            <option value="export">Xuất kho</option>
+            <option value="update">Chỉnh sửa</option>
+            <option value="expire">Hết hạn</option>
+          </select>
         </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Từ ngày</label>
+          <input type="date" v-model="fromDate" class="form-control" @change="filterLogs" />
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Đến ngày</label>
+          <input type="date" v-model="toDate" class="form-control" @change="filterLogs" />
+        </div>
+      </div>
     </div>
+
+    <!-- TABLE -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white py-3">
+        <h5 class="mb-0 fw-bold">Danh sách thao tác</h5>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+              <tr>
+                <th>Hành động</th>
+                <th>Lô</th>
+                <th>Người thực hiện</th>
+                <th>Thời gian</th>
+                <th>Ghi chú</th>
+                <th>Chi tiết</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="log in filtered" :key="log.id">
+                <td>
+                  <span class="badge" :class="badgeClass(log.action)">
+                    <i :class="['me-2', log.icon]"></i>
+                    {{ translateAction(log.action) }}
+                  </span>
+                </td>
+
+                <td class="fw-bold">
+                  <span
+                    class="text-danger pointer"
+                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })"
+                  >
+                    BL{{ String(log.batch_id).padStart(6, "0") }}
+                  </span>
+                </td>
+
+                <td>
+                  <div class="d-flex align-items-center">
+                    
+                    <div>
+                      <div class="fw-bold small">{{ log.actor_name }}</div>
+                      <div class="text-muted very-small">{{ log.actor_role }}</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>{{ formatDateTime(log.time) }}</td>
+                <td>{{ log.notes }}</td>
+
+                <td>
+                  <button
+                    class="btn btn-sm btn-outline-secondary"
+                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </td>
+              </tr>
+
+              <tr v-if="filtered.length === 0">
+                <td colspan="6" class="text-center py-3 text-muted">Không có dữ liệu phù hợp.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import baseRequestDoctor from "../../../core/baseRequestDoctor";
+
 export default {
-    name: 'BloodStockLogView',
-    data() {
-        return {
-            actionLogs: [
-                { id: 1, action: 'Nhập kho', icon: 'bi bi-arrow-down-circle', actionClass: 'badge-success', actor: { name: 'Nguyễn Văn An', role: 'Kỹ thuật viên', avatar: 'https://i.pravatar.cc/150?img=1' }, timestamp: '15/01/2024 14:30', notes: 'Nhập 3 đơn vị máu O+ từ bệnh viện Bạch Mai' },
-                { id: 2, action: 'Chỉnh sửa', icon: 'bi bi-pencil', actionClass: 'badge-primary', actor: { name: 'Trần Thị Bình', role: 'Quản lý kho', avatar: 'https://i.pravatar.cc/150?img=2' }, timestamp: '15/01/2024 10:15', notes: 'Cập nhật ngày hết hạn cho lô máu #A02' },
-                { id: 3, action: 'Hủy', icon: 'bi bi-x-circle', actionClass: 'badge-danger', actor: { name: 'Lê Minh Cường', role: 'Bác sĩ', avatar: 'https://i.pravatar.cc/150?img=3' }, timestamp: '15/01/2024 11:05', notes: 'Hủy lô máu A+ đã hết hạn' },
-                { id: 4, action: 'Nhập kho', icon: 'bi bi-arrow-down-circle', actionClass: 'badge-success', actor: { name: 'Hoàng Thị Thanh Ân', role: 'Kỹ thuật viên', avatar: 'https://i.pravatar.cc/150?img=4' }, timestamp: '15/01/2024 09:28', notes: 'Nhập 5 đơn vị máu B+ từ hiến máu tình nguyện' },
-                { id: 5, action: 'Chỉnh sửa', icon: 'bi bi-pencil', actionClass: 'badge-primary', actor: { name: 'Hoàng Công Ý', role: 'Quản lý kho', avatar: 'https://i.pravatar.cc/150?img=5' }, timestamp: '14/01/2024 16:18', notes: 'Điều chỉnh số lượng túi cho lô máu O-' },
-            ]
+  name: "BloodStockLogView",
+
+  data() {
+    return {
+      logs: [],
+      filtered: [],
+      filterAction: "all",
+      fromDate: "",
+      toDate: "",
+    };
+  },
+
+  mounted() {
+    this.loadLogs();
+  },
+
+  methods: {
+    async loadLogs() {
+      try {
+        const res = await baseRequestDoctor.get("/doctor/blood-inventory/logs");
+        if (res.data.status) {
+          this.logs = res.data.data || [];
+          this.filtered = this.logs;
+        } else {
+          this.$toast?.error(res.data.message || "Không tải được nhật ký kho máu!");
+          this.logs = [];
+          this.filtered = [];
         }
-    }
-}
+      } catch (e) {
+        this.$toast?.error("Lỗi tải nhật ký kho máu!");
+        this.logs = [];
+        this.filtered = [];
+      }
+    },
+
+    translateAction(a) {
+      return {
+        import: "Nhập kho",
+        export: "Xuất kho",
+        update: "Chỉnh sửa",
+        expire: "Hết hạn",
+      }[a] || "Khác";
+    },
+
+    badgeClass(a) {
+      return {
+        import: "badge-success",
+        export: "badge-primary",
+        update: "badge-warning text-dark",
+        expire: "badge-danger",
+      }[a] || "badge-secondary";
+    },
+
+    formatDateTime(dt) {
+      if (!dt) return "-";
+      const d = new Date(dt);
+      if (Number.isNaN(d.getTime())) return "-";
+      return d.toLocaleString("vi-VN");
+    },
+
+    filterLogs() {
+      let result = [...(this.logs || [])];
+
+      if (this.filterAction !== "all") {
+        result = result.filter((l) => l.action === this.filterAction);
+      }
+
+      if (this.fromDate) {
+        const from = new Date(this.fromDate);
+        from.setHours(0, 0, 0, 0);
+        result = result.filter((l) => new Date(l.time) >= from);
+      }
+
+      if (this.toDate) {
+        const to = new Date(this.toDate);
+        to.setHours(23, 59, 59, 999);
+        result = result.filter((l) => new Date(l.time) <= to);
+      }
+
+      this.filtered = result;
+    },
+  },
+};
 </script>
 
 <style scoped>
-.breadcrumb a {
-    text-decoration: none;
-    color: #dc3545;
+.pointer {
+  cursor: pointer;
 }
 
 .badge {
-    padding: 0.5em 0.8em;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border-radius: 6px;
+  padding: 0.5em 0.8em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 6px;
 }
 
 .badge-success {
-    background-color: #d1e7dd;
-    color: #198754;
+  background-color: #d1e7dd;
+  color: #198754;
 }
 
 .badge-primary {
-    background-color: #cfe2ff;
-    color: #0d6efd;
+  background-color: #cfe2ff;
+  color: #0d6efd;
 }
 
 .badge-danger {
-    background-color: #f8d7da;
-    color: #dc3545;
+  background-color: #f8d7da;
+  color: #dc3545;
+}
+
+.badge-warning {
+  background-color: #fff3cd;
 }
 
 .very-small {
-    font-size: 0.75rem;
+  font-size: 0.75rem;
 }
 </style>
