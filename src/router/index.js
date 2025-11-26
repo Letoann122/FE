@@ -202,7 +202,7 @@ const routes = [
   },
   {
     path: "/notification",
-    component: () => import("../components/Client/Notification/index.vue"),
+    component: () => import("../components/Client/notification/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor,
   },
