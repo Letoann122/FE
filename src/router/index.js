@@ -32,6 +32,12 @@ const routes = [
     beforeEnter: checkAdmin,
   },
   {
+  path: "/admin/campaigns/:id",
+  component: () => import("../components/Admin/CampaignDetail/index.vue"),
+  meta: { layout: "admin" },
+  beforeEnter: checkAdmin,
+  },
+  {
     path: "/admin/appoint-control",
     component: () => import("../components/Admin/AppointControl/index.vue"),
     meta: { layout: "admin" },

@@ -15,19 +15,11 @@
         </button>
 
         <!-- ❌ Disable khi đã ended -->
-        <button
-          class="btn btn-warning me-2"
-          @click="openEditModal"
-          :disabled="isClosed"
-        >
+        <button class="btn btn-warning me-2" @click="openEditModal" :disabled="isClosed">
           <i class="bi bi-pencil me-1"></i>Sửa
         </button>
 
-        <button
-          class="btn btn-danger"
-          @click="openCloseModal"
-          v-if="!isClosed"
-        >
+        <button class="btn btn-danger" @click="openCloseModal" v-if="!isClosed">
           <i class="bi bi-x-circle me-1"></i>Đóng chiến dịch
         </button>
       </div>
@@ -44,12 +36,10 @@
             </p>
 
             <ul class="list-group list-group-flush small">
-
               <li class="list-group-item d-flex justify-content-between">
                 <span>Loại chiến dịch</span>
-                <button class="btn btn-sm"
-                        :class="campaign.is_emergency ? 'btn-danger' : 'btn-info'">
-                  {{ campaign.is_emergency ? 'Khẩn cấp' : 'Định kỳ' }}
+                <button class="btn btn-sm" :class="campaign.is_emergency ? 'btn-danger' : 'btn-info'">
+                  {{ campaign.is_emergency ? "Khẩn cấp" : "Định kỳ" }}
                 </button>
               </li>
 
@@ -73,7 +63,8 @@
               <!-- STATUS – dùng DB -->
               <li class="list-group-item d-flex justify-content-between bg-light">
                 <span>Trạng thái</span>
-                <button class="btn btn-sm"
+                <button
+                  class="btn btn-sm"
                   :class="{
                     'btn-secondary': getCampaignStatus(campaign) === 'Đã kết thúc',
                     'btn-warning': getCampaignStatus(campaign) === 'Sắp diễn ra',
@@ -83,7 +74,6 @@
                   {{ getCampaignStatus(campaign) }}
                 </button>
               </li>
-
             </ul>
           </div>
         </div>
@@ -91,7 +81,6 @@
 
       <!-- RIGHT -->
       <div class="col-lg-8">
-
         <!-- DESCRIPTION -->
         <div class="card shadow-sm mb-4 border-0">
           <div class="card-header bg-white fw-bold">
@@ -104,17 +93,23 @@
 
         <!-- LIST -->
         <div class="card shadow-sm border-0">
-          <div class="card-header bg-white fw-bold d-flex justify-content-between">
+          <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
             <span>
               <i class="bi bi-people-fill text-danger me-2"></i>Danh sách lịch hẹn
             </span>
 
-            <button class="btn btn-success btn-sm">
+            <button class="btn btn-success btn-sm" :disabled="!canViewAppointments">
               <i class="bi bi-download me-2"></i>Xuất danh sách
             </button>
           </div>
 
-          <div class="table-responsive">
+          <!-- ✅ Nếu chưa duyệt -->
+          <div v-if="!canViewAppointments" class="p-4 text-center text-muted">
+            <i class="bi bi-shield-lock fs-3 d-block mb-2"></i>
+            Chiến dịch <strong>chưa được Admin duyệt</strong> nên chưa hiển thị danh sách lịch hẹn.
+          </div>
+
+          <div v-else class="table-responsive">
             <table class="table table-hover align-middle mb-0">
               <thead class="table-light">
                 <tr>
@@ -146,20 +141,17 @@
                     Chưa có lịch hẹn nào
                   </td>
                 </tr>
-
               </tbody>
             </table>
           </div>
         </div>
-
       </div>
     </div>
 
     <!-- CLOSE MODAL -->
-    <div class="modal fade" id="closeCampaignModal">
+    <div class="modal fade" id="closeCampaignModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
-
           <div class="modal-header">
             <h5 class="modal-title text-danger">Xác nhận đóng chiến dịch</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -173,49 +165,41 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
             <button class="btn btn-danger" @click="confirmClose">Xác nhận</button>
           </div>
-
         </div>
       </div>
     </div>
 
     <!-- EDIT MODAL -->
-    <div class="modal fade" id="editCampaignModal">
+    <div class="modal fade" id="editCampaignModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
-
           <div class="modal-header">
             <h5 class="modal-title text-danger">Sửa chiến dịch</h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
-
             <div class="mb-3">
               <label class="form-label">Tiêu đề</label>
-              <input type="text" class="form-control"
-                     v-model="form.title" :disabled="!canEditFull" />
+              <input type="text" class="form-control" v-model="form.title" :disabled="!canEditFull" />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Mô tả</label>
-              <textarea class="form-control" rows="3"
-                        v-model="form.content"></textarea>
+              <textarea class="form-control" rows="3" v-model="form.content"></textarea>
             </div>
 
             <div class="row g-3">
               <div class="col-6">
                 <label class="form-label">Ngày bắt đầu</label>
-                <input type="date" class="form-control"
-                       v-model="form.start_date" :disabled="!canEditFull" />
+                <input type="date" class="form-control" v-model="form.start_date" :disabled="!canEditFull" />
               </div>
 
               <div class="col-6">
                 <label class="form-label">Ngày kết thúc</label>
-                <input type="date" class="form-control"
-                       v-model="form.end_date" :disabled="!canEditFull" />
+                <input type="date" class="form-control" v-model="form.end_date" :disabled="!canEditFull" />
               </div>
             </div>
-
           </div>
 
           <div class="modal-footer">
@@ -224,11 +208,9 @@
               <i class="bi bi-save me-1"></i>Lưu
             </button>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 
   <div v-else class="text-center py-5">
@@ -255,37 +237,44 @@ export default {
 
   mounted() {
     const id = this.$route.params.id;
-    this.loadDetail(id);
 
     this.$nextTick(() => {
-      this.modalClose = new bootstrap.Modal(
-        document.getElementById("closeCampaignModal")
-      );
-      this.modalEdit = new bootstrap.Modal(
-        document.getElementById("editCampaignModal")
-      );
+      this.modalClose = new bootstrap.Modal(document.getElementById("closeCampaignModal"));
+      this.modalEdit = new bootstrap.Modal(document.getElementById("editCampaignModal"));
     });
 
-    this.loaded = true;
+    this.loadDetail(id);
   },
 
   computed: {
     isClosed() {
       return this.campaign.status === "ended";
     },
+    canViewAppointments() {
+      return this.campaign.approval_status === "approved";
+    },
   },
 
   methods: {
-    loadDetail(id) {
-      baseRequestDoctor.get(`/doctor/campaigns/${id}`).then((res) => {
-        if (res.data.status) this.campaign = res.data.data;
-      });
+    async loadDetail(id) {
+      try {
+        const res = await baseRequestDoctor.get(`/doctor/campaigns/${id}`);
+        if (res.data.status) {
+          this.campaign = res.data.data;
 
-      baseRequestDoctor
-        .get(`/doctor/campaigns/${id}/appointments`)
-        .then((res) => {
-          if (res.data.status) this.appointments = res.data.data;
-        });
+          // ✅ chỉ load appointments khi đã duyệt
+          if (this.campaign.approval_status === "approved") {
+            const rs2 = await baseRequestDoctor.get(`/doctor/campaigns/${id}/appointments`);
+            this.appointments = rs2.data.status ? rs2.data.data : [];
+          } else {
+            this.appointments = [];
+          }
+        }
+      } catch (e) {
+        this.$toast?.error?.("Lỗi tải dữ liệu!");
+      } finally {
+        this.loaded = true;
+      }
     },
 
     openEditModal() {
@@ -308,11 +297,11 @@ export default {
         .put(`/doctor/campaigns/${this.campaign.id}`, this.form)
         .then((res) => {
           if (res.data.status) {
-            this.$toast.success("Cập nhật chiến dịch thành công!");
+            this.$toast.success(res.data.message || "Cập nhật chiến dịch thành công!");
             this.modalEdit.hide();
             this.loadDetail(this.campaign.id);
           } else {
-            this.$toast.error("Không thể cập nhật chiến dịch");
+            this.$toast.error(res.data.message || "Không thể cập nhật chiến dịch");
           }
         })
         .catch(() => this.$toast.error("Lỗi server!"));
@@ -323,26 +312,20 @@ export default {
     },
 
     confirmClose() {
-      baseRequestDoctor
-        .patch(`/doctor/campaigns/${this.campaign.id}/close`)
-        .then((res) => {
-          if (res.data.status) {
-            this.$toast.success("Đã đóng chiến dịch!");
-            this.modalClose.hide();
-            this.loadDetail(this.campaign.id);
-          } else {
-            this.$toast.error(res.data.message || "Không thể đóng chiến dịch");
-          }
-        });
+      baseRequestDoctor.patch(`/doctor/campaigns/${this.campaign.id}/close`).then((res) => {
+        if (res.data.status) {
+          this.$toast.success("Đã đóng chiến dịch!");
+          this.modalClose.hide();
+          this.loadDetail(this.campaign.id);
+        } else {
+          this.$toast.error(res.data.message || "Không thể đóng chiến dịch");
+        }
+      });
     },
 
     formatRange(s, e) {
       if (!s || !e) return "-";
-      return (
-        new Date(s).toLocaleDateString("vi-VN") +
-        " - " +
-        new Date(e).toLocaleDateString("vi-VN")
-      );
+      return new Date(s).toLocaleDateString("vi-VN") + " - " + new Date(e).toLocaleDateString("vi-VN");
     },
 
     getCampaignStatus(item) {
@@ -360,3 +343,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form-label {
+  font-weight: 500;
+}
+</style>

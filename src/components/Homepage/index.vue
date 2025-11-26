@@ -236,6 +236,7 @@
 </template>
 
 <script>
+import baseRequestClient from '../../core/baseRequestClient';
 export default {
   name: "TrangChu",
   data() {
