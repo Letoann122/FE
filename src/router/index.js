@@ -183,13 +183,13 @@ const routes = [
   {
     path: "/blood-donation-history",
     component: () =>
-      import("../components/Client/Blooddonationhistory/index.vue"),
+      import("../components/Client/blooddonationhistory/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor,
   },
   {
     path: "/account-security",
-    component: () => import("../components/Client/Accountsecurity/index.vue"),
+    component: () => import("../components/Client/accountsecurity/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor,
   },
