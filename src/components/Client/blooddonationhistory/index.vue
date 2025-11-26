@@ -40,7 +40,7 @@
           <p class="text-muted mb-3">Theo dõi toàn bộ hành trình hiến máu của bạn</p>
           <hr class="border border-1 border-light-subtle my-3" />
 
-          
+          <!-- Stats -->
           <div class="row g-3 mb-4">
             <div v-for="(item, index) in stats" :key="index" class="col-md-4">
               <div class="card border-0 shadow-sm rounded-4 py-3 px-4 d-flex align-items-center">
@@ -61,41 +61,36 @@
             </div>
           </div>
 
-         
+          <!-- Filters -->
           <div class="card border-0 shadow-sm rounded-4 mb-4 p-3">
             <div class="row g-2 align-items-center">
               <div class="col-md-2">
-                <select class="form-select">
-                  <option selected>Tất cả năm</option>
-                  <option>2025</option>
-                  <option>2024</option>
-                  <option>2023</option>
+                <select class="form-select" v-model="filters.year" @change="fetchHistory(1)">
+                  <option value="">Tất cả năm</option>
+                  <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
                 </select>
               </div>
+
               <div class="col-md-2">
-                <select class="form-select">
-                  <option selected>Tất cả tháng</option>
-                  <option>Tháng 1</option>
-                  <option>Tháng 2</option>
-                  <option>Tháng 3</option>
+                <select class="form-select" v-model="filters.month" @change="fetchHistory(1)">
+                  <option value="">Tất cả tháng</option>
+                  <option v-for="m in 12" :key="m" :value="m">Tháng {{ m }}</option>
                 </select>
               </div>
-              <div class="col-md-6">
+
+              <div class="col-md-8">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Tìm kiếm theo địa điểm..."
+                  v-model="filters.q"
+                  @input="onSearchInput"
                 />
-              </div>
-              <div class="col-md-2 text-end">
-                <button class="btn btn-danger w-100" style="height: 40px">
-                  <i class="bi bi-download me-2"></i>Xuất dữ liệu
-                </button>
               </div>
             </div>
           </div>
 
-          <!-- Table section -->
+          <!-- Table -->
           <div class="card border-0 shadow-sm rounded-4">
             <div class="table-responsive">
               <table class="table align-middle mb-0">
@@ -107,24 +102,78 @@
                     <th><i class="bi bi-chat-square-text me-2"></i>Ghi chú</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr v-for="(item, index) in donations" :key="index">
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.location }}</td>
+
+                <tbody v-if="loading">
+                  <tr>
+                    <td colspan="4" class="text-center text-muted py-4">Đang tải dữ liệu...</td>
+                  </tr>
+                </tbody>
+
+                <tbody v-else>
+                  <tr v-if="donations.length === 0">
+                    <td colspan="4" class="text-center text-muted py-4">
+                      Chưa có dữ liệu lịch sử hiến máu.
+                    </td>
+                  </tr>
+
+                  <tr v-for="item in donations" :key="item.id">
+                    <td>{{ formatDate(item.collected_at) }}</td>
+                    <td>{{ buildLocation(item) }}</td>
                     <td>
                       <span class="badge bg-light text-danger fw-semibold px-3 py-2">
-                        {{ item.amount }}
+                        {{ item.volume_ml }}ml
                       </span>
                     </td>
-                    <td>{{ item.note }}</td>
+                    <td>{{ item.notes || "-" }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="p-3 text-muted small border-top">
-              Hiển thị {{ donations.length }} kết quả
+
+            <div
+              class="p-3 d-flex justify-content-between align-items-center text-muted small border-top"
+            >
+              <div>
+                Hiển thị {{ donations.length }} kết quả
+                <span v-if="meta.total_records">/ Tổng {{ meta.total_records }}</span>
+              </div>
+
+              <!-- Pagination -->
+              <nav v-if="meta.total_pages > 1">
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item" :class="{ disabled: meta.page <= 1 }">
+                    <button
+                      class="page-link"
+                      @click="fetchHistory(meta.page - 1)"
+                      :disabled="meta.page <= 1"
+                    >
+                      Trước
+                    </button>
+                  </li>
+
+                  <li
+                    class="page-item"
+                    v-for="p in pageNumbers"
+                    :key="p"
+                    :class="{ active: p === meta.page }"
+                  >
+                    <button class="page-link" @click="fetchHistory(p)">{{ p }}</button>
+                  </li>
+
+                  <li class="page-item" :class="{ disabled: meta.page >= meta.total_pages }">
+                    <button
+                      class="page-link"
+                      @click="fetchHistory(meta.page + 1)"
+                      :disabled="meta.page >= meta.total_pages"
+                    >
+                      Sau
+                    </button>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
+          <!-- /Table -->
         </div>
       </div>
     </div>
@@ -132,58 +181,151 @@
 </template>
 
 <script>
+import baseRequestClient from "../../../core/baseRequestClient";
+
 export default {
   name: "LichSuHienMau",
   data() {
+    const now = new Date();
     return {
+      loading: false,
+      searchTimer: null,
+
+      filters: {
+        year: "",
+        month: "",
+        q: "",
+      },
+
       stats: [
         {
           label: "Tổng số lần hiến",
-          value: "12 lần",
+          value: "0 lần",
           icon: "bi bi-droplet-fill text-danger",
           bg: "bg-light-danger",
         },
         {
           label: "Tổng lượng máu",
-          value: "4,200ml",
+          value: "0ml",
           icon: "bi bi-beaker-fill text-primary",
           bg: "bg-light-primary",
         },
         {
           label: "Lần hiến gần nhất",
-          value: "05/01/2025",
+          value: "-",
           icon: "bi bi-calendar-check text-success",
           bg: "bg-light-success",
         },
       ],
 
-      donations: [
-        {
-          date: "05/01/2025",
-          location: "Trung tâm Hiến máu Huế",
-          amount: "450ml",
-          note: "Sức khỏe tốt",
-        },
-        {
-          date: "12/08/2024",
-          location: "BV Đa khoa Đà Nẵng",
-          amount: "350ml",
-          note: "Hiến máu tình nguyện",
-        },
-        {
-          date: "15/06/2024",
-          location: "Bệnh viện Chợ Rẫy",
-          amount: "400ml",
-          note: "Chiến dịch Chủ nhật đỏ",
-        },
-        {
-          date: "20/03/2024",
-          location: "Trung tâm Y tế Quận 1",
-          amount: "350ml",
-          note: "Hiến máu định kỳ",
-        },
-      ],
+      donations: [],
+
+      meta: {
+        page: 1,
+        limit: 10,
+        total_records: 0,
+        total_pages: 1,
+      },
+
+      yearOptions: Array.from({ length: 6 }, (_, i) => now.getFullYear() - i),
     };
+  },
+
+  computed: {
+    pageNumbers() {
+      const total = this.meta.total_pages || 1;
+      const current = this.meta.page || 1;
+
+      const start = Math.max(1, current - 2);
+      const end = Math.min(total, start + 4);
+
+      const pages = [];
+      for (let p = start; p <= end; p++) pages.push(p);
+      return pages;
+    },
+  },
+
+  mounted() {
+    this.fetchHistory(1);
+  },
+
+  methods: {
+    buildParams(page = 1) {
+      const params = { page, limit: this.meta.limit };
+      if (this.filters.year) params.year = this.filters.year;
+      if (this.filters.month) params.month = this.filters.month;
+      if (this.filters.q && this.filters.q.trim()) params.q = this.filters.q.trim();
+      return params;
+    },
+
+    async fetchHistory(page = 1) {
+      try {
+        this.loading = true;
+
+        const res = await baseRequestClient.get("/donor/donation-history", {
+          params: this.buildParams(page),
+        });
+
+        if (res.data.status) {
+          this.donations = res.data.data || [];
+          this.meta = {
+            page: res.data.meta?.page || page,
+            limit: res.data.meta?.limit || this.meta.limit,
+            total_records: res.data.meta?.total_records || 0,
+            total_pages: res.data.meta?.total_pages || 1,
+          };
+
+          const s = res.data.stats || {};
+          const totalCount = s.total_count || 0;
+          const totalVolume = s.total_volume_ml || 0;
+          const lastAt = s.last_donation_at || null;
+
+          this.stats = [
+            {
+              label: "Tổng số lần hiến",
+              value: `${totalCount} lần`,
+              icon: "bi bi-droplet-fill text-danger",
+              bg: "bg-light-danger",
+            },
+            {
+              label: "Tổng lượng máu",
+              value: `${Number(totalVolume).toLocaleString("vi-VN")}ml`,
+              icon: "bi bi-beaker-fill text-primary",
+              bg: "bg-light-primary",
+            },
+            {
+              label: "Lần hiến gần nhất",
+              value: lastAt ? this.formatDate(lastAt) : "-",
+              icon: "bi bi-calendar-check text-success",
+              bg: "bg-light-success",
+            },
+          ];
+        } else {
+          this.$toast?.error(res.data.message || "Không thể tải lịch sử hiến máu!");
+        }
+      } catch (err) {
+        this.$toast?.error(err.response?.data?.message || "Không thể tải lịch sử hiến máu!");
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    onSearchInput() {
+      clearTimeout(this.searchTimer);
+      this.searchTimer = setTimeout(() => this.fetchHistory(1), 400);
+    },
+
+    formatDate(dateVal) {
+      if (!dateVal) return "-";
+      const d = new Date(dateVal);
+      return d.toLocaleDateString("vi-VN");
+    },
+
+    buildLocation(item) {
+      const name = item.donation_site_name || item.hospital_name || "";
+      const addr = item.donation_site_address || "";
+      return [name, addr].filter(Boolean).join(" - ");
+    },
   },
 };
 </script>
@@ -197,9 +339,11 @@ export default {
 .bg-light-danger {
   background-color: rgba(255, 99, 132, 0.1);
 }
+
 .bg-light-primary {
   background-color: rgba(54, 162, 235, 0.1);
 }
+
 .bg-light-success {
   background-color: rgba(75, 192, 192, 0.1);
 }
@@ -208,9 +352,11 @@ export default {
   font-weight: 600;
   color: #333;
 }
+
 .table td {
   color: #444;
 }
+
 .badge {
   border-radius: 12px;
 }
