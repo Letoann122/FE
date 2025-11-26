@@ -45,4 +45,20 @@ export default {
 @import "../../../assets/css/icons.css";
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css");
+/* ✅ set bg giống client */
+.wrapper{
+  background-color: #f5f6f7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ✅ theme rocker hay set trắng ở đây -> override lại */
+.page-wrapper,
+.page-content{
+  background-color: transparent !important;
+}
+
+/* đảm bảo phần content giãn đầy */
+.page-wrapper{ flex: 1; }
 </style>
