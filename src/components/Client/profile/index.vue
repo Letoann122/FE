@@ -4,27 +4,34 @@
       <div class="col-md-3 col-lg-2">
         <div class="card border-0 shadow-sm rounded-4 p-2">
           <div class="list-group list-group-flush">
-            <router-link to="/profile" class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold">
+            <router-link
+              to="/profile"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
               <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
             </router-link>
-            <router-link to="/blood-donation-history" class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold">
+
+            <router-link
+              to="/blood-donation-history"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
               <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
             </router-link>
-            <router-link to="/account-security" class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold">
+
+            <router-link
+              to="/account-security"
+              class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold"
+            >
               <i class="bi bi-shield-lock-fill me-2"></i> Bảo mật tài khoản
             </router-link>
           </div>
         </div>
       </div>
 
-
       <div class="col-md-9 col-lg-9">
-
-      <div class="col-md-8 col-lg-9">
-
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <h4 class="fw-bold mb-1">
@@ -38,19 +45,48 @@
             <div class="row">
               <div class="col-lg-6">
                 <label class="mb-2">Họ và tên</label>
-                <input v-model="profile.full_name" type="text" class="form-control" />
+                <input
+                  v-model="profile.full_name"
+                  type="text"
+                  class="form-control"
+                  readonly
+                  disabled
+                />
+                <div class="form-text">
+                  Thông tin này được khóa để đảm bảo đối soát hồ sơ.
+                </div>
               </div>
+
               <div class="col-lg-6">
                 <label class="mb-2">Ngày sinh</label>
-                <input v-model="profile.birthday" type="date" class="form-control" />
+                <input
+                  v-model="profile.birthday"
+                  type="date"
+                  class="form-control"
+                  readonly
+                  disabled
+                />
+                <div class="form-text">
+                  Nếu cần chỉnh sửa, vui lòng liên hệ quản trị/điểm hiến máu.
+                </div>
               </div>
+
               <div class="col-lg-12">
                 <label class="mt-3 mb-2">Địa chỉ</label>
-                <textarea v-model="profile.address" class="form-control"></textarea>
+                <textarea
+                  v-model="profile.address"
+                  class="form-control"
+                  rows="3"
+                ></textarea>
               </div>
+
               <div class="col-md-6">
                 <label class="form-label mt-3 mb-2">Nhóm máu *</label>
-                <select v-model="profile.blood_group" class="form-select" required>
+                <select
+                  v-model="profile.blood_group"
+                  class="form-select"
+                  disabled
+                >
                   <option value="">Chọn nhóm máu</option>
                   <option value="A+">A+</option>
                   <option value="A-">A-</option>
@@ -61,15 +97,29 @@
                   <option value="O+">O+</option>
                   <option value="O-">O-</option>
                 </select>
+                <div class="form-text">
+                  Nhóm máu được cập nhật theo kết quả xét nghiệm tại điểm hiến.
+                </div>
               </div>
+
               <div class="col-lg-6">
                 <label class="mt-3 mb-2">Số điện thoại</label>
-                <input v-model="profile.phone" type="text" class="form-control" />
+                <input
+                  v-model="profile.phone"
+                  type="text"
+                  class="form-control"
+                />
               </div>
+
               <div class="col-lg-12">
                 <label class="mt-3 mb-2">Tiền sử y tế</label>
-                <textarea v-model="profile.medical_history" class="form-control"></textarea>
+                <textarea
+                  v-model="profile.medical_history"
+                  class="form-control"
+                  rows="3"
+                ></textarea>
               </div>
+
               <div class="group-input text-end mt-5">
                 <button class="btn btn-danger" type="button" @click="updateProfile">
                   Lưu thay đổi
@@ -82,8 +132,8 @@
           </div>
         </div>
       </div>
+
     </div>
-  </div>
   </div>
 </template>
 
@@ -121,21 +171,27 @@ export default {
         this.$toast?.error("Không thể tải thông tin hồ sơ!");
       }
     },
+
     async updateProfile() {
       try {
-        if (
-          !this.profile.full_name ||
-          !this.profile.birthday ||
-          !this.profile.phone
-        ) {
-          this.$toast?.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
+        // Chỉ validate các field cho phép update
+        if (!this.profile.phone) {
+          this.$toast?.error("Vui lòng điền số điện thoại!");
           return;
         }
-        const res = await baseRequestClient.put("/donor/profile", this.profile);
+
+        // ✅ Không gửi các field bị khóa lên server
+        const payload = {
+          phone: this.profile.phone,
+          address: this.profile.address,
+          medical_history: this.profile.medical_history,
+          // gender: this.profile.gender, // nếu bạn cho phép update gender thì mở dòng này
+        };
+
+        const res = await baseRequestClient.put("/donor/profile", payload);
+
         if (res.data.status) {
-          this.$toast?.success(
-            res.data.message || "Cập nhật hồ sơ thành công!"
-          );
+          this.$toast?.success(res.data.message || "Cập nhật hồ sơ thành công!");
           this.loadProfile();
         } else {
           this.$toast?.error(res.data.message || "Không thể cập nhật hồ sơ!");
@@ -146,9 +202,7 @@ export default {
             this.$toast?.error(msg)
           );
         } else {
-          this.$toast?.error(
-            err.response?.data?.message || "Lỗi khi cập nhật hồ sơ!"
-          );
+          this.$toast?.error(err.response?.data?.message || "Lỗi khi cập nhật hồ sơ!");
         }
       }
     },
@@ -160,5 +214,12 @@ export default {
 .list-group-item.active {
   background-color: #ffecec !important;
   color: #dc3545 !important;
+}
+
+/* Nhìn “read-only” rõ hơn một chút */
+.form-control:disabled,
+.form-select:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
 }
 </style>
