@@ -32,7 +32,7 @@ const routes = [
     beforeEnter: checkAdmin,
   },
   {
-    path: "/admin/appoint-control",
+    path: "/admin/lich-hen",
     component: () => import("../components/Admin/AppointControl/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
