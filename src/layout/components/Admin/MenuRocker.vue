@@ -18,23 +18,6 @@
             <div class="menu-title">Dashboard</div>
           </router-link>
         </li>
-
-        <!-- Người hiến máu -->
-        <li class="nav-item dropdown">
-          <!-- <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="parent-icon"><i class="bx bx-user-pin"></i></div>
-            <div class="menu-title">Người hiến máu</div>
-          </a>
-        </li>
-
-        <!-- Bệnh viện / ngân hàng máu -->
-        <li class="nav-item dropdown">
-          <!-- <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="parent-icon"><i class="fa-solid fa-hospital"></i></div>
-            <div class="menu-title">Bệnh viện / ngân hàng máu</div>
-          </a>
-        </li>
-
         <!-- Nội dung & tin tức -->
         <li class="nav-item">
           <router-link to="/admin/content-management" class="nav-link">
