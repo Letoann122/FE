@@ -176,7 +176,7 @@ const routes = [
   },
   {
     path: "/profile",
-    component: () => import("../components/Client/Profile/index.vue"),
+    component: () => import("../components/Client/profile/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor,
   },
