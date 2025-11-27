@@ -2,7 +2,7 @@
   <div class="top-wrapper">
     <nav ref="nav" class="navbar navbar-expand-lg bg-white" :class="{ 'fixed-top shadow-sm': isSticky }">
       <div class="container-fluid">
-        <router-link class="navbar-brand fw-bold ms-3" to="/trang-chu">
+        <router-link class="navbar-brand fw-bold ms-3" to="/home-page">
           <i class="fa-solid fa-heart text-danger"></i> Smart Blood Donation
         </router-link>
 
@@ -11,26 +11,24 @@
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/trang-chu" exact-active-class="active">Trang chủ</router-link>
+              <router-link class="nav-link" to="/home-page" exact-active-class="active">Trang chủ</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/GioiThieu" exact-active-class="active">Giới thiệu</router-link>
+              <router-link class="nav-link" to="/about" exact-active-class="active">Giới thiệu</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Register" exact-active-class="active">Đăng ký hiến máu</router-link>
+              <router-link class="nav-link" to="/register-blooddonation" exact-active-class="active">Đặt
+                lịch</router-link>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#">Đặt lịch</a>
+              <router-link class="nav-link" to="/news" exact-active-class="active">Tin tức & chiến dịch</router-link>
             </li>
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/tintuc" exact-active-class="active">Tin tức & chiến dịch</router-link>
+              <router-link class="nav-link" to="/guide-health" exact-active-class="active">Hướng dẫn sức khoẻ</router-link>
             </li>
-
-            <!-- dropdown đúng chuẩn bootstrap -->
             <li class="nav-item dropdown mx-3">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -43,53 +41,77 @@
               </ul>
             </li>
           </ul>
-
-          <div class="d-flex">
-            <router-link class="btn btn-outline-secondary me-2" to="/dang-nhap">Đăng nhập</router-link>
-            <router-link class="btn btn-danger" to="/dang-ky">Đăng ký</router-link>
+          <div v-if="!isLoggedIn" class="d-flex">
+            <router-link class="btn btn-outline-secondary me-2" to="/login">Đăng nhập</router-link>
+            <router-link class="btn btn-danger" to="/register">Đăng ký</router-link>
+          </div>
+          <div v-else class="dropdown">
+            <a class="d-flex align-items-center text-decoration-none dropdown-toggle text-secondary fw-semibold"
+              href="#" data-bs-toggle="dropdown">
+              Xin chào, {{ user.full_name }}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <router-link class="dropdown-item" to="/profile">Hồ sơ cá nhân</router-link>
+              </li>
+              <li>
+                <a class="dropdown-item text-danger" @click="logout">Đăng xuất</a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </nav>
-
-    <!-- spacer: xuất hiện khi navbar chuyển sang fixed-top để tránh giật layout -->
     <div v-show="isSticky" :style="{ height: navHeight + 'px' }"></div>
   </div>
 </template>
 
 <script>
+import baseRequestDonor from "../../../core/baseRequestClient";
+import { createToaster } from "@meforma/vue-toaster";
+
+const toast = createToaster({ position: "top-right", duration: 3000 });
+
 export default {
   name: "TopSBD",
   data() {
     return {
+      isLoggedIn: false,
+      user: {},
       isSticky: false,
       navHeight: 0,
-      stickyOffset: 10, // cuộn > 10px thì dính top (bạn đổi số này nếu muốn)
+      stickyOffset: 10,
     };
   },
   mounted() {
-    this.$nextTick(() => {
-      this.measure();
-      window.addEventListener("scroll", this.onScroll, { passive: true });
-      window.addEventListener("resize", this.measure);
-    });
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.onScroll);
-    window.removeEventListener("resize", this.measure);
+    this.checkLogin();
   },
   methods: {
-    onScroll() {
-      this.isSticky = window.scrollY > this.stickyOffset;
+    async checkLogin() {
+      const token = localStorage.getItem("token_donor");
+      if (!token) return;
+
+      try {
+        const res = await baseRequestDonor.get("donor/check-token");
+        if (res.data.status) {
+          this.isLoggedIn = true;
+          this.user = { full_name: res.data.ho_ten };
+        } else {
+          localStorage.removeItem("token_donor");
+          this.isLoggedIn = false;
+        }
+      } catch {
+        localStorage.removeItem("token_donor");
+        this.isLoggedIn = false;
+        toast.error("Phiên đăng nhập đã hết hạn!");
+        this.$router.push("/login");
+      }
     },
-    measure() {
-      if (this.$refs.nav) this.navHeight = this.$refs.nav.offsetHeight || 64;
-    },
-  },
-  watch: {
-    // khi đổi route, đo lại chiều cao navbar
-    "$route.fullPath"() {
-      this.$nextTick(this.measure);
+    logout() {
+      localStorage.removeItem("token_donor");
+      this.isLoggedIn = false;
+      toast.success("Đăng xuất thành công!");
+      this.$router.push("/home-page");
     },
   },
 };
@@ -97,9 +119,6 @@ export default {
 
 <style scoped>
 .navbar {
-  transition: box-shadow .2s ease, padding .2s ease;
+  transition: box-shadow 0.2s ease, padding 0.2s ease;
 }
-
-/* Có thể thu nhỏ padding khi sticky nếu thích:
-.navbar.fixed-top { padding-top: 8px; padding-bottom: 8px; } */
 </style>

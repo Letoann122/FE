@@ -1,25 +1,62 @@
 import axios from "axios";
-const apiUrl = "http://127.0.0.1:8000/api/";
+import { createToaster } from "@meforma/vue-toaster";
 
-export default {
-    getHeader() {
-        let token   =   window.localStorage.getItem('token_nguoi_hien_mau');
-        if(token == null) {
-            return {}
-        }
-        // console.log(token);
-        return { Authorization: 'Bearer ' + token }
-    },
-    get(url) {
-        return axios.get(apiUrl + url, {headers : this.getHeader()});
-    },
-    post(url, data) {
-        return axios.post(apiUrl + url, data, {headers : this.getHeader()});
-    },
-    delete(url) {
-        return axios.delete(apiUrl + url, {headers : this.getHeader()});
-    },
-    put(url, data) {
-        return axios.put(apiUrl + url, data, {headers : this.getHeader()});
-    },
-}
+const toast = createToaster();
+
+const baseRequestClient = axios.create({
+  baseURL: "http://localhost:4000/api",
+  timeout: 8000,
+});
+
+// 🧩 Gắn token vào mọi request
+baseRequestClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token_donor");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// ⚙️ Xử lý lỗi trả về từ BE
+baseRequestClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // ✅ Bỏ qua check token khi DEV MODE
+    if (import.meta.env.VITE_SKIP_TOKEN === "true") {
+      console.log("⚙️ DEV MODE: Bỏ qua lỗi token (client)");
+      return Promise.resolve({ data: { status: true, data: [] } });
+    }
+
+    if (error.response) {
+      const { status, data } = error.response || {};
+      const hasValidationErrors =
+        status === 422 && data && data.errors && typeof data.errors === "object";
+
+      if (status === 401 || status === 403) {
+        toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại!");
+        localStorage.removeItem("token_donor");
+        localStorage.removeItem("user_donor");
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 1500);
+      } else if (status >= 500) {
+        toast.error("Lỗi máy chủ. Vui lòng thử lại sau!");
+      } else if (!hasValidationErrors && data?.message) {
+        // ❗ Chỉ toast message chung khi KHÔNG phải lỗi validate 422
+        toast.error(data.message);
+      } else if (!hasValidationErrors) {
+        toast.error("Có lỗi xảy ra!");
+      }
+    } else {
+      toast.error("Không thể kết nối đến máy chủ!");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export default baseRequestClient;
