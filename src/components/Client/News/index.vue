@@ -1,6 +1,11 @@
 <template>
   <section class="position-relative text-center d-flex align-items-center justify-content-center">
-    <img src="../../../assets/img/banner2.jpg" alt="Banner hiến máu" class="w-100" style="height: 500px; opacity: 0.5" />
+    <img
+      src="../../../assets/img/banner2.jpg"
+      alt="Banner hiến máu"
+      class="w-100"
+      style="height: 500px; opacity: 0.5"
+    />
     <div class="position-absolute">
       <h2 class="fw-bold display-5">Tin tức & Chiến dịch Hiến Máu</h2>
       <p class="text-dark fw-semibold">Cập nhật nhanh các hoạt động hiến máu, sự kiện và thông báo quan trọng</p>
@@ -28,6 +33,16 @@
           <button class="btn btn-outline-secondary w-100 mt-2" @click="clearFilter">
             <i class="bi bi-x-circle me-1"></i> Xóa lọc
           </button>
+
+          <hr />
+
+          <h6 class="fw-bold mb-2">Lọc chiến dịch</h6>
+          <select class="form-select" v-model="campaignStatus" @change="fetchCampaigns">
+            <option value="active">Đang hoạt động</option>
+            <option value="upcoming">Sắp diễn ra</option>
+            <option value="running">Đang diễn ra</option>
+            <option value="ended">Đã kết thúc</option>
+          </select>
         </div>
       </div>
 
@@ -65,7 +80,6 @@
               </div>
             </div>
 
-            <!-- Không có dữ liệu -->
             <div v-if="newsList.length === 0" class="text-center text-muted my-5">
               <i class="bi bi-journal-x fs-3"></i>
               <p class="mt-2">Không có tin tức nào trong khoảng thời gian này.</p>
@@ -77,12 +91,7 @@
               <li class="page-item" :class="{ disabled: currentPage === 1 }">
                 <a class="page-link" href="#" @click.prevent="fetchNews(currentPage - 1)">«</a>
               </li>
-              <li
-                v-for="page in totalPages"
-                :key="page"
-                class="page-item"
-                :class="{ active: currentPage === page }"
-              >
+              <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
                 <a class="page-link" href="#" @click.prevent="fetchNews(page)">{{ page }}</a>
               </li>
               <li class="page-item" :class="{ disabled: currentPage === totalPages }">
@@ -92,28 +101,71 @@
           </nav>
         </div>
 
+        <!-- CAMPAIGNS -->
         <div class="card border-0 bg-white mt-4 shadow-sm">
-          <div class="card-header bg-danger text-white fw-bold">
-            <i class="bi bi-heart-pulse me-2"></i>Chiến dịch hiến máu
+          <div class="card-header bg-danger text-white fw-bold d-flex align-items-center justify-content-between">
+            <div><i class="bi bi-heart-pulse me-2"></i>Chiến dịch hiến máu</div>
+
+            <button class="btn btn-sm btn-light" @click="fetchCampaigns" :disabled="loadingCampaigns">
+              <span v-if="loadingCampaigns" class="spinner-border spinner-border-sm me-1"></span>
+              <i v-else class="bi bi-arrow-repeat me-1"></i>
+              Tải lại
+            </button>
           </div>
+
           <div class="card-body">
-            <div class="list-group">
+            <div v-if="loadingCampaigns" class="text-center text-muted py-4">
+              <div class="spinner-border text-danger"></div>
+              <div class="small mt-2">Đang tải chiến dịch...</div>
+            </div>
+
+            <div v-else-if="campaigns.length === 0" class="text-center text-muted py-4">
+              <i class="bi bi-inbox fs-4"></i>
+              <div class="mt-2">Chưa có chiến dịch phù hợp.</div>
+            </div>
+
+            <div v-else class="list-group">
               <div
-                v-for="(event, i) in campaigns"
-                :key="i"
+                v-for="(c, i) in campaigns"
+                :key="c.id || i"
                 class="list-group-item d-flex justify-content-between align-items-center"
               >
                 <div>
-                  <h6 class="fw-bold mb-1">{{ event.title }}</h6>
-                  <div><i class="bi bi-geo-alt-fill text-danger"></i> {{ event.location }}</div>
-                  <div><i class="bi bi-clock-fill text-danger"></i> {{ event.time }}</div>
-                  <span class="badge bg-danger mt-2">{{ event.status }}</span>
+                  <h6 class="fw-bold mb-1">{{ c.title }}</h6>
+
+                  <div class="text-secondary">
+                    <i class="bi bi-geo-alt-fill text-danger"></i>
+                    {{ c.location_display || c.location || "Chưa cập nhật địa điểm" }}
+                  </div>
+
+                  <div class="text-secondary">
+                    <i class="bi bi-calendar-event-fill text-danger"></i>
+                    {{ formatDate(c.start_date) }} - {{ formatDate(c.end_date) }}
+                  </div>
+
+                  <span class="badge mt-2" :class="statusBadgeClass(c.status)">
+                    {{ statusLabel(c.status) }}
+                  </span>
                 </div>
-                <a href="#" class="btn btn-danger btn-sm">Đăng ký tham gia</a>
+
+                <div class="d-flex gap-2">
+                  <router-link
+                    :to="`/campaigns/${c.id}`"
+                    class="btn btn-danger btn-sm"
+                    :class="{ disabled: c.status === 'ended' }"
+                  >
+                    Đăng ký tham gia
+                  </router-link>
+                </div>
               </div>
+            </div>
+
+            <div v-if="campaignError" class="alert alert-danger mt-3 mb-0">
+              {{ campaignError }}
             </div>
           </div>
         </div>
+        <!-- /CAMPAIGNS -->
       </div>
     </div>
   </div>
@@ -121,25 +173,29 @@
 
 <script>
 import axios from "axios";
+import baseRequestClient from "../../../core/baseRequestClient";
 
 export default {
   data() {
     return {
+      // news
       newsList: [],
       currentPage: 1,
       totalPages: 1,
       dateStart: "",
       dateEnd: "",
       defaultImage: new URL("../../../assets/img/hienmau.jpg", import.meta.url).href,
-      campaigns: [
-        { title: "Chiến dịch hiến máu mùa thu 2025", location: "BV Đa Khoa Đà Nẵng", time: "20/09/2025 - 8:00-17:00", status: "Đang diễn ra" },
-        { title: "Chiến dịch cứu người - Mùa hè 2025", location: "BV Chợ Rẫy - TPHCM", time: "10/08/2025 - 8:00-17:00", status: "Đang diễn ra" },
-        { title: "Ngày hiến máu toàn quốc", location: "Trung tâm Huyết học - TPHCM", time: "01/07/2025 - 8:00-17:00", status: "Đã kết thúc" },
-      ],
+
+      // campaigns
+      campaignStatus: "active",
+      campaigns: [],
+      loadingCampaigns: false,
+      campaignError: "",
     };
   },
 
   methods: {
+    // ---------------- NEWS ----------------
     async fetchNews(page = 1) {
       try {
         const params = { page, limit: 8 };
@@ -174,10 +230,50 @@ export default {
       if (!date) return "";
       return new Date(date).toLocaleDateString("vi-VN");
     },
+
+    // --------------- CAMPAIGNS ---------------
+    async fetchCampaigns() {
+      this.loadingCampaigns = true;
+      this.campaignError = "";
+      try {
+        const res = await baseRequestClient.get("/public/campaigns", {
+          params: { status: this.campaignStatus },
+        });
+
+        if (res.data?.status) {
+          this.campaigns = res.data.data || [];
+        } else {
+          this.campaigns = [];
+          this.campaignError = res.data?.message || "Không thể tải chiến dịch!";
+        }
+      } catch (err) {
+        this.campaigns = [];
+        this.campaignError = err.response?.data?.message || "Lỗi server khi tải chiến dịch!";
+      } finally {
+        this.loadingCampaigns = false;
+      }
+    },
+
+    statusLabel(s) {
+      if (s === "upcoming") return "Sắp diễn ra";
+      if (s === "running") return "Đang diễn ra";
+      if (s === "ended") return "Đã kết thúc";
+      return s || "-";
+    },
+
+    statusBadgeClass(s) {
+      if (s === "running") return "bg-danger";
+      if (s === "upcoming") return "bg-warning text-dark";
+      if (s === "ended") return "bg-secondary";
+      return "bg-light text-dark border";
+    },
   },
 
   mounted() {
     this.fetchNews();
+    this.fetchCampaigns();
   },
 };
 </script>
+
+<style scoped></style>

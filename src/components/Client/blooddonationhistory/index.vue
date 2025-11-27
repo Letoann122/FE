@@ -82,7 +82,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Tìm kiếm theo địa điểm..."
+                  placeholder="Tìm theo địa điểm / tên chiến dịch..."
                   v-model="filters.q"
                   @input="onSearchInput"
                 />
@@ -118,7 +118,14 @@
 
                   <tr v-for="item in donations" :key="item.id">
                     <td>{{ formatDate(item.collected_at) }}</td>
-                    <td>{{ buildLocation(item) }}</td>
+
+                    <td>
+                      {{ buildLocation(item) }}
+                      <div v-if="item.is_campaign && item.campaign_title" class="small text-muted mt-1">
+                        <i class="bi bi-bullseye me-1"></i> Chiến dịch: {{ item.campaign_title }}
+                      </div>
+                    </td>
+
                     <td>
                       <span class="badge bg-light text-danger fw-semibold px-3 py-2">
                         {{ item.volume_ml }}ml
@@ -191,11 +198,7 @@ export default {
       loading: false,
       searchTimer: null,
 
-      filters: {
-        year: "",
-        month: "",
-        q: "",
-      },
+      filters: { year: "", month: "", q: "" },
 
       stats: [
         {
@@ -321,7 +324,13 @@ export default {
       return d.toLocaleDateString("vi-VN");
     },
 
+    // ✅ NEW: ưu tiên location_display từ BE (đã xử lý campaign location)
     buildLocation(item) {
+      if (item.location_display && String(item.location_display).trim()) {
+        return String(item.location_display).trim();
+      }
+
+      // fallback dữ liệu cũ
       const name = item.donation_site_name || item.hospital_name || "";
       const addr = item.donation_site_address || "";
       return [name, addr].filter(Boolean).join(" - ");

@@ -128,9 +128,7 @@
       </div>
     </div>
 
-    <!-- =========================
-         MODAL CHI TIẾT (1 cái duy nhất)
-         ========================= -->
+    <!-- MODAL CHI TIẾT -->
     <div class="modal fade" ref="detailModalEl" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -145,7 +143,16 @@
           <div class="modal-body" v-if="selected">
             <div class="row g-3">
               <div class="col-lg-6">
-                <p><strong>Mã lịch:</strong> {{ selected.appointment_code }}</p>
+                <p class="mb-2">
+                  <strong>Mã lịch:</strong> {{ selected.appointment_code }}
+                  <span v-if="selected.is_campaign" class="badge bg-info text-dark ms-2">Chiến dịch</span>
+                  <span v-else class="badge bg-secondary ms-2">Đặt lịch</span>
+                </p>
+
+                <p v-if="selected.is_campaign" class="mb-2">
+                  <strong>Chiến dịch:</strong> {{ selected.campaign_title || "Không rõ" }}
+                </p>
+
                 <p><strong>Người hiến:</strong> {{ selected.donor_name }}</p>
                 <p><strong>SĐT:</strong> {{ selected.donor_phone }}</p>
                 <p><strong>Email:</strong> {{ selected.donor_email }}</p>
@@ -155,8 +162,22 @@
               <div class="col-lg-6">
                 <p><strong>Ngày hiến:</strong> {{ selected.scheduled_date }}</p>
                 <p><strong>Khung giờ:</strong> {{ selected.time_range }}</p>
-                <p><strong>Địa điểm:</strong> {{ selected.donation_site_name }}</p>
-                <p><strong>Bệnh viện:</strong> {{ selected.hospital_name }}</p>
+
+                <p>
+                  <strong>Địa điểm:</strong>
+                  {{ selected.location_display || selected.donation_site_name || "" }}
+                </p>
+
+                <p>
+                  <strong>Bệnh viện:</strong>
+                  <span v-if="selected.is_campaign && selected.campaign_locate_type === 'custom'">
+                    Tự chọn
+                  </span>
+                  <span v-else>
+                    {{ selected.hospital_display || selected.hospital_name || "" }}
+                  </span>
+                </p>
+
                 <p>
                   <strong>Lượng máu dự kiến:</strong> {{ selected.preferred_volume_ml }} ml
                 </p>
@@ -184,9 +205,7 @@
       </div>
     </div>
 
-    <!-- =========================
-         MODAL TỪ CHỐI (modal con)
-         ========================= -->
+    <!-- MODAL TỪ CHỐI -->
     <div class="modal fade" ref="rejectModalEl" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -235,11 +254,9 @@ export default {
       loadingList: false,
       totalAppointments: 0,
 
-      // pagination
       pageSize: 15,
       currentPage: 1,
 
-      // modal flow
       selected: null,
       rejectReason: "",
       actionLoading: false,
@@ -247,7 +264,6 @@ export default {
       rejectModal: null,
       reopenDetailAfterRejectClose: true,
 
-      // lưu filter hiện tại để reload sau approve/reject
       lastParams: {},
     };
   },
@@ -302,14 +318,12 @@ export default {
       keyboard: true,
     });
 
-    // Khi reject modal đóng xong -> mở lại detail (nếu muốn)
     this.$refs.rejectModalEl.addEventListener("hidden.bs.modal", () => {
       if (this.reopenDetailAfterRejectClose && this.selected) {
         setTimeout(() => this.detailModal.show(), 0);
       }
     });
 
-    // Load data
     this.loadAppointments({});
   },
 
@@ -357,7 +371,6 @@ export default {
       this.loadAppointments(params);
     },
 
-    // ===== Modal: Detail =====
     openDetail(item) {
       this.selected = item;
       this.detailModal.show();
@@ -370,7 +383,6 @@ export default {
       this.rejectReason = "";
     },
 
-    // ===== Approve =====
     approveSelected() {
       if (!this.selected) return;
       this.actionLoading = true;
@@ -394,14 +406,12 @@ export default {
         });
     },
 
-    // ===== Modal: Reject (modal con) =====
     openRejectModal() {
       if (!this.selected) return;
 
       this.reopenDetailAfterRejectClose = true;
       this.rejectReason = "";
 
-      // hide detail trước, rồi show reject
       const detailEl = this.$refs.detailModalEl;
       const onHidden = () => {
         detailEl.removeEventListener("hidden.bs.modal", onHidden);
@@ -452,7 +462,6 @@ export default {
         });
     },
 
-    // cleanup “kẹt nền xám”
     forceCleanupModalUI() {
       setTimeout(() => {
         document.body.classList.remove("modal-open");
