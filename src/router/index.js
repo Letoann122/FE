@@ -32,10 +32,10 @@ const routes = [
     beforeEnter: checkAdmin,
   },
   {
-  path: "/admin/campaigns/:id",
-  component: () => import("../components/Admin/CampaignDetail/index.vue"),
-  meta: { layout: "admin" },
-  beforeEnter: checkAdmin,
+    path: "/admin/campaigns/:id",
+    component: () => import("../components/Admin/CampaignDetail/index.vue"),
+    meta: { layout: "admin" },
+    beforeEnter: checkAdmin,
   },
   {
     path: "/admin/appoint-control",
@@ -48,7 +48,7 @@ const routes = [
     component: () => import("../components/Admin/BloodInventory/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
-    },
+  },
   {
     path: "/admin/content-management",
     component: () => import("../components/Admin/ContentManagement/index.vue"),
@@ -56,7 +56,7 @@ const routes = [
     beforeEnter: checkAdmin,
   },
 
-//hospital
+  //hospital
   {
     path: "/Hospital/profile",
     component: () => import("../components/Hospital/Profile/index.vue"),
@@ -169,6 +169,12 @@ const routes = [
     path: "/news",
     component: () => import("../components/Client/News/index.vue"),
     meta: { layout: "client" },
+  },
+  {
+    path: "/campaigns/:id",
+    component: () => import("../components/Client/CampaignDetail/index.vue"),
+    meta: { layout: "client" },
+    beforeEnter: checkDonor
   },
   {
     path: "/see-details",
