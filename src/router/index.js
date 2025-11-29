@@ -20,7 +20,7 @@ const routes = [
     beforeEnter: checkAdmin,
   },
   {
-    path: "/admin/login-doctor",
+    path: "/admin/doctor-approve",
     component: () => import("../components/Admin/DuyetBacSi/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,

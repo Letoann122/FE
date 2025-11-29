@@ -11,31 +11,49 @@
     </div>
     <nav class="navbar navbar-expand-xl w-100">
       <ul class="navbar-nav justify-content-start flex-grow-1 gap-1">
-        <!-- Dashboard -->
         <li class="nav-item">
           <router-link to="/admin/dashboard" class="nav-link">
             <div class="parent-icon"><i class="bx bx-home-circle"></i></div>
             <div class="menu-title">Dashboard</div>
           </router-link>
         </li>
-        <!-- Nội dung & tin tức -->
         <li class="nav-item">
           <router-link to="/admin/content-management" class="nav-link">
             <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
             <div class="menu-title">Nội dung & tin tức</div>
           </router-link>
         </li>
-
-        <!-- Phân quyền -->
-        <li class="nav-item dropdown">
+        <li class="nav-item">
+          <router-link to="/admin/doctor-approve" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="menu-title">Xét duyệt bác sĩ</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/create-campaign" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="menu-title">Chiến dịch</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/user-management" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="menu-title">Quản lý người dùng</div>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/admin/blood-inventory" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="menu-title">Quản lý kho máu</div>
+          </router-link>
+        </li>
+        <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="fa-solid fa-shield"></i></div>
             <div class="menu-title">Phân quyền</div>
           </a>
-        </li>
-
-        <!-- Thống kê & Báo cáo -->
-        <li class="nav-item dropdown">
+        </li> -->
+        <!-- <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="parent-icon"><i class="bx bx-bar-chart"></i></div>
             <div class="menu-title">Thống kê & Báo cáo</div>
@@ -60,9 +78,7 @@
               </router-link>
             </li>
           </ul>
-        </li>
-
-        <!-- Quản lý lịch hẹn -->
+        </li> -->
         <li class="nav-item">
           <router-link class="nav-link" to="/admin/appoint-control">
             <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn
