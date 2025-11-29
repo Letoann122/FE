@@ -5,10 +5,17 @@
         <h2 class="fw-bold mb-1">Chi tiết Donor</h2>
         <p class="text-muted mb-0">Thông tin đầy đủ và lịch sử hiến máu.</p>
       </div>
+
+      <!-- ✅ Return -->
+      <router-link to="/Hospital/donor-management" class="btn btn-secondary">
+        <i class="bi bi-arrow-left me-2"></i>Quay lại
+      </router-link>
     </div>
+
     <div v-if="!loaded" class="text-center py-5">
       <div class="spinner-border text-danger"></div>
     </div>
+
     <div v-else class="row g-4">
       <div class="col-lg-4">
         <div class="card text-center shadow-sm">
@@ -17,6 +24,7 @@
             <p class="mb-0 small">ID: {{ donor.id }}</p>
             <span class="badge bg-light text-danger">{{ donor.bloodType }}</span>
           </div>
+
           <div class="card-body text-start">
             <h6 class="text-secondary text-uppercase mb-2">Thông tin cá nhân</h6>
             <ul class="list-unstyled small">
@@ -29,16 +37,13 @@
             <hr />
             <div class="d-flex justify-content-between align-items-center">
               <span class="text-muted small">Trạng thái</span>
-              <span class="badge bg-success" v-if="donor.status === 'Hoạt động'">
-                Hoạt động
-              </span>
-              <span class="badge bg-warning text-dark" v-else>
-                Tạm ngừng
-              </span>
+              <span class="badge bg-success" v-if="donor.status === 'Hoạt động'">Hoạt động</span>
+              <span class="badge bg-warning text-dark" v-else>Tạm ngừng</span>
             </div>
           </div>
         </div>
       </div>
+
       <div class="col-lg-8">
         <div class="card mb-4 shadow-sm">
           <div class="card-header bg-white">
@@ -47,6 +52,7 @@
               Lịch sử hiến máu
             </h6>
           </div>
+
           <div class="card-body">
             <div class="table-responsive">
               <table class="table table-striped table-hover align-middle">
@@ -54,17 +60,20 @@
                   <tr>
                     <th>Ngày hiến</th>
                     <th>Địa điểm</th>
-                    <th>Bệnh viện</th>
+                    <th>Bệnh viện / Chiến dịch</th>
                     <th>Thể tích</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   <tr v-for="(item, i) in history" :key="i">
                     <td>{{ item.date }}</td>
-                    <td>{{ item.site }}</td>
-                    <td>{{ item.hospital }}</td>
-                    <td>{{ item.volume }} ml</td>
+                    <!-- ✅ fallback nếu data cũ bị trống -->
+                    <td>{{ item.site || item.location || "—" }}</td>
+                    <td>{{ item.hospital || item.campaign_title || "—" }}</td>
+                    <td>{{ item.volume || 0 }} ml</td>
                   </tr>
+
                   <tr v-if="history.length === 0">
                     <td colspan="4" class="text-center text-muted py-3">
                       Chưa có lịch sử hiến máu
@@ -75,6 +84,7 @@
             </div>
           </div>
         </div>
+
         <div class="card mb-4 shadow-sm" v-if="lastDonation">
           <div class="card-header bg-white">
             <h6 class="fw-bold mb-0">
@@ -82,31 +92,39 @@
               Lần hiến gần nhất
             </h6>
           </div>
+
           <div class="card-body">
             <ul class="list-group list-group-flush small">
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Ngày hiến:</strong>
                 <span>{{ lastDonation.date }}</span>
               </li>
+
+              <!-- ✅ nếu là chiến dịch: site = location -->
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Địa điểm:</strong>
-                <span>{{ lastDonation.site }}</span>
+                <span>{{ lastDonation.site || lastDonation.location || "—" }}</span>
               </li>
+
+              <!-- ✅ nếu là chiến dịch: hospital = tên chiến dịch -->
               <li class="list-group-item d-flex justify-content-between">
-                <strong>Bệnh viện:</strong>
-                <span>{{ lastDonation.hospital }}</span>
+                <strong>Bệnh viện / Chiến dịch:</strong>
+                <span>{{ lastDonation.hospital || lastDonation.campaign_title || "—" }}</span>
               </li>
+
               <li class="list-group-item d-flex justify-content-between">
                 <strong>Thể tích:</strong>
-                <span>{{ lastDonation.volume }} ml</span>
+                <span>{{ lastDonation.volume || 0 }} ml</span>
               </li>
             </ul>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import baseRequestDoctor from "../../../core/baseRequestDoctor";
