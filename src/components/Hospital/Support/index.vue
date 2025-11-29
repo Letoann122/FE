@@ -2,76 +2,141 @@
     <div class="support-page-wrapper">
         <div class="mb-4">
             <h2 class="fw-bold">Tư vấn & Hỗ trợ</h2>
-            <p class="text-muted">Gửi hướng dẫn và tư vấn sức khỏe trực tiếp đến donor.</p>
+            <p class="text-muted">
+                Gửi thông báo, hướng dẫn và cảnh báo sức khỏe đến donor.
+            </p>
         </div>
-
         <div class="row g-4">
-            <div class="col-lg-8">
+            <div class="col-lg-3">
                 <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold mb-4"><i class="bi bi-send-fill me-2 text-danger"></i>Gửi tư vấn mới</h5>
-                        <form @submit.prevent="submitConsultation">
-                            <div class="mb-3">
-                                <label for="consultTitle" class="form-label">Tiêu đề tư vấn</label>
-                                <input type="text" class="form-control" id="consultTitle" placeholder="Nhập tiêu đề ngắn gọn" v-model="newConsultation.title">
-                            </div>
-                            <div class="mb-3">
-                                <label for="consultRecipient" class="form-label">Chọn người nhận</label>
-                                <select id="consultRecipient" class="form-select" v-model="newConsultation.recipient">
-                                    <option selected value="all">Tất cả donor</option>
-                                    <option value="group_a">Donor nhóm A+</option>
-                                    <option value="group_a">Donor nhóm A-</option>
-                                    <option value="group_a">Donor nhóm B+</option>
-                                    <option value="group_a">Donor nhóm B-</option>
-                                    <option value="group_a">Donor nhóm AB+</option>
-                                    <option value="group_a">Donor nhóm AB-</option>
-                                    <option value="group_a">Donor nhóm O+</option>
-                                    <option value="group_o">Donor nhóm O-</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="consultContent" class="form-label">Nội dung tư vấn</label>
-                                <textarea class="form-control" id="consultContent" rows="5" placeholder="Nhập nội dung tư vấn chi tiết..." v-model="newConsultation.content"></textarea>
-                            </div>
-                            <div class="mb-4">
-                                <label for="formFile" class="form-label">Đính kèm tệp (tùy chọn)</label>
-                                <div class="file-drop-zone">
-                                    <input class="form-control" type="file" id="formFile" hidden>
-                                    <p class="text-muted small">Kéo thả file hoặc <a href="#" onclick="document.getElementById('formFile').click(); return false;">chọn file</a></p>
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-3">Kho hướng dẫn</h6>
+                        <div class="guide-card p-3 mb-3 rounded">
+                            <div class="d-flex">
+                                <div class="fs-2 text-danger me-3">
+                                    <i class="bi bi-journal-medical"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Chuẩn bị trước & sau hiến máu</h6>
+                                    <p class="small text-muted">Hướng dẫn từ Viện Huyết học.</p>
+                                    <a href="https://vienhuyethoc.vn/luu-y-truoc-va-sau-hien-mau/" target="_blank"
+                                        class="text-danger fw-semibold small">
+                                        Xem bài viết →
+                                    </a>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-danger"><i class="bi bi-send-check-fill me-2"></i>Gửi tư vấn</button>
+                        </div>
+                        <div class="guide-card p-3 rounded">
+                            <div class="d-flex">
+                                <div class="fs-2 text-danger me-3">
+                                    <i class="bi bi-heart-pulse"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Dinh dưỡng cho người hiến máu</h6>
+                                    <p class="small text-muted">Chế độ ăn giúp phục hồi tốt nhất.</p>
+                                    <a href="https://www.pharmacity.vn/che-do-an-uong-truoc-va-sau-khi-hien-mau-giup-hoi-phuc-suc-khoe-toi-uu.htm"
+                                        target="_blank" class="text-danger fw-semibold small">
+                                        Xem bài viết →
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h6 class="fw-bold mb-2">Hỗ trợ trực tuyến</h6>
+                        <p class="text-muted small mb-3">
+                            Chat với hỗ trợ viên để được giải đáp nhanh.
+                        </p>
+                        <button class="btn btn-danger w-100" @click="openTawk">
+                            <i class="bi bi-chat-dots me-2"></i>Chat ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-4">
+                            <i class="bi bi-megaphone-fill text-danger me-2"></i>
+                            Gửi thông báo mới
+                        </h5>
+                        <form @submit.prevent="submitConsultation">
+                            <div class="mb-3">
+                                <label class="form-label">Tiêu đề</label>
+                                <input type="text" class="form-control" v-model="form.title"
+                                    placeholder="Nhập tiêu đề thông báo" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Gửi đến nhóm máu</label>
+                                <select class="form-select" v-model="form.recipient">
+                                    <option value="all">Tất cả donor</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" v-model="form.emergency" />
+                                <label class="form-check-label text-danger fw-bold">
+                                    Gửi thông báo khẩn cấp (Emergency Alert)
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Nội dung</label>
+                                <textarea class="form-control" rows="5" v-model="form.content"
+                                    placeholder="Nhập nội dung chi tiết..."></textarea>
+                            </div>
+                            <button class="btn btn-danger px-4" :disabled="sending">
+                                <i class="bi bi-send-fill me-2"></i>
+                                <span v-if="sending">Đang gửi...</span>
+                                <span v-else>Gửi thông báo</span>
+                            </button>
                         </form>
                     </div>
                 </div>
-
                 <div class="card shadow-sm border-0 mb-4">
                     <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="card-title fw-bold mb-0"><i class="bi bi-mailbox2 me-2"></i>Danh sách tư vấn đã gửi</h5>
-                        <input type="text" class="form-control" style="max-width: 250px;" placeholder="Tìm kiếm...">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-mailbox2 me-2"></i>Danh sách đã gửi
+                        </h5>
+                        <input type="text" class="form-control" style="max-width: 250px" placeholder="Tìm kiếm..." />
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
+                        <div v-if="!loaded" class="text-center py-4">
+                            <div class="spinner-border text-danger"></div>
+                        </div>
+                        <div v-else class="table-responsive">
+                            <table class="table align-middle table-hover">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Tiêu đề</th>
                                         <th>Ngày gửi</th>
-                                        <th>Số lượng donor</th>
+                                        <th>Người nhận</th>
                                         <th>Trạng thái</th>
-                                        <th>Thao tác</th>
+                                        <th>Xem</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="item in sentConsultations" :key="item.id">
-                                        <td class="fw-bold">{{ item.title }}</td>
-                                        <td>{{ item.date }}</td>
-                                        <td>{{ item.count }}</td>
-                                        <td><span class="badge" :class="item.statusClass">{{ item.status }}</span></td>
+                                    <tr v-for="item in notifications" :key="item.id">
+                                        <td class="fw-semibold">{{ item.title }}</td>
+                                        <td>{{ formatDate(item.created_at) }}</td>
+                                        <td>{{ item.sent_count }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary me-1" title="Xem"><i class="bi bi-eye-fill"></i></a>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary me-1" title="Sửa"><i class="bi bi-pencil-fill"></i></a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger" title="Xóa"><i class="bi bi-trash-fill"></i></a>
+                                            <span class="badge" :class="getStatusClass(item.status)">
+                                                {{ getStatusText(item.status) }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-eye-fill"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -79,133 +144,172 @@
                         </div>
                     </div>
                 </div>
-
-                <div>
-                    <h5 class="fw-bold mb-3"><i class="bi bi-book-half me-2"></i>Kho hướng dẫn</h5>
-                    <div class="row">
-                        <div v-for="(guide, index) in guides" :key="index" class="col-md-4">
-                            <div class="card h-100 shadow-sm border-0">
-                                <div class="card-body">
-                                    <div class="fs-2 text-danger mb-2"><i :class="guide.icon"></i></div>
-                                    <h6 class="card-title fw-bold">{{ guide.title }}</h6>
-                                    <p class="small text-muted">{{ guide.description }}</p>
-                                    <a href="#" class="btn btn-sm btn-outline-danger me-2"><i class="bi bi-file-earmark-pdf-fill me-1"></i> Tải PDF</a>
-                                    <a href="#" class="text-danger small">Xem online</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                 <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold mb-3">Bộ lọc</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="filter1" checked>
-                            <label class="form-check-label" for="filter1">Tư vấn sức khỏe</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="filter2">
-                            <label class="form-check-label" for="filter2">Hướng dẫn hiến máu</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="filter3">
-                            <label class="form-check-label" for="filter3">Thông báo khác</label>
-                        </div>
-                    </div>
-                 </div>
-
-                 <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body">
-                        <h6 class="card-title fw-bold mb-3">Tư vấn nổi bật</h6>
-                        <ul class="list-unstyled">
-                            <li v-for="(item, index) in featuredConsultations" :key="index" class="mb-2">
-                                <a href="#" class="text-decoration-none text-dark">{{ item.title }}</a>
-                                <p class="text-muted small mb-0">{{ item.views }} lượt xem</p>
-                            </li>
-                        </ul>
-                    </div>
-                 </div>
-
-                 <div class="card shadow-sm border-0">
-                    <div class="card-body text-center">
-                        <h6 class="card-title fw-bold mb-3">Liên hệ nhanh</h6>
-                        <p class="text-muted mb-3">Hotline: 5678 1234</p>
-                        <button class="btn btn-danger w-100"><i class="bi bi-chat-dots-fill me-2"></i>Chat trực tuyến</button>
-                    </div>
-                 </div>
-            </div>
-        </div>
-        
-        <div class="card shadow-sm mt-4" style="background-color: #fef2f2; border: 1px solid #fde2e2;">
-            <div class="card-body text-center py-5">
-                <h3 class="fw-bold">Bạn đã sẵn sàng cho các yêu cầu tiếp theo?</h3>
-                <p class="lead text-muted my-3">Kiểm tra các yêu cầu tư vấn mới hoặc xem lại các câu hỏi thường gặp để chuẩn bị tốt hơn.</p>
-                <button class="btn btn-danger btn-lg">Xem các yêu cầu mới</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import baseRequestDoctor from '../../../core/baseRequestDoctor';
+
 export default {
-    name: 'SupportView',
     data() {
         return {
-            newConsultation: {
-                title: '',
-                recipient: 'all',
-                content: ''
+            loaded: false,
+            sending: false,
+            form: {
+                title: "",
+                recipient: "all",
+                emergency: false,
+                content: "",
             },
-            sentConsultations: [
-                { id: 1, title: 'Hướng dẫn chuẩn bị trước hiến máu', date: '15/09/2024', count: "1,234" , status: 'Đã gửi', statusClass: 'badge-green' },
-                { id: 2, title: 'Chăm sóc sức khỏe sau hiến máu', date: '12/09/2024', count: 856, status: 'Đang gửi', statusClass: 'badge-yellow' },
-            ],
-            guides: [
-                { icon: 'bi bi-shield-check', title: 'Chuẩn bị trước hiến máu', description: 'Hướng dẫn chi tiết về cách chuẩn bị sức khỏe và tinh thần trước khi hiến máu.' },
-                { icon: 'bi bi-bandaid', title: 'Chăm sóc sau hiến máu', description: 'Các bước chăm sóc cần thiết sau khi hiến máu để đảm bảo sức khỏe.' },
-                { icon: 'bi bi-graph-up-arrow', title: 'Dinh dưỡng & Tập luyện', description: 'Chế độ dinh dưỡng và tập luyện phù hợp cho người hiến máu.' },
-            ],
-            featuredConsultations: [
-                { title: 'Cách phục hồi sau hiến máu', views: '1,234' },
-                { title: 'Chế độ ăn cho người hiến máu', views: '987' },
-            ]
-        }
+            notifications: [],
+        };
+    },
+    mounted() {
+        this.loadNotifications();
     },
     methods: {
-        submitConsultation() {
-            alert('Gửi tư vấn: ' + JSON.stringify(this.newConsultation));
-            this.newConsultation = { title: '', recipient: 'all', content: '' };
+        async loadNotifications() {
+            this.loaded = false;
+            try {
+                const res = await baseRequestDoctor.get("/doctor/support/notifications");
+                if (res.data.status) {
+                    this.notifications = res.data.data || [];
+                }
+            } catch (e) {
+                this.$toast?.error("Không thể tải danh sách thông báo!");
+            } finally {
+                this.loaded = true;
+            }
+        },
+        async submitConsultation() {
+            if (!this.form.title || !this.form.content) {
+                return this.$toast.error("Tiêu đề và nội dung không được để trống!");
+            }
+            this.sending = true;
+            try {
+                const res = await baseRequestDoctor.post(
+                    "/doctor/support/notifications",
+                    this.form
+                );
+                if (res.data.status) {
+                    this.$toast.success("Gửi thông báo thành công!");
+                    this.loadNotifications();
+                    this.form = {
+                        title: "",
+                        recipient: "all",
+                        emergency: false,
+                        content: "",
+                    };
+                } else {
+                    this.$toast.error(res.data.message || "Gửi thông báo thất bại!");
+                }
+            } catch (err) {
+                this.$toast?.error("Lỗi server khi gửi thông báo!");
+            } finally {
+                this.sending = false;
+            }
+        },
+        openTawk() {
+            if (window.Tawk_API) window.Tawk_API.maximize();
+            else this.$toast.error("Tawk.to chưa tải!");
+        },
+        formatDate(d) {
+            return new Date(d).toLocaleDateString("vi-VN");
+        },
+        getStatusClass(status) {
+            switch (status) {
+                case "sent":
+                    return "badge-green";
+                case "sending":
+                    return "badge-yellow";
+                default:
+                    return "badge-yellow";
+            }
+        },
+        getStatusText(status) {
+            switch (status) {
+                case "sent":
+                    return "Đã gửi";
+                case "sending":
+                    return "Đang gửi";
+                default:
+                    return "Khác";
+            }
+        },
+        async submitConsultation() {
+    if (!this.form.title || !this.form.content) {
+        return this.$toast.error("Tiêu đề và nội dung không được để trống!");
+    }
+
+    this.sending = true;
+
+    try {
+        // Nếu tick KHẨN CẤP → gọi API tạo alert
+        if (this.form.emergency) {
+            const res = await baseRequestDoctor.post("/doctor/emergency-alert", {
+                title: this.form.title,
+                content: this.form.content,
+            });
+
+            if (res.data.status) {
+                this.$toast.success("Đã tạo cảnh báo khẩn cấp!");
+            } else {
+                this.$toast.error("Không thể tạo cảnh báo khẩn cấp!");
+            }
+
+        } else {
+            // Nếu không khẩn cấp → gửi thông báo bình thường
+            const res = await baseRequestDoctor.post(
+                "/doctor/support/notifications",
+                this.form
+            );
+
+            if (res.data.status) {
+                this.$toast.success("Gửi thông báo thành công!");
+            } else {
+                this.$toast.error(res.data.message || "Gửi thông báo thất bại!");
+            }
         }
+
+        this.loadNotifications();
+        this.form = {
+            title: "",
+            recipient: "all",
+            emergency: false,
+            content: "",
+        };
+    } catch (err) {
+        this.$toast.error("Lỗi server!");
+    } finally {
+        this.sending = false;
     }
 }
+
+    },
+};
 </script>
 
 <style scoped>
-.file-drop-zone {
-    border: 2px dashed #dee2e6;
-    border-radius: .375rem;
-    padding: 2rem;
-    text-align: center;
-    transition: background-color 0.2s ease-in-out;
-}
-.file-drop-zone:hover {
-    background-color: #f8f9fa;
-}
 .badge {
-    padding: 0.5em 0.75em;
+    padding: 0.45em 0.75em;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: 20px;
 }
+
 .badge-green {
+    background: #d1e7dd;
     color: #198754;
-    background-color: #d1e7dd;
 }
+
 .badge-yellow {
+    background: #fff3cd;
     color: #664d03;
-    background-color: #fff3cd;
+}
+
+.guide-card:hover {
+    background: #fff7f7;
 }
 </style>

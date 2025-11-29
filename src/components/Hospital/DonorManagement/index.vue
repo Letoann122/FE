@@ -1,21 +1,15 @@
 <template>
   <div class="container-fluid my-4 px-4">
-
     <div class="row g-4">
-
-      <!-- ===== FILTER ===== -->
       <div class="col-lg-3">
         <div class="card shadow-sm border-0 rounded-4">
           <div class="card-body">
-
             <h5 class="fw-bold text-danger mb-3">
               <i class="bi bi-funnel-fill me-2"></i>
               Bộ lọc donor
             </h5>
-
             <label class="form-label small">Tìm theo tên hoặc số điện thoại</label>
-            <input type="text" class="form-control mb-3" v-model="filters.keyword" />
-
+            <input type="text" class="form-control mb-3" v-model="filters.keyword" @keyup.enter="applyFilter" />
             <label class="form-label small">Nhóm máu</label>
             <select class="form-select mb-3" v-model="filters.bloodType">
               <option value="">Tất cả</option>
@@ -23,41 +17,28 @@
                 {{ group }}
               </option>
             </select>
-
             <label class="form-label small">Ngày hiến từ</label>
             <input type="date" class="form-control mb-3" v-model="filters.fromDate" />
-
             <label class="form-label small">Ngày hiến đến</label>
             <input type="date" class="form-control mb-4" v-model="filters.toDate" />
-
             <button class="btn btn-danger w-100 fw-bold" @click="applyFilter">
               <i class="bi bi-search me-2"></i> Lọc dữ liệu
             </button>
-
           </div>
         </div>
       </div>
-
-      <!-- ===== TABLE ===== -->
       <div class="col-lg-9">
         <div class="card shadow-sm border-0 rounded-4">
           <div class="card-body">
-
             <div class="d-flex justify-content-between align-items-center mb-4">
               <h5 class="fw-bold mb-0">
                 <i class="bi bi-people me-2"></i>Danh sách Donor
               </h5>
-
-              <!-- BTN OPEN MODAL -->
-              <button
-                class="btn btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#createDonorModal"
-              >
+              <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#createDonorModal"
+                @click="prepareCreateModal">
                 <i class="bi bi-plus-lg me-2"></i>Thêm donor mới
               </button>
             </div>
-
             <div class="table-responsive">
               <table class="table table-hover align-middle">
                 <thead class="table-light">
@@ -73,120 +54,83 @@
                     <th>Thao tác</th>
                   </tr>
                 </thead>
-
                 <tbody>
                   <tr v-for="(value, index) in filteredDonors" :key="value.id">
-
                     <td>{{ index + 1 }}</td>
-
                     <td class="fw-bold">{{ value.name }}</td>
-
                     <td>
                       <span class="badge bg-danger-light text-danger p-2">
                         {{ value.bloodType }}
                       </span>
                     </td>
-
                     <td>{{ value.address }}</td>
-
                     <td>
                       <div>{{ value.phone }}</div>
                       <small class="text-muted">{{ value.email }}</small>
                     </td>
-
                     <td>
                       <span v-if="value.lastDonation !== 'Chưa hiến'">
                         {{ value.lastDonation }}
                       </span>
                       <span v-else class="text-muted small fst-italic">Chưa hiến</span>
                     </td>
-
                     <td>{{ value.totalDonation }}</td>
-
                     <td>
-                      <span
-                        :class="[
-                          'badge rounded-pill px-3',
-                          value.status === 'Hoạt động'
-                            ? 'bg-success-light text-success'
-                            : 'bg-warning-light text-warning'
-                        ]"
-                      >
+                      <span :class="[
+                        'badge rounded-pill px-3',
+                        value.status === 'Hoạt động'
+                          ? 'bg-success-light text-success'
+                          : 'bg-warning-light text-warning'
+                      ]">
                         {{ value.status }}
                       </span>
                     </td>
-
                     <td>
-                      <RouterLink
-                        :to="`/Hospital/donor-management/${value.id}`"
-                        class="btn btn-sm btn-outline-danger"
-                      >
+                      <RouterLink :to="`/Hospital/donor-management/${value.id}`" class="btn btn-sm btn-outline-danger">
                         Xem chi tiết
                       </RouterLink>
                     </td>
-
                   </tr>
-
                   <tr v-if="filteredDonors.length === 0">
                     <td colspan="9" class="text-center text-muted py-3">
                       Không tìm thấy donor nào
                     </td>
                   </tr>
-
                 </tbody>
               </table>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
-
-    <!-- ========================================= -->
-    <!--                  MODAL                   -->
-    <!-- ========================================= -->
-    <div
-      class="modal fade"
-      id="createDonorModal"
-      tabindex="-1"
-      aria-labelledby="createDonorModalLabel"
-      aria-hidden="true"
-    >
+    <div class="modal fade" id="createDonorModal" tabindex="-1" aria-labelledby="createDonorModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-
           <div class="modal-header">
             <h5 class="modal-title fw-bold" id="createDonorModalLabel">
               <i class="bi bi-person-plus-fill text-danger me-2"></i> Tạo donor mới
             </h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-
           <div class="modal-body">
-
             <div class="row g-3">
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Họ tên *</label>
                 <input type="text" class="form-control" v-model="newDonor.full_name" />
               </div>
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Email *</label>
                 <input type="email" class="form-control" v-model="newDonor.email" />
               </div>
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Số điện thoại *</label>
                 <input type="text" class="form-control" v-model="newDonor.phone" />
               </div>
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Ngày sinh *</label>
                 <input type="date" class="form-control" v-model="newDonor.birthday" />
               </div>
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Giới tính *</label>
                 <select class="form-select" v-model="newDonor.gender">
@@ -194,7 +138,6 @@
                   <option value="Nữ">Nữ</option>
                 </select>
               </div>
-
               <div class="col-md-6">
                 <label class="form-label fw-bold">Nhóm máu *</label>
                 <select class="form-select" v-model="newDonor.blood_type_id">
@@ -204,27 +147,28 @@
                   </option>
                 </select>
               </div>
-
               <div class="col-12">
                 <label class="form-label fw-bold">Địa chỉ *</label>
                 <input type="text" class="form-control" v-model="newDonor.address" />
               </div>
-
             </div>
-
           </div>
-
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button class="btn btn-danger fw-bold" @click="createNewDonor">
-              <i class="bi bi-check2-circle me-1"></i> Tạo donor
+            <button class="btn btn-secondary" data-bs-dismiss="modal" :disabled="creating">
+              Hủy
+            </button>
+            <button class="btn btn-danger fw-bold" @click="createNewDonor" :disabled="creating">
+              <span v-if="!creating">
+                <i class="bi bi-check2-circle me-1"></i> Tạo donor
+              </span>
+              <span v-else>
+                <span class="spinner-border spinner-border-sm me-2"></span> Đang tạo...
+              </span>
             </button>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -233,14 +177,13 @@ import baseRequestDoctor from "../../../core/baseRequestDoctor";
 
 export default {
   name: "QuanLyDonor",
-
   data() {
     return {
       donors: [],
       filteredDonors: [],
-
+      creating: false,
+      loadingTable: false,
       bloodGroups: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
-
       bloodTypeList: [
         { id: 1, display: "A+" },
         { id: 2, display: "A-" },
@@ -251,7 +194,6 @@ export default {
         { id: 7, display: "O+" },
         { id: 8, display: "O-" },
       ],
-
       newDonor: {
         full_name: "",
         email: "",
@@ -261,7 +203,6 @@ export default {
         address: "",
         blood_type_id: "",
       },
-
       filters: {
         keyword: "",
         bloodType: "",
@@ -270,70 +211,118 @@ export default {
       },
     };
   },
-
   mounted() {
     this.loadData();
   },
-
   methods: {
-    loadData() {
-      baseRequestDoctor.get("doctor/donors").then((res) => {
-        if (res.data?.status) {
-          this.donors = res.data.data;
-          this.filteredDonors = this.donors;
-        }
-      });
+    toDateOnlyStr(val) {
+      if (!val || val === "Chưa hiến") return null;
+      return String(val).slice(0, 10);
     },
-
+    validateNewDonor() {
+      const d = this.newDonor;
+      if (!d.full_name.trim()) return "Vui lòng nhập họ tên.";
+      if (!d.email.trim()) return "Vui lòng nhập email.";
+      if (!d.phone.trim()) return "Vui lòng nhập số điện thoại.";
+      if (!d.birthday) return "Vui lòng chọn ngày sinh.";
+      if (!d.gender) return "Vui lòng chọn giới tính.";
+      if (!d.blood_type_id) return "Vui lòng chọn nhóm máu.";
+      if (!d.address.trim()) return "Vui lòng nhập địa chỉ.";
+      return null;
+    },
+    resetNewDonor() {
+      this.newDonor = {
+        full_name: "",
+        email: "",
+        phone: "",
+        birthday: "",
+        gender: "Nam",
+        address: "",
+        blood_type_id: "",
+      };
+    },
+    hideCreateModal() {
+      const el = document.getElementById("createDonorModal");
+      if (!el || typeof bootstrap === "undefined") return;
+      const instance = bootstrap.Modal.getInstance(el) || new bootstrap.Modal(el);
+      instance.hide();
+    },
+    async loadData() {
+      try {
+        this.loadingTable = true;
+        const res = await baseRequestDoctor.get("doctor/donors");
+        if (res.data?.status) {
+          this.donors = res.data.data || [];
+          this.filteredDonors = this.donors;
+        } else {
+          this.$toast?.error(res.data?.message || "Không tải được danh sách donor!");
+        }
+      } catch (e) {
+        this.$toast?.error("Lỗi tải danh sách donor!");
+      } finally {
+        this.loadingTable = false;
+      }
+    },
     applyFilter() {
       let result = [...this.donors];
-
       if (this.filters.keyword.trim()) {
-        const key = this.filters.keyword.toLowerCase();
+        const raw = this.filters.keyword.trim();
+        const key = raw.toLowerCase();
         result = result.filter(
           (d) =>
-            d.name.toLowerCase().includes(key) ||
-            d.phone.includes(this.filters.keyword)
+            String(d.name || "").toLowerCase().includes(key) ||
+            String(d.phone || "").includes(raw)
         );
       }
-
       if (this.filters.bloodType) {
         result = result.filter((d) => d.bloodType === this.filters.bloodType);
       }
-
-      if (this.filters.fromDate) {
-        result = result.filter(
-          (d) => d.lastDonation !== "Chưa hiến" && d.lastDonation >= this.filters.fromDate
-        );
-      }
-
-      if (this.filters.toDate) {
-        result = result.filter(
-          (d) => d.lastDonation !== "Chưa hiến" && d.lastDonation <= this.filters.toDate
-        );
-      }
-
-      this.filteredDonors = result;
-    },
-
-    createNewDonor() {
-      baseRequestDoctor
-        .post("doctor/donors/create", this.newDonor)
-        .then((res) => {
-          if (res.data.status) {
-            alert("Tạo donor thành công!");
-
-            this.loadData();
-
-            const modal = bootstrap.Modal.getInstance(
-              document.getElementById("createDonorModal")
-            );
-            modal.hide();
-          }
-        })
-        .catch(() => {
-          alert("Lỗi tạo donor!");
+      const from = this.filters.fromDate || null;
+      const to = this.filters.toDate || null;
+      if (from) {
+        result = result.filter((d) => {
+          const last = this.toDateOnlyStr(d.lastDonation);
+          return last && last >= from;
         });
+      }
+      if (to) {
+        result = result.filter((d) => {
+          const last = this.toDateOnlyStr(d.lastDonation);
+          return last && last <= to;
+        });
+      }
+      this.filteredDonors = result;
+      this.$toast?.info(`Đã lọc: ${result.length} donor`);
+    },
+    prepareCreateModal() {
+      this.resetNewDonor();
+    },
+    async createNewDonor() {
+      const err = this.validateNewDonor();
+      if (err) return this.$toast?.warning(err);
+      try {
+        this.creating = true;
+        const payload = {
+          ...this.newDonor,
+          full_name: this.newDonor.full_name.trim(),
+          email: this.newDonor.email.trim(),
+          phone: this.newDonor.phone.trim(),
+          address: this.newDonor.address.trim(),
+        };
+        const res = await baseRequestDoctor.post("doctor/donors/create", payload);
+        if (res.data?.status) {
+          this.$toast?.success(res.data?.message || "Tạo donor thành công!");
+          await this.loadData();
+          this.hideCreateModal();
+          this.resetNewDonor();
+          return;
+        }
+        this.$toast?.error(res.data?.message || "Tạo donor thất bại!");
+      } catch (e) {
+        this.$toast?.error("Lỗi tạo donor!");
+      } finally {
+        this.creating = false;
+      }
     },
   },
 };
