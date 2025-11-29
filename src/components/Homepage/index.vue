@@ -1,35 +1,4 @@
 <template>
-  <!-- alert -->
-  <div v-if="showAlert" class="alert alert-custom text-white mb-0" role="alert">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex align-items-center">
-        <i class="fa-solid fa-circle ms-3" style="color: #fff"></i>
-        <i
-          class="fa-solid fa-triangle-exclamation ms-2"
-          style="color: #ffd43b"
-        ></i>
-        <strong class="ms-2">KHẨN CẤP:</strong>
-        <span class="ms-2">Hiện đang cần nhóm máu O tại BV Đà Nẵng</span>
-      </div>
-      <div class="d-flex align-items-center">
-        <router-link
-          to="/register"
-          class="btn btn-light text-danger fw-bold rounded-pill me-3"
-        >
-          <i class="fa-solid fa-heart-circle-plus me-1 text-danger"></i>
-          Đăng ký ngay
-        </router-link>
-
-        <button
-          class="btn btn-link text-white fw-bold p-0 me-3"
-          style="font-size: 18px"
-          @click="showAlert = false"
-        >
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-    </div>
-  </div>
   <div class="container my-5">
     <div class="row align-items-center">
       <div class="col-md-6 mt-5 mb-5">
@@ -53,9 +22,7 @@
       <div class="col-md-6 text-center">
         <img
           src="https://dms.gov.vn/documents/20182/20167074/L%E1%BB%A3i+%C3%ADch+c%E1%BB%A7a+hi%E1%BA%BFn+m%C3%A1u.jpg/a75e9f83-f6a0-42fe-9f95-7ad9358fbeca"
-          class="img-fluid"
-          alt="Blood Donation"
-        />
+          class="img-fluid" alt="Blood Donation" />
       </div>
     </div>
   </div>
@@ -204,9 +171,7 @@
         <div class="col-md-3">
           <div class="card shadow-sm border-0 h-100">
             <div class="card-body text-center">
-              <i
-                class="fa-solid fa-clock-rotate-left fa-2x text-danger mb-3"
-              ></i>
+              <i class="fa-solid fa-clock-rotate-left fa-2x text-danger mb-3"></i>
               <h6 class="fw-bold">Theo Dõi Lịch Sử</h6>
               <p class="text-muted">
                 Lưu trữ và theo dõi lịch sử hiến máu chi tiết của từng người
@@ -224,13 +189,10 @@
         Hãy cùng chúng tôi xây dựng một hệ thống hiến máu thông minh, giúp cứu
         sống nhiều người hơn mỗi ngày
       </p>
-      
-      <router-link 
-  to="/contact" 
-  class="btn btn-danger btn-lg"
->
-  Liên hệ ngay
-</router-link>
+
+      <router-link to="/contact" class="btn btn-danger btn-lg">
+        Liên hệ ngay
+      </router-link>
     </div>
   </div>
 </template>
