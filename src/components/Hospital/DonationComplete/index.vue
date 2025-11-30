@@ -100,7 +100,7 @@
                   <td class="text-end">
                     <button class="btn btn-sm btn-outline-success"
                             @click="moModal(value)">
-                      <i class="bi bi-check2-circle me-1"></i> Ghi nhận
+                      Ghi nhận
                     </button>
                   </td>
                 </tr>
