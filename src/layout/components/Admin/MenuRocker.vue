@@ -47,38 +47,6 @@
             <div class="menu-title">Quản lý kho máu</div>
           </router-link>
         </li>
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="parent-icon"><i class="fa-solid fa-shield"></i></div>
-            <div class="menu-title">Phân quyền</div>
-          </a>
-        </li> -->
-        <!-- <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="parent-icon"><i class="bx bx-bar-chart"></i></div>
-            <div class="menu-title">Thống kê & Báo cáo</div>
-          </a>
-          <ul class="dropdown-menu">
-            <li class="nav-item">
-              <router-link to="/admin/thong-ke/lich-hen-chuyen-khoa" class="nav-link">
-                <div class="parent-icon"><i class="bx bx-calendar"></i></div>
-                <div class="menu-title">Lịch hẹn theo bác sĩ</div>
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/admin/thong-ke/lich-hen-bac-si" class="nav-link">
-                <div class="parent-icon"><i class="bx bx-calendar"></i></div>
-                <div class="menu-title">Lịch hẹn theo người hiến</div>
-              </router-link>
-            </li>
-            <li class="nav-item">
-              <router-link to="/admin/thong-ke/benh-nhan-chuyen-khoa" class="nav-link">
-                <div class="parent-icon"><i class="bx bx-calendar"></i></div>
-                <div class="menu-title">Số lượng người hiến</div>
-              </router-link>
-            </li>
-          </ul>
-        </li> -->
         <li class="nav-item">
           <router-link class="nav-link" to="/admin/appoint-control">
             <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn
