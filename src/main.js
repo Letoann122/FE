@@ -6,7 +6,9 @@ import Client from './layout/wrapper/Client/index.vue'
 import Blank from './layout/wrapper/blank.vue'
 import Hospital from './layout/wrapper/Hospital/index.vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'     // ⭐ MUST HAVE: enable dropdown + modal + collapse
 import Toaster from '@meforma/vue-toaster'
+
 
 const app = createApp(App)
 app.use(Toaster, { position: 'top-right' })

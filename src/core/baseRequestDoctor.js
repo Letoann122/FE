@@ -11,7 +11,7 @@ const baseRequestDoctor = axios.create({
 // ==================== TOKEN CHUẨN CHO DOCTOR ====================
 baseRequestDoctor.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token_doctor");   // 👈 đúng
+    const token = localStorage.getItem("token_doctor");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,14 +24,24 @@ baseRequestDoctor.interceptors.request.use(
 baseRequestDoctor.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Skip khi DEV MODE
     if (import.meta.env.VITE_SKIP_TOKEN === "true") {
       console.log("⚙ DEV MODE: Bỏ qua lỗi token (doctor)");
       return Promise.resolve({ data: { status: true, data: [] } });
     }
 
-    if (error.response) {
-      const status = error.response.status;
+    const requestUrl = error.config?.url || "";
+    const status = error.response?.status;
 
+    // ❗ KHÔNG xử lý token nếu đang login
+    if (requestUrl.includes("/login")) {
+      return Promise.reject(error);
+    }
+
+    if (error.response) {
+      const data = error.response.data;
+
+      // 🔥 Token hết hạn / bị khóa / không hợp lệ
       if (status === 401 || status === 403) {
         toast.error("Phiên đăng nhập bác sĩ đã hết hạn. Vui lòng đăng nhập lại!");
         localStorage.removeItem("token_doctor");
@@ -40,10 +50,14 @@ baseRequestDoctor.interceptors.response.use(
         setTimeout(() => {
           window.location.href = "/login";
         }, 1500);
-      } else if (status >= 500) {
+
+        return Promise.reject(error);
+      }
+
+      if (status >= 500) {
         toast.error("Lỗi máy chủ, vui lòng thử lại!");
-      } else if (error.response.data?.message) {
-        toast.error(error.response.data.message);
+      } else if (data?.message) {
+        toast.error(data.message);
       } else {
         toast.error("Có lỗi xảy ra!");
       }
