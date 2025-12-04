@@ -5,8 +5,10 @@ import Admin from './layout/wrapper/Admin/index.vue'
 import Client from './layout/wrapper/Client/index.vue'
 import Blank from './layout/wrapper/blank.vue'
 import Hospital from './layout/wrapper/Hospital/index.vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'     // ⭐ MUST HAVE: enable dropdown + modal + collapse
+// import 'bootstrap/dist/css/bootstrap.min.css'
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js'     
+import "../src/assets/css/bootstrap.min.css"
+import "../src/assets/js/bootstrap.bundle.min.js"
 import Toaster from '@meforma/vue-toaster'
 
 
