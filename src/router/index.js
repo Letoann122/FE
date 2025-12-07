@@ -8,8 +8,8 @@ const routes = [
 
   //admin
   {
-    path: "/admin/home",
-    component: () => import("../components/Admin/trangchu/index.vue"),
+    path: "/admin/dashboard",
+    component: () => import("../components/Admin/Dashboard/index.vue"),
     meta: { layout: "admin" },
     beforeEnter: checkAdmin,
   },
@@ -72,6 +72,12 @@ const routes = [
   {
     path: "/Hospital/dashboard",
     component: () => import("../components/Hospital/dashboard/index.vue"),
+    meta: { layout: "Hospital" },
+    beforeEnter: checkDoctor,
+  },
+  {
+    path: "/Hospital/news",
+    component: () => import("../components/Hospital/News/index.vue"),
     meta: { layout: "Hospital" },
     beforeEnter: checkDoctor,
   },
@@ -168,6 +174,11 @@ const routes = [
   {
     path: "/news",
     component: () => import("../components/Client/News/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/news/:id",
+    component: () => import("../components/Client/NewsDetail/index.vue"),
     meta: { layout: "client" },
   },
   {
