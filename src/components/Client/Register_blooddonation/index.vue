@@ -1,6 +1,5 @@
 <template>
   <div class="container py-5">
-    <!-- HEADER -->
     <div class="mb-4 border-bottom pb-3">
       <h3 class="fw-bold text-danger">
         <i class="bi bi-calendar2-heart me-2"></i> Đặt lịch hiến máu
@@ -11,9 +10,7 @@
     </div>
 
     <div class="row g-4">
-      <!-- LEFT COLUMN (FORM + TABLE FULL WIDTH BELOW) -->
       <div class="col-lg-6">
-        <!-- FORM CARD -->
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-2">Thông tin đặt lịch</h5>
           <p class="text-muted">Vui lòng điền đầy đủ thông tin bên dưới</p>
@@ -87,7 +84,6 @@
         </div>
       </div>
 
-      <!-- RIGHT PANEL: MAP -->
       <div class="col-lg-6" v-if="selectedSite">
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <h5 class="fw-bold mb-3">
@@ -133,7 +129,6 @@
         </div>
       </div>
 
-      <!-- FULL WIDTH TABLE -->
       <div class="col-lg-12 mt-4">
         <div class="card p-4 shadow-sm border-0 rounded-4">
           <div class="d-flex justify-content-between align-items-center mb-2">
@@ -217,7 +212,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import baseRequestClient from "../../../core/baseRequestClient";
@@ -310,8 +304,8 @@ export default {
           }
         })
         .catch((err) => {
-          const errs = Object.values(err.response.data.errors || {});
-          errs.forEach((v) => this.$toast.error(v[0]));
+          const message = err.response?.data?.message || "Lỗi tải thông tin";
+          this.$toast.error(message);
         })
         .finally(() => (this.loadingProfile = false));
     },
@@ -323,14 +317,16 @@ export default {
           if (res.data.status) this.donation_sites = res.data.data || [];
         })
         .catch((err) => {
-          const errs = Object.values(err.response.data.errors || {});
-          errs.forEach((v) => this.$toast.error(v[0]));
+          const message = err.response?.data?.message || "Lỗi tải danh sách địa điểm";
+          this.$toast.error(message);
         });
     },
 
     buildScheduledAt(dateStr, slot) {
-      const h = slot.split("-")[0].trim();
-      return `${dateStr} ${h}:00`;
+      if (!dateStr || !slot) return null;
+      const h = slot.split("-")[0].trim().split(":")[0];
+      const pad = (n) => (n < 10 ? "0" + n : n);
+      return `${dateStr} ${pad(h)}:00:00`;
     },
 
     submitBooking() {
@@ -361,8 +357,8 @@ export default {
           }
         })
         .catch((err) => {
-          const errs = Object.values(err.response.data.errors || {});
-          errs.forEach((v) => this.$toast.error(v[0]));
+          const message = err.response?.data?.message || "Đã có lỗi xảy ra";
+          this.$toast.error(message);
         })
         .finally(() => (this.submitting = false));
     },
@@ -383,8 +379,8 @@ export default {
           if (res.data.status) this.myAppointments = res.data.data;
         })
         .catch((err) => {
-          const errs = Object.values(err.response.data.errors || {});
-          errs.forEach((v) => this.$toast.error(v[0]));
+          const message = err.response?.data?.message || "Lỗi tải lịch sử";
+          this.$toast.error(message);
         })
         .finally(() => (this.loadingAppointments = false));
     },
@@ -402,8 +398,8 @@ export default {
           }
         })
         .catch((err) => {
-          const errs = Object.values(err.response.data.errors || {});
-          errs.forEach((v) => this.$toast.error(v[0]));
+          const message = err.response?.data?.message || "Lỗi hủy lịch";
+          this.$toast.error(message);
         })
         .finally(() => (this.submittingCancelId = null));
     },
