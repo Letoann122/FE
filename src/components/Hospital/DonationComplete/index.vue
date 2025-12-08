@@ -53,7 +53,6 @@
             <h5 class="fw-bold text-danger mb-1">
               <i class="bi bi-droplet-half me-2"></i> Ghi nhận hiến máu
             </h5>
-            <small class="text-muted">Chỉ hiển thị lịch APPROVED</small>
           </div>
 
           <div class="card-body p-0">
@@ -308,7 +307,7 @@ export default {
         blood_group: this.form.nhom_mau,
         volume_ml: this.form.so_ml,
         collected_at: this.form.thoi_diem_lay,
-        screened_ok: this.form.da_sang_loc,
+        screened_ok: this.form.da_sang_loc ? 1 : 0,
         notes: this.form.ghi_chu || "",
       };
 
