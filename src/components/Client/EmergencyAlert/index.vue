@@ -38,6 +38,7 @@
 
 <script>
 import axios from "axios";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export default {
     data() {
@@ -79,7 +80,7 @@ export default {
         // GỌI API ALERT
         // ==============================
         try {
-            const res = await axios.get("http://localhost:4000/public/emergency-alert");
+            const res = await axios.get(`${API_BASE}/public/emergency-alert`);
 
             if (res.data.status && res.data.data) {
                 this.alert = res.data.data;

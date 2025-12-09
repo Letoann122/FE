@@ -24,6 +24,7 @@
 
 <script>
 import axios from "axios";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export default {
     data() {
@@ -42,7 +43,7 @@ export default {
         async fetchDetail() {
             try {
                 const id = this.$route.params.id;
-                const res = await axios.get(`http://localhost:4000/api/news/${id}`);
+                const res = await axios.get(`${API_BASE}/api/news/${id}`);
 
                 if (res.data?.status) this.news = res.data.data;
                 else this.$toast?.error("Không thể tải bài viết!");

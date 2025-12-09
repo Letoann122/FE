@@ -34,50 +34,54 @@
 
 <script>
 import axios from "axios";
-export default {
-    data() {
-        return {
-            form: {
-                password: "",
-                password_confirmation: "",
-            },
-            token: null,
-        };
-    },
-    created() {
-        const query = new URLSearchParams(window.location.search);
-        this.token = query.get("token");
-    },
-    methods: {
-        async DoiMatKhau() {
-            if (this.form.password !== this.form.password_confirmation) {
-                this.$toast.error("Mật khẩu xác nhận không khớp!");
-                return;
-            }
-            if (!this.token) {
-                this.$toast.error("Token không hợp lệ hoặc đã hết hạn!");
-                return;
-            }
-            try {
-                const res = await axios.post("http://localhost:4000/reset-password", {
-                    token: this.token,
-                    password: this.form.password,
-                    password_confirmation: this.form.password_confirmation,
-                });
-                if (res.data.status) {
-                    this.$toast.success("Đổi mật khẩu thành công! Mời bạn đăng nhập lại.");
-                    this.$router.push("/login");
-                } else {
-                    this.$toast.error(res.data.message || "Có lỗi xảy ra!");
-                }
-            } catch (err) {
-                console.error("Change password error:", err);
-                this.$toast.error("Lỗi server khi đổi mật khẩu!");
-            }
-        },
-    }
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
+export default {
+  data() {
+    return {
+      form: {
+        password: "",
+        password_confirmation: "",
+      },
+      token: null,
+    };
+  },
+  created() {
+    const query = new URLSearchParams(window.location.search);
+    this.token = query.get("token");
+  },
+  methods: {
+    async DoiMatKhau() {
+      if (this.form.password !== this.form.password_confirmation) {
+        this.$toast.error("Mật khẩu xác nhận không khớp!");
+        return;
+      }
+      if (!this.token) {
+        this.$toast.error("Token không hợp lệ hoặc đã hết hạn!");
+        return;
+      }
+      try {
+        const res = await axios.post(`${API_BASE}/reset-password`, {
+          token: this.token,
+          password: this.form.password,
+          password_confirmation: this.form.password_confirmation,
+        });
+
+        if (res.data.status) {
+          this.$toast.success("Đổi mật khẩu thành công! Mời bạn đăng nhập lại.");
+          this.$router.push("/login");
+        } else {
+          this.$toast.error(res.data.message || "Có lỗi xảy ra!");
+        }
+      } catch (err) {
+        console.error("Change password error:", err);
+        this.$toast.error("Lỗi server khi đổi mật khẩu!");
+      }
+    },
+  },
 };
 </script>
+
 
 <style></style>
