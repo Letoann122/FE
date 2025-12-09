@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid py-4 min-vh-100">
     <div class="row gx-4">
-      <!-- SIDEBAR: NHẬP LÔ MÁU -->
       <div class="col-xl-3 col-lg-4">
         <div class="card shadow-sm border-0">
           <div class="card-body">
@@ -11,7 +10,7 @@
               <div class="col-12">
                 <label class="form-label small">Nhóm máu</label>
                 <select v-model="form.blood_type_id" class="form-select" :disabled="loadingCreate">
-                  <option disabled value="">-- Chọn nhóm máu --</option>
+                  <option disabled value="">Chọn nhóm máu</option>
                   <option v-for="type in bloodTypes" :key="type.id" :value="type.id">
                     {{ type.name }}
                   </option>
@@ -34,8 +33,8 @@
                   v-model.number="form.units"
                   type="number"
                   class="form-control"
-                  min="1"
                   :disabled="loadingCreate"
+                  placeholder="Nhập số lượng túi"
                 />
               </div>
 
@@ -51,21 +50,12 @@
         </div>
       </div>
 
-      <!-- BẢNG TỔNG QUAN -->
       <div class="col-xl-9 col-lg-8">
         <div class="card shadow-sm border-0">
           <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <div>
               <h5 class="mb-0 fw-bold">Tổng quan tồn kho máu</h5>
-              <div class="text-muted small mt-1">
-                <i class="bi bi-arrow-repeat me-1"></i>
-                Cập nhật theo danh sách lô máu hiện có
-              </div>
             </div>
-
-            <button class="btn btn-outline-secondary btn-sm" @click="loadData" :disabled="loadingList">
-              <i class="bi bi-arrow-clockwise me-1"></i> Tải lại
-            </button>
           </div>
 
           <div class="card-body p-0">
@@ -77,6 +67,7 @@
                     <th>Tổng túi</th>
                     <th>Hạn sớm nhất</th>
                     <th>Hạn muộn nhất</th>
+                    <th>Không đạt</th>
                     <th>Sắp hết hạn</th>
                     <th>Hết hạn</th>
                     <th>Tình trạng</th>
@@ -86,7 +77,7 @@
 
                 <tbody>
                   <tr v-if="loadingList">
-                    <td colspan="8" class="py-4 text-center text-muted">
+                    <td colspan="9" class="py-4 text-center text-muted">
                       <span class="spinner-border spinner-border-sm me-2" role="status"></span>
                       Đang tải dữ liệu...
                     </td>
@@ -97,6 +88,7 @@
                     <td>{{ blood.total_units }}</td>
                     <td>{{ formatDateCell(blood.earliest_expiry) }}</td>
                     <td>{{ formatDateCell(blood.latest_expiry) }}</td>
+                    <td>{{ blood.failed_units }}</td>
                     <td>{{ blood.expiring_count }}</td>
                     <td>{{ blood.expired_count }}</td>
 
@@ -115,7 +107,6 @@
                     </td>
 
                     <td class="text-end">
-                      <!-- ✅ FIX: encode AB+ đúng -->
                       <button
                         class="btn btn-sm btn-outline-primary me-2"
                         @click="$router.push({ path: '/Hospital/blood-inventory-by-type', query: { type: blood.type } })"
@@ -134,7 +125,7 @@
                   </tr>
 
                   <tr v-if="!loadingList && aggregated.length === 0">
-                    <td colspan="8" class="py-4 text-center text-muted">Không có dữ liệu</td>
+                    <td colspan="9" class="py-4 text-center text-muted">Không có dữ liệu</td>
                   </tr>
                 </tbody>
               </table>
@@ -145,7 +136,6 @@
       </div>
     </div>
 
-    <!-- EXPORT MODAL (Vue-only) -->
     <div v-if="exportModal.open" class="modal-backdrop-custom" @click.self="closeExportModal">
       <div class="modal-card">
         <div class="modal-header border-bottom">
@@ -256,6 +246,7 @@ export default {
         groups[t.name] = {
           type: t.name,
           total_units: 0,
+          failed_units: 0,        // 👈 số túi không đạt
           earliest_expiry: null,
           latest_expiry: null,
           expiring_count: 0,
@@ -273,6 +264,11 @@ export default {
         const exp = this.toDate0(batch.expiry_date);
 
         if (units > 0) g.total_units += units;
+
+        // 👉 nếu batch có quality_note (VD: "Không đạt sàng lọc") thì cộng vào failed_units
+        if (batch.quality_note && units > 0) {
+          g.failed_units += units;
+        }
 
         if (units > 0 && exp) {
           if (!g.earliest_expiry || exp < this.toDate0(g.earliest_expiry)) g.earliest_expiry = batch.expiry_date;
@@ -307,24 +303,33 @@ export default {
       this.loadingList = true;
       try {
         const res = await baseRequestDoctor.get("/doctor/blood-inventory");
-        if (res.data.status) this.list_blood = res.data.data || [];
-        else this.$toast?.error(res.data.message || "Không thể tải danh sách kho máu!");
+        if (res.data.status) {
+          this.list_blood = res.data.data || [];
+        } else {
+          this.$toast?.error(res.data.message || "Không thể tải danh sách kho máu!");
+        }
       } catch (e) {
-        this.$toast?.error("Lỗi khi tải kho máu!");
+        console.error(e);
       } finally {
         this.loadingList = false;
       }
     },
 
     async createBloodBatch() {
-      if (!this.form.blood_type_id || !this.form.donation_date || !this.form.expiry_date || !this.form.units) {
+      if (!this.form.blood_type_id || !this.form.donation_date || !this.form.expiry_date) {
         this.$toast?.error("Vui lòng nhập đầy đủ thông tin!");
+        return;
+      }
+
+      if (!this.form.units || Number(this.form.units) <= 0) {
+        this.$toast?.error("Số lượng túi máu phải lớn hơn 0!");
         return;
       }
 
       this.loadingCreate = true;
       try {
         const res = await baseRequestDoctor.post("/doctor/blood-inventory", this.form);
+        
         if (res.data.status) {
           this.$toast?.success(res.data.message || "Thêm lô máu thành công!");
           await this.loadData();
@@ -333,7 +338,7 @@ export default {
           this.$toast?.error(res.data.message || "Không thể thêm lô máu!");
         }
       } catch (e) {
-        this.$toast?.error(e?.response?.data?.message || "Lỗi khi thêm lô máu!");
+        console.error(e);
       } finally {
         this.loadingCreate = false;
       }
@@ -386,16 +391,14 @@ export default {
           this.$toast?.error(res.data.message || "Xuất túi máu thất bại!");
         }
       } catch (e) {
-        this.$toast?.error(e?.response?.data?.message || "Lỗi khi xuất túi máu!");
+        console.error(e);
       } finally {
         this.loadingExport = false;
       }
     },
 
-    // ===== dates (local safe) =====
     toDate0(input) {
       if (!input) return null;
-
       const s = typeof input === "string" ? input : null;
       if (s && /^\d{4}-\d{2}-\d{2}$/.test(s)) {
         const [y, m, d] = s.split("-").map(Number);
@@ -403,7 +406,6 @@ export default {
         dt.setHours(0, 0, 0, 0);
         return dt;
       }
-
       const dt = new Date(input);
       if (Number.isNaN(dt.getTime())) return null;
       dt.setHours(0, 0, 0, 0);
@@ -434,7 +436,6 @@ export default {
   vertical-align: middle;
 }
 
-/* Vue-only modal */
 .modal-backdrop-custom {
   position: fixed;
   inset: 0;

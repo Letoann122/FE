@@ -51,12 +51,12 @@
     <div class="card shadow-sm border-0 mt-4">
       <div class="card-header bg-white fw-bold">
         <i class="bi bi-people-fill text-danger me-2"></i>
-        Danh sách Donor đã đăng ký ({{ registrations.length }})
+        Danh sách người hiến đã đăng ký ({{ registrations.length }})
       </div>
 
       <div class="card-body p-0">
         <div v-if="registrations.length === 0" class="text-center text-muted py-3">
-          Chưa có Donor nào đăng ký.
+          Chưa có người hiến nào đăng ký.
         </div>
 
         <div v-else class="table-responsive">

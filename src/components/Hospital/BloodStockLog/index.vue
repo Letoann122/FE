@@ -67,24 +67,21 @@
             <tbody>
               <tr v-for="log in filtered" :key="log.id">
                 <td>
-                  <span class="badge" :class="badgeClass(log.action)">
-                    <i :class="['me-2', log.icon]"></i>
+                  <span class="text" >
                     {{ translateAction(log.action) }}
                   </span>
                 </td>
 
                 <td class="fw-bold">
-                  <span
-                    class="text-danger pointer"
-                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })"
-                  >
+                  <span class="text-danger pointer"
+                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })">
                     BL{{ String(log.batch_id).padStart(6, "0") }}
                   </span>
                 </td>
 
                 <td>
                   <div class="d-flex align-items-center">
-                    
+
                     <div>
                       <div class="fw-bold small">{{ log.actor_name }}</div>
                       <div class="text-muted very-small">{{ log.actor_role }}</div>
@@ -96,10 +93,8 @@
                 <td>{{ log.notes }}</td>
 
                 <td>
-                  <button
-                    class="btn btn-sm btn-outline-secondary"
-                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })"
-                  >
+                  <button class="btn btn-sm btn-outline-secondary"
+                    @click="$router.push({ name: 'BloodBatchDetail', params: { id: log.batch_id } })">
                     <i class="bi bi-eye"></i>
                   </button>
                 </td>

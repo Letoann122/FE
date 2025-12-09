@@ -15,7 +15,7 @@
             <!-- Mã lịch -->
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
-              <input type="text" class="form-control" v-model="loc_lich.ma_lich" />
+              <input type="text" class="form-control" placeholder="Nhập mã lịch hiến máu" v-model="loc_lich.ma_lich" />
             </div>
 
             <!-- Từ ngày -->

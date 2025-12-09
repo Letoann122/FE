@@ -43,32 +43,24 @@
             <hr class="border border-1 border-light-subtle my-3" />
 
             <div class="row">
+              <!-- CHO SỬA họ tên -->
               <div class="col-lg-6">
                 <label class="mb-2">Họ và tên</label>
                 <input
                   v-model="profile.full_name"
                   type="text"
                   class="form-control"
-                  readonly
-                  disabled
                 />
-                <div class="form-text">
-                  Thông tin này được khóa để đảm bảo đối soát hồ sơ.
-                </div>
               </div>
 
+              <!-- CHO SỬA ngày sinh -->
               <div class="col-lg-6">
                 <label class="mb-2">Ngày sinh</label>
                 <input
                   v-model="profile.birthday"
                   type="date"
                   class="form-control"
-                  readonly
-                  disabled
                 />
-                <div class="form-text">
-                  Nếu cần chỉnh sửa, vui lòng liên hệ quản trị/điểm hiến máu.
-                </div>
               </div>
 
               <div class="col-lg-12">
@@ -80,6 +72,7 @@
                 ></textarea>
               </div>
 
+              <!-- CHỈ KHOÁ NHÓM MÁU -->
               <div class="col-md-6">
                 <label class="form-label mt-3 mb-2">Nhóm máu *</label>
                 <select
@@ -98,7 +91,8 @@
                   <option value="O-">O-</option>
                 </select>
                 <div class="form-text">
-                  Nhóm máu được cập nhật theo kết quả xét nghiệm tại điểm hiến.
+                  Nhóm máu được cập nhật theo kết quả xét nghiệm tại điểm hiến,
+                  bạn không thể tự chỉnh sửa.
                 </div>
               </div>
 
@@ -174,18 +168,28 @@ export default {
 
     async updateProfile() {
       try {
-        // Chỉ validate các field cho phép update
+        // Validate theo BE: full_name, birthday, phone
+        if (!this.profile.full_name || !this.profile.full_name.trim()) {
+          this.$toast?.error("Họ và tên không được để trống!");
+          return;
+        }
+        if (!this.profile.birthday) {
+          this.$toast?.error("Ngày sinh không được để trống!");
+          return;
+        }
         if (!this.profile.phone) {
           this.$toast?.error("Vui lòng điền số điện thoại!");
           return;
         }
 
-        // ✅ Không gửi các field bị khóa lên server
+        // Không gửi blood_group (đã khóa)
         const payload = {
+          full_name: this.profile.full_name,
+          birthday: this.profile.birthday,
+          gender: this.profile.gender,
           phone: this.profile.phone,
           address: this.profile.address,
           medical_history: this.profile.medical_history,
-          // gender: this.profile.gender, // nếu bạn cho phép update gender thì mở dòng này
         };
 
         const res = await baseRequestClient.put("/donor/profile", payload);
@@ -216,7 +220,6 @@ export default {
   color: #dc3545 !important;
 }
 
-/* Nhìn “read-only” rõ hơn một chút */
 .form-control:disabled,
 .form-select:disabled {
   opacity: 0.85;
