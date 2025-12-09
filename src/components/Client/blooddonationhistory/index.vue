@@ -5,25 +5,16 @@
       <div class="col-md-3 col-lg-2">
         <div class="card border-0 shadow-sm rounded-4 p-2">
           <div class="list-group list-group-flush">
-            <router-link
-              to="/profile"
-              class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold"
-            >
+            <router-link to="/profile" class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold">
               <i class="bi bi-person-fill me-2"></i> Hồ sơ cá nhân
             </router-link>
-            <router-link
-              to="/blood-donation-history"
-              class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold"
-            >
+            <router-link to="/blood-donation-history" class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold">
               <i class="bi bi-arrow-counterclockwise me-2"></i> Lịch sử hiến máu
             </router-link>
-            <router-link
-              to="/account-security"
-              class="list-group-item list-group-item-action rounded-3 my-1"
-              active-class="active text-danger fw-bold"
-            >
+            <router-link to="/account-security" class="list-group-item list-group-item-action rounded-3 my-1"
+              active-class="active text-danger fw-bold">
               <i class="bi bi-shield-lock-fill me-2"></i> Bảo mật tài khoản
             </router-link>
           </div>
@@ -44,13 +35,10 @@
           <div class="row g-3 mb-4">
             <div v-for="(item, index) in stats" :key="index" class="col-md-4">
               <div class="card border-0 shadow-sm rounded-4 py-3 px-4 d-flex align-items-center">
-                <div
-                  :class="[
-                    'icon-box rounded-circle d-flex align-items-center justify-content-center me-3',
-                    item.bg,
-                  ]"
-                  style="width: 45px; height: 45px"
-                >
+                <div :class="[
+                  'icon-box rounded-circle d-flex align-items-center justify-content-center me-3',
+                  item.bg,
+                ]" style="width: 45px; height: 45px">
                   <i :class="item.icon" class="fs-5"></i>
                 </div>
                 <div>
@@ -79,13 +67,8 @@
               </div>
 
               <div class="col-md-8">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Tìm theo địa điểm / tên chiến dịch..."
-                  v-model="filters.q"
-                  @input="onSearchInput"
-                />
+                <input type="text" class="form-control" placeholder="Tìm theo địa điểm / tên chiến dịch..."
+                  v-model="filters.q" @input="onSearchInput" />
               </div>
             </div>
           </div>
@@ -137,9 +120,7 @@
               </table>
             </div>
 
-            <div
-              class="p-3 d-flex justify-content-between align-items-center text-muted small border-top"
-            >
+            <div class="p-3 d-flex justify-content-between align-items-center text-muted small border-top">
               <div>
                 Hiển thị {{ donations.length }} kết quả
                 <span v-if="meta.total_records">/ Tổng {{ meta.total_records }}</span>
@@ -149,30 +130,18 @@
               <nav v-if="meta.total_pages > 1">
                 <ul class="pagination pagination-sm mb-0">
                   <li class="page-item" :class="{ disabled: meta.page <= 1 }">
-                    <button
-                      class="page-link"
-                      @click="fetchHistory(meta.page - 1)"
-                      :disabled="meta.page <= 1"
-                    >
+                    <button class="page-link" @click="fetchHistory(meta.page - 1)" :disabled="meta.page <= 1">
                       Trước
                     </button>
                   </li>
 
-                  <li
-                    class="page-item"
-                    v-for="p in pageNumbers"
-                    :key="p"
-                    :class="{ active: p === meta.page }"
-                  >
+                  <li class="page-item" v-for="p in pageNumbers" :key="p" :class="{ active: p === meta.page }">
                     <button class="page-link" @click="fetchHistory(p)">{{ p }}</button>
                   </li>
 
                   <li class="page-item" :class="{ disabled: meta.page >= meta.total_pages }">
-                    <button
-                      class="page-link"
-                      @click="fetchHistory(meta.page + 1)"
-                      :disabled="meta.page >= meta.total_pages"
-                    >
+                    <button class="page-link" @click="fetchHistory(meta.page + 1)"
+                      :disabled="meta.page >= meta.total_pages">
                       Sau
                     </button>
                   </li>

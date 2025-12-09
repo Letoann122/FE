@@ -1,11 +1,7 @@
 <template>
   <section class="position-relative text-center d-flex align-items-center justify-content-center">
-    <img
-      src="../../../assets/img/banner2.jpg"
-      alt="Banner hiến máu"
-      class="w-100"
-      style="height: 500px; opacity: 0.5"
-    />
+    <img src="../../../assets/img/banner2.jpg" alt="Banner hiến máu" class="w-100"
+      style="height: 500px; opacity: 0.5" />
     <div class="position-absolute">
       <h2 class="fw-bold display-5">Tin tức & Chiến dịch Hiến Máu</h2>
       <p class="text-dark fw-semibold">Cập nhật nhanh các hoạt động hiến máu, sự kiện và thông báo quan trọng</p>
@@ -58,22 +54,15 @@
           <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             <div v-for="(news, index) in newsList" :key="index">
               <div class="card h-100 shadow-sm">
-                <img
-                  :src="news.image_url || defaultImage"
-                  alt="news"
-                  class="card-img-top"
-                  style="height: 160px; object-fit: cover"
-                />
+                <img :src="news.image_url || defaultImage" alt="news" class="card-img-top"
+                  style="height: 160px; object-fit: cover" />
                 <div class="card-body d-flex flex-column">
                   <h6 class="fw-bold text-truncate" :title="news.title">{{ news.title }}</h6>
                   <small class="text-muted mb-2">{{ formatDate(news.published_date) }}</small>
                   <p class="card-text flex-grow-1 text-secondary small mb-3">
                     {{ truncate(news.content, 80) }}
                   </p>
-                  <router-link
-                    :to="`/news/${news.id}`"
-                    class="btn btn-outline-danger btn-sm mt-auto align-self-start"
-                  >
+                  <router-link :to="`/news/${news.id}`" class="btn btn-outline-danger btn-sm mt-auto align-self-end">
                     Xem chi tiết
                   </router-link>
                 </div>
@@ -105,12 +94,6 @@
         <div class="card border-0 bg-white mt-4 shadow-sm">
           <div class="card-header bg-danger text-white fw-bold d-flex align-items-center justify-content-between">
             <div><i class="bi bi-heart-pulse me-2"></i>Chiến dịch hiến máu</div>
-
-            <button class="btn btn-sm btn-light" @click="fetchCampaigns" :disabled="loadingCampaigns">
-              <span v-if="loadingCampaigns" class="spinner-border spinner-border-sm me-1"></span>
-              <i v-else class="bi bi-arrow-repeat me-1"></i>
-              Tải lại
-            </button>
           </div>
 
           <div class="card-body">
@@ -125,11 +108,8 @@
             </div>
 
             <div v-else class="list-group">
-              <div
-                v-for="(c, i) in campaigns"
-                :key="c.id || i"
-                class="list-group-item d-flex justify-content-between align-items-center"
-              >
+              <div v-for="(c, i) in campaigns" :key="c.id || i"
+                class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="fw-bold mb-1">{{ c.title }}</h6>
 
@@ -149,11 +129,8 @@
                 </div>
 
                 <div class="d-flex gap-2">
-                  <router-link
-                    :to="`/campaigns/${c.id}`"
-                    class="btn btn-danger btn-sm"
-                    :class="{ disabled: c.status === 'ended' }"
-                  >
+                  <router-link :to="`/campaigns/${c.id}`" class="btn btn-danger btn-sm"
+                    :class="{ disabled: c.status === 'ended' }">
                     Đăng ký tham gia
                   </router-link>
                 </div>

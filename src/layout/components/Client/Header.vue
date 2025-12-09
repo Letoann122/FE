@@ -85,6 +85,11 @@ export default {
   },
   mounted() {
     this.checkLogin();
+    this.handleSticky();
+    window.addEventListener("scroll", this.handleSticky);
+  },
+  unmounted() {
+    window.removeEventListener("scroll", this.handleSticky);
   },
   methods: {
     async checkLogin() {
@@ -107,15 +112,24 @@ export default {
         this.$router.push("/login");
       }
     },
+
     logout() {
       localStorage.removeItem("token_donor");
       this.isLoggedIn = false;
       toast.success("Đăng xuất thành công!");
       this.$router.push("/home-page");
     },
+
+    handleSticky() {
+      const nav = this.$refs.nav;
+      if (!nav) return;
+      this.navHeight = nav.offsetHeight;
+      this.isSticky = window.scrollY > this.stickyOffset;
+    },
   },
 };
 </script>
+
 
 <style scoped>
 .navbar {

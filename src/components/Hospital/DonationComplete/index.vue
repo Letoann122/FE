@@ -15,7 +15,7 @@
             <!-- Mã lịch -->
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
-              <input type="text" class="form-control" v-model="loc_lich.ma_lich" />
+              <input type="text" class="form-control" placeholder="Nhập mã lịch hiến máu" v-model="loc_lich.ma_lich" />
             </div>
 
             <!-- Từ ngày -->
@@ -53,7 +53,6 @@
             <h5 class="fw-bold text-danger mb-1">
               <i class="bi bi-droplet-half me-2"></i> Ghi nhận hiến máu
             </h5>
-            <small class="text-muted">Chỉ hiển thị lịch APPROVED</small>
           </div>
 
           <div class="card-body p-0">
@@ -68,42 +67,41 @@
 
               <table class="table table-hover align-middle mb-0">
                 <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Mã lịch</th>
-                  <th>Người hiến máu</th>
-                  <th>Ngày / Giờ</th>
-                  <th>Trạng thái</th>
-                  <th class="text-end">Thao tác</th>
-                </tr>
+                  <tr>
+                    <th>STT</th>
+                    <th>Mã lịch</th>
+                    <th>Người hiến máu</th>
+                    <th>Ngày / Giờ</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                  </tr>
                 </thead>
 
                 <tbody>
-                <tr v-for="(value, index) in paginatedData" :key="value.id">
-                  <td>{{ index + 1 + (page - 1) * per_page }}</td>
-                  <td><span class="badge bg-light text-dark">{{ value.appointment_code }}</span></td>
+                  <tr v-for="(value, index) in paginatedData" :key="value.id">
+                    <td>{{ index + 1 + (page - 1) * per_page }}</td>
+                    <td><span class="badge bg-light text-dark">{{ value.appointment_code }}</span></td>
 
-                  <td>
-                    <strong>{{ value.donor_name }}</strong>
-                    <div class="small text-muted">{{ value.donor_phone }}</div>
-                  </td>
+                    <td>
+                      <strong>{{ value.donor_name }}</strong>
+                      <div class="small text-muted">{{ value.donor_phone }}</div>
+                    </td>
 
-                  <td>
-                    {{ value.scheduled_date }}
-                    <div class="small text-muted">{{ value.time_range }}</div>
-                  </td>
+                    <td>
+                      {{ value.scheduled_date }}
+                      <div class="small text-muted">{{ value.time_range }}</div>
+                    </td>
 
-                  <td>
-                    <span class="badge bg-primary px-3">Đã duyệt</span>
-                  </td>
+                    <td>
+                      <span class="badge bg-primary px-3">Đã duyệt</span>
+                    </td>
 
-                  <td class="text-end">
-                    <button class="btn btn-sm btn-outline-success"
-                            @click="moModal(value)">
-                      <i class="bi bi-check2-circle me-1"></i> Ghi nhận
-                    </button>
-                  </td>
-                </tr>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-success" @click="moModal(value)">
+                        Ghi nhận
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
 
@@ -111,17 +109,13 @@
 
             <!-- PAGINATION -->
             <div class="d-flex justify-content-between align-items-center p-3">
-              <button class="btn btn-outline-secondary btn-sm"
-                      :disabled="page === 1"
-                      @click="page--">
+              <button class="btn btn-outline-secondary btn-sm" :disabled="page === 1" @click="page--">
                 « Trang trước
               </button>
 
               <span>Trang {{ page }} / {{ totalPages }}</span>
 
-              <button class="btn btn-outline-secondary btn-sm"
-                      :disabled="page === totalPages"
-                      @click="page++">
+              <button class="btn btn-outline-secondary btn-sm" :disabled="page === totalPages" @click="page++">
                 Trang sau »
               </button>
             </div>
@@ -244,7 +238,7 @@ export default {
         ghi_chu: "",
       },
 
-      nhom_mau_list: ["A+","A-","B+","B-","AB+","AB-","O+","O-"],
+      nhom_mau_list: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
       dang_luu: false,
     };
   },
@@ -297,8 +291,8 @@ export default {
 
     defaultDatetime(dateStr) {
       const now = new Date();
-      const [y,m,d] = dateStr.split("-");
-      return `${y}-${m}-${d}T${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+      const [y, m, d] = dateStr.split("-");
+      return `${y}-${m}-${d}T${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
     },
 
     luu() {
@@ -313,7 +307,7 @@ export default {
         blood_group: this.form.nhom_mau,
         volume_ml: this.form.so_ml,
         collected_at: this.form.thoi_diem_lay,
-        screened_ok: this.form.da_sang_loc,
+        screened_ok: this.form.da_sang_loc ? 1 : 0,
         notes: this.form.ghi_chu || "",
       };
 

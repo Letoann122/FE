@@ -1,428 +1,382 @@
 <template>
-  <div class="container-fluid py-3 blood-inventory-page">
-    <!-- Header -->
-    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+  <div class="container-fluid py-4 blood-admin-dashboard">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h5 class="mb-0">Quản lý kho máu (Admin)</h5>
-        <div class="text-muted small">Lọc nhanh • Bulk actions • Theo dõi tổng quan theo nhóm máu</div>
-      </div>
-
-      <div class="d-flex flex-wrap gap-2">
-        <button class="btn btn-outline-secondary" @click="resetFilters">
-          <i class="bx bx-eraser me-1"></i> Đặt lại
-        </button>
-        <button class="btn btn-primary" @click="refresh">
-          <i class="bx bx-refresh me-1"></i> Làm mới
-        </button>
+        <h3 class="fw-bold mb-1">🩸 Quản lý kho máu (Admin)</h3>
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="card mb-3">
-      <div class="card-body">
-        <div class="row g-3 align-items-end">
-          <div class="col-12 col-lg-3">
-            <label class="form-label">Mã túi</label>
-            <input
-              v-model.trim="filters.bag_code"
-              type="text"
-              class="form-control"
-              placeholder="VD: BAG-2025-0001"
-              @keyup.enter="applyFilters"
-            />
-          </div>
-
-          <div class="col-6 col-lg-2">
-            <label class="form-label">Nhóm máu (ABO)</label>
-            <select class="form-select" v-model="filters.abo" @change="applyFilters">
-              <option value="">Tất cả</option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="AB">AB</option>
-              <option value="O">O</option>
-            </select>
-          </div>
-
-          <div class="col-6 col-lg-2">
-            <label class="form-label">Rh</label>
-            <select class="form-select" v-model="filters.rh" @change="applyFilters">
-              <option value="">Tất cả</option>
-              <option value="+">+</option>
-              <option value="-">-</option>
-            </select>
-          </div>
-
-          <div class="col-12 col-lg-3">
-            <label class="form-label">Trạng thái</label>
-            <select class="form-select" v-model="filters.status" @change="applyFilters">
-              <option value="">Tất cả</option>
-              <option value="AVAILABLE">Có sẵn</option>
-              <option value="RESERVED">Giữ chỗ</option>
-              <option value="ISSUED">Cấp phát</option>
-              <option value="TRANSFERRED">Di chuyển</option>
-              <option value="DISCARDED">Hủy</option>
-            </select>
-          </div>
-
-          <div class="col-12 col-lg-2">
-            <label class="form-label">Từ khóa</label>
-            <input
-              v-model.trim="filters.q"
-              type="text"
-              class="form-control"
-              placeholder="Mã túi / ghi chú..."
-              @keyup.enter="applyFilters"
-            />
-          </div>
-
-          <div class="col-6 col-lg-2">
-            <label class="form-label">HSD từ</label>
-            <input v-model="filters.exp_from" type="date" class="form-control" />
-          </div>
-
-          <div class="col-6 col-lg-2">
-            <label class="form-label">HSD đến</label>
-            <input v-model="filters.exp_to" type="date" class="form-control" />
-          </div>
-
-          <div class="col-12 col-lg-2">
-            <label class="form-label">Số dòng</label>
-            <select class="form-select" v-model.number="pagination.limit" @change="applyFilters">
-              <option :value="10">10</option>
-              <option :value="20">20</option>
-              <option :value="50">50</option>
-            </select>
-          </div>
-
-          <div class="col-12 text-end">
-            <button class="btn btn-outline-secondary me-2" @click="resetFilters">
-              Đặt lại
-            </button>
-            <button class="btn btn-primary" @click="applyFilters">
-              <i class="bx bx-filter-alt me-1"></i> Áp dụng
-            </button>
+    <!-- TOP CARDS -->
+    <div class="row g-3 mb-4">
+      <div class="col-12 col-md-6 col-lg-3" v-for="(card, idx) in topCards" :key="idx">
+        <div class="card shadow-sm border-0 rounded-4 h-100">
+          <div class="card-body d-flex align-items-center justify-content-between">
+            <div>
+              <h6 class="mb-1 text-muted">{{ card.title }}</h6>
+              <h3 class="fw-bold mb-0">{{ card.value }}</h3>
+            </div>
+            <div class="display-6">{{ card.icon }}</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Chart + Summary -->
-    <div class="row g-3">
-      <div class="col-12 col-lg-6">
-        <div class="card h-100">
-          <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
-            <h6 class="mb-0">Phân bố tồn kho theo nhóm máu (ABO +/-)</h6>
-            <span class="text-muted small">Tổng: {{ stats.total_units }}</span>
-          </div>
-
-          <div class="card-body">
-            <div class="position-relative" style="min-height: 260px">
-              <canvas ref="chartEl" height="220" style="width: 100%"></canvas>
-              <div v-if="!stats.total_units" class="text-center text-muted py-4">
-                Chưa có dữ liệu để hiển thị biểu đồ
-              </div>
-            </div>
-
-            <div class="legend mt-2">
-              <div v-for="it in typeLegend" :key="it.key" class="legend-item">
-                <span class="legend-swatch" :style="{ background: it.color }"></span>
-                <span class="legend-label">{{ it.label }} ({{ it.value }})</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- KHO MÁU -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white py-3">
+        <h5 class="fw-bold mb-0">
+          <i class="bi bi-grid-3x3-gap me-2"></i>Tổng quan kho máu
+        </h5>
       </div>
-
-      <div class="col-12 col-lg-6">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="row row-cols-2 row-cols-md-4 g-3 status-row">
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Có sẵn</div>
-                  <div class="value">{{ stats.by_status.AVAILABLE || 0 }}</div>
-                  <span class="badge bg-success">AVAILABLE</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Giữ chỗ</div>
-                  <div class="value">{{ stats.by_status.RESERVED || 0 }}</div>
-                  <span class="badge bg-warning text-dark">RESERVED</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Cấp phát</div>
-                  <div class="value">{{ stats.by_status.ISSUED || 0 }}</div>
-                  <span class="badge bg-primary">ISSUED</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Hủy</div>
-                  <div class="value">{{ stats.by_status.DISCARDED || 0 }}</div>
-                  <span class="badge bg-danger">DISCARDED</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Di chuyển</div>
-                  <div class="value">{{ stats.by_status.TRANSFERRED || 0 }}</div>
-                  <span class="badge bg-info text-dark">TRANSFERRED</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Sắp hết hạn (≤ 7 ngày)</div>
-                  <div class="value">{{ stats.expiring_soon || 0 }}</div>
-                  <span class="badge bg-dark">EXPIRING</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Tổng thể tích (ml)</div>
-                  <div class="value">{{ stats.total_volume_ml || 0 }}</div>
-                  <span class="badge bg-secondary">VOLUME</span>
-                </div>
-              </div>
-              <div class="col">
-                <div class="status-card">
-                  <div class="label">Tổng đơn vị</div>
-                  <div class="value">{{ stats.total_units || 0 }}</div>
-                  <span class="badge bg-light text-dark border">UNITS</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-3 small text-muted">
-              * Summary có thể lấy từ endpoint stats, hoặc tính từ dữ liệu list tuỳ bạn.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Table -->
-    <div class="card mt-3">
-      <div class="card-body">
-        <!-- Bulk actions + selection -->
-        <div class="d-flex flex-wrap gap-2 mb-3 justify-content-between align-items-center">
-          <div class="d-flex align-items-center gap-2">
-            <input
-              type="checkbox"
-              class="form-check-input"
-              :checked="isAllSelected"
-              :disabled="!rows.length"
-              @change="toggleSelectAll($event)"
-            />
-            <span class="text-muted small">
-              Chọn tất cả • Đã chọn: <b>{{ selectedIds.length }}</b>
-            </span>
-            <button class="btn btn-outline-secondary btn-sm" :disabled="!selectedIds.length" @click="clearSelection">
-              Bỏ chọn
-            </button>
-          </div>
-
-          <div class="d-flex flex-wrap gap-2">
-            <div class="btn-group">
-              <button class="btn btn-success btn-sm" :disabled="!selectedIds.length" @click="bulkSetStatus('AVAILABLE')">
-                Có sẵn
-              </button>
-              <button class="btn btn-warning btn-sm" :disabled="!selectedIds.length" @click="bulkSetStatus('RESERVED')">
-                Giữ chỗ
-              </button>
-              <button class="btn btn-primary btn-sm" :disabled="!selectedIds.length" @click="bulkSetStatus('ISSUED')">
-                Cấp phát
-              </button>
-              <button class="btn btn-info btn-sm" :disabled="!selectedIds.length" @click="bulkSetStatus('TRANSFERRED')">
-                Di chuyển
-              </button>
-              <button class="btn btn-danger btn-sm" :disabled="!selectedIds.length" @click="bulkSetStatus('DISCARDED')">
-                Hủy
-              </button>
-            </div>
-          </div>
-        </div>
-
+      <div class="card-body p-0">
         <div class="table-responsive">
-          <table class="table table-striped align-middle">
-            <thead>
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
               <tr>
-                <th style="width:44px"></th>
-                <th>Mã túi</th>
-                <th>Nhóm</th>
-                <th>Rh</th>
-                <th class="text-end">Thể tích (ml)</th>
-                <th>Ngày thu</th>
-                <th>Hạn dùng</th>
-                <th>Trạng thái</th>
-                <th class="text-end">Thao tác</th>
+                <th>#</th>
+                <th>Nhóm máu</th>
+                <th>Số lượng</th>
+                <th>Sắp hết hạn</th>
               </tr>
             </thead>
-
             <tbody>
-              <tr v-if="loading">
-                <td colspan="9" class="text-center text-muted py-4">Đang tải dữ liệu...</td>
-              </tr>
-
-              <tr v-else-if="!rows.length">
-                <td colspan="9" class="text-center text-muted py-4">Không có dữ liệu</td>
-              </tr>
-
-              <tr v-else v-for="r in rows" :key="r.id">
+              <tr v-for="(row, index) in inventorySummary" :key="index">
+                <td>{{ index + 1 }}</td>
+                <th>{{ row.blood_type }}</th>
+                <td>{{ row.total_units }}</td>
                 <td>
-                  <input type="checkbox" class="form-check-input" :value="r.id" v-model="selectedIds" />
-                </td>
-
-                <td class="fw-semibold">
-                  {{ r.bag_code }}
-                  <div class="text-muted small" v-if="r.hospital_name">{{ r.hospital_name }}</div>
-                </td>
-
-                <td>{{ r.abo }}</td>
-                <td>{{ r.rh }}</td>
-
-                <td class="text-end">{{ r.volume_ml }}</td>
-
-                <td>{{ fmtDate(r.collected_at) }}</td>
-
-                <td>
-                  <div class="d-flex align-items-center gap-2">
-                    <span>{{ fmtDate(r.expires_at) }}</span>
-                    <span v-if="expiryBadge(r)" class="badge" :class="expiryBadge(r).cls">
-                      {{ expiryBadge(r).text }}
-                    </span>
-                  </div>
-                </td>
-
-                <td>
-                  <span class="badge" :class="statusBadge(r.status).cls">
-                    {{ statusBadge(r.status).label }}
+                  <span
+                    class="badge rounded-pill"
+                    :class="row.expiring_units > 0 ? 'bg-warning text-dark' : 'bg-success'"
+                  >
+                    {{ row.expiring_units }}
                   </span>
                 </td>
+              </tr>
 
-                <td class="text-end">
-                  <div class="btn-group">
-                    <button class="btn btn-outline-secondary btn-sm" @click="openDetail(r)" title="Xem">
-                      <i class="bx bx-show"></i>
-                    </button>
-                    <button class="btn btn-success btn-sm" @click="setStatusSingle(r, 'AVAILABLE')" title="Có sẵn">
-                      <i class="bx bx-check"></i>
-                    </button>
-                    <button class="btn btn-warning btn-sm" @click="setStatusSingle(r, 'RESERVED')" title="Giữ chỗ">
-                      <i class="bx bx-bookmark"></i>
-                    </button>
-                    <button class="btn btn-primary btn-sm" @click="setStatusSingle(r, 'ISSUED')" title="Cấp phát">
-                      <i class="bx bx-log-out-circle"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" @click="setStatusSingle(r, 'DISCARDED')" title="Hủy">
-                      <i class="bx bx-trash"></i>
-                    </button>
-                  </div>
-                </td>
+              <tr v-if="inventorySummary.length === 0">
+                <td colspan="4" class="text-center text-muted py-4">Chưa có dữ liệu kho máu.</td>
               </tr>
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
 
-        <!-- Pagination -->
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
-          <div class="text-muted small">
-            Hiển thị <b>{{ rows.length }}</b> / <b>{{ pagination.total }}</b> bản ghi
-          </div>
+    <!-- BIỂU ĐỒ NHẬP - XUẤT -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">
+          <i class="bi bi-graph-up me-2"></i>Biểu đồ nhập - xuất máu
+        </h5>
+        <div>
+          <button
+            class="btn btn-sm"
+            :class="range === 7 ? 'btn-danger' : 'btn-outline-secondary'"
+            @click="setRange(7)"
+          >
+            7 ngày
+          </button>
+          <button
+            class="btn btn-sm ms-1"
+            :class="range === 30 ? 'btn-danger' : 'btn-outline-secondary'"
+            @click="setRange(30)"
+          >
+            30 ngày
+          </button>
+        </div>
+      </div>
+      <div class="card-body" style="min-height: 260px">
+        <Line :data="chartData" :options="chartOptions" height="110" />
+      </div>
+    </div>
 
-          <div class="d-flex gap-2 align-items-center">
-            <button class="btn btn-outline-secondary btn-sm" :disabled="pagination.page <= 1 || loading" @click="gotoPage(pagination.page - 1)">
-              <i class="bx bx-chevron-left"></i>
-            </button>
-            <span class="small">Trang <b>{{ pagination.page }}</b> / <b>{{ pagination.total_pages }}</b></span>
-            <button class="btn btn-outline-secondary btn-sm" :disabled="pagination.page >= pagination.total_pages || loading" @click="gotoPage(pagination.page + 1)">
-              <i class="bx bx-chevron-right"></i>
-            </button>
-          </div>
+    <!-- DANH SÁCH LÔ MÁU MỚI NHẬP -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white py-3">
+        <h5 class="fw-bold mb-0">
+          <i class="bi bi-droplet-half me-2"></i>Danh sách lô máu mới nhập
+        </h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Mã lô</th>
+                <th>Nhóm máu</th>
+                <th>Số lượng</th>
+                <th>Ngày nhập</th>
+                <th>Hạn sử dụng</th>
+                <th>Người nhập</th>
+                <th class="text-nowrap" style="width: 110px">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(batch, index) in latestBatches" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td class="fw-bold">{{ formatBatchCode(batch.id) }}</td>
+                <td class="fw-bold">{{ batch.blood_type }}</td>
+                <td>{{ batch.units }}</td>
+                <td>{{ formatDate(batch.donation_date) }}</td>
+                <td>{{ formatDate(batch.expiry_date) }}</td>
+                <td>{{ batch.imported_by?.full_name || "-" }}</td>
+                <td class="text-nowrap">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#batchDetailModal"
+                    @click="openBatchDetail(batch)"
+                  >
+                    Xem
+                  </button>
+                </td>
+              </tr>
+
+              <tr v-if="latestBatches.length === 0">
+                <td colspan="8" class="text-center text-muted py-4">Chưa có lô máu mới.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
 
-    <!-- Detail Modal -->
-    <div v-if="detailModal.open" class="modal-backdrop-custom">
-      <div class="modal-custom">
-        <div class="modal-header">
-          <h6 class="mb-0">Chi tiết túi máu</h6>
-          <button class="btn btn-sm btn-outline-secondary" @click="detailModal.open = false">
-            <i class="bx bx-x"></i>
+    <!-- NHẬT KÝ NHẬP/XUẤT KHO -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">
+          <i class="bi bi-journal-check me-2"></i>Nhật ký nhập/xuất kho
+        </h5>
+
+        <div class="d-flex gap-2 align-items-center">
+          <select v-model="txFilters.type" class="form-select form-select-sm">
+            <option value="">Tất cả</option>
+            <option value="IN">Nhập (IN)</option>
+            <option value="OUT">Xuất (OUT)</option>
+          </select>
+
+          <input
+            v-model="txFilters.q"
+            type="text"
+            class="form-control form-control-sm"
+            style="min-width: 220px"
+            placeholder="Tìm theo nhóm máu, ghi chú, người làm..."
+          />
+
+          <input v-model="txFilters.from" type="date" class="form-control form-control-sm" />
+          <input v-model="txFilters.to" type="date" class="form-control form-control-sm" />
+        </div>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>#</th>
+                <th>Thời gian</th>
+                <th>Loại</th>
+                <th>Nhóm</th>
+                <th>Số lượng</th>
+                <th>Ghi chú</th>
+                <th>Bởi</th>
+                <th class="text-nowrap" style="width: 110px">Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(tx, index) in paginatedTransactions" :key="index">
+                <td>{{ (txPage - 1) * txPageSize + index + 1 }}</td>
+                <td style="white-space: nowrap">{{ formatDateTime(tx.occurred_at) }}</td>
+                <td>
+                  <span class="badge" :class="tx.tx_type === 'IN' ? 'bg-success' : 'bg-danger'">
+                    {{ tx.tx_type }}
+                  </span>
+                </td>
+                <td class="fw-bold">{{ tx.blood_type }}</td>
+                <td>{{ tx.units }}</td>
+                <td>{{ tx.reason || "-" }}</td>
+                <td>{{ tx.by?.full_name || "-" }}</td>
+                <td class="text-nowrap">
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#txDetailModal"
+                    @click="openTxDetail(tx)"
+                  >
+                    Xem
+                  </button>
+                </td>
+              </tr>
+
+              <tr v-if="filteredTransactions.length === 0">
+                <td colspan="8" class="text-center text-muted py-4">Không có giao dịch phù hợp.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FIX: canh phải phân trang -->
+      <div class="card-footer bg-white d-flex justify-content-end">
+        <div class="d-flex gap-2 align-items-center">
+          <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === 1" @click="txPage -= 1">
+            Trước
           </button>
+          <span class="small">Trang {{ txPage }} / {{ txTotalPages }}</span>
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            :disabled="txPage === txTotalPages"
+            @click="txPage += 1"
+          >
+            Sau
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Batch detail -->
+  <div class="modal fade" id="batchDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Chi tiết lô máu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
-          <div class="row g-2">
-            <div class="col-6">
-              <div class="text-muted small">Mã túi</div>
-              <div class="fw-semibold">{{ detailModal.row?.bag_code }}</div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="text-muted small">Mã lô</div>
+                <div class="fw-bold">{{ formatBatchCode(activeBatch.id) }}</div>
+                <hr />
+                <div class="text-muted small">Nhóm máu</div>
+                <div class="fw-bold">{{ activeBatch.blood_type || "-" }}</div>
+                <hr />
+                <div class="text-muted small">Số lượng</div>
+                <div class="fw-bold">{{ activeBatch.units ?? "-" }}</div>
+              </div>
             </div>
-            <div class="col-3">
-              <div class="text-muted small">ABO</div>
-              <div class="fw-semibold">{{ detailModal.row?.abo }}</div>
-            </div>
-            <div class="col-3">
-              <div class="text-muted small">Rh</div>
-              <div class="fw-semibold">{{ detailModal.row?.rh }}</div>
-            </div>
-            <div class="col-6">
-              <div class="text-muted small">Thể tích</div>
-              <div class="fw-semibold">{{ detailModal.row?.volume_ml }} ml</div>
-            </div>
-            <div class="col-6">
-              <div class="text-muted small">Trạng thái</div>
-              <span class="badge" :class="statusBadge(detailModal.row?.status).cls">
-                {{ statusBadge(detailModal.row?.status).label }}
-              </span>
-            </div>
-            <div class="col-6">
-              <div class="text-muted small">Ngày thu</div>
-              <div class="fw-semibold">{{ fmtDate(detailModal.row?.collected_at) }}</div>
-            </div>
-            <div class="col-6">
-              <div class="text-muted small">Hạn dùng</div>
-              <div class="fw-semibold">{{ fmtDate(detailModal.row?.expires_at) }}</div>
-            </div>
-            <div class="col-12" v-if="detailModal.row?.note">
-              <div class="text-muted small">Ghi chú</div>
-              <div>{{ detailModal.row?.note }}</div>
+
+            <div class="col-md-8">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="text-muted small">Ngày nhập</div>
+                    <div class="fw-semibold">{{ formatDate(activeBatch.donation_date) }}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="text-muted small">Hạn sử dụng</div>
+                    <div class="fw-semibold">{{ formatDate(activeBatch.expiry_date) }}</div>
+                  </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="text-muted small">Người nhập</div>
+                    <div class="fw-semibold">{{ activeBatch.imported_by?.full_name || "-" }}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="text-muted small">Hospital</div>
+                    <div class="fw-semibold">{{ activeBatch.hospital_name || "-" }}</div>
+                  </div>
+                </div>
+
+                <hr />
+
+                <div class="text-muted small">Người hiến (username)</div>
+                <div class="fw-semibold">{{ activeBatch.donor_username || "-" }}</div>
+              </div>
             </div>
           </div>
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" @click="detailModal.open = false">Đóng</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Reason Modal (optional) -->
-    <div v-if="reasonModal.open" class="modal-backdrop-custom">
-      <div class="modal-custom">
-        <div class="modal-header">
-          <h6 class="mb-0">Lý do bắt buộc</h6>
-          <button class="btn btn-sm btn-outline-secondary" @click="closeReasonModal">
-            <i class="bx bx-x"></i>
-          </button>
+  <!-- MODAL: Transaction detail -->
+  <div class="modal fade" id="txDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Chi tiết giao dịch kho</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body">
-          <div class="mb-2">
-            Chuyển trạng thái sang: <b>{{ statusBadge(reasonModal.nextStatus).label }}</b> ({{ reasonModal.ids.length }} túi)
-          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="text-muted small">Mã giao dịch</div>
+                <div class="fw-bold">{{ activeTx.id || "-" }}</div>
+                <hr />
+                <div class="text-muted small">Loại</div>
+                <div>
+                  <span class="badge" :class="activeTx.tx_type === 'IN' ? 'bg-success' : 'bg-danger'">
+                    {{ activeTx.tx_type || "-" }}
+                  </span>
+                </div>
+                <hr />
+                <div class="text-muted small">Thời gian</div>
+                <div class="fw-semibold">{{ formatDateTime(activeTx.occurred_at) }}</div>
+              </div>
+            </div>
 
-          <label class="form-label">Nhập lý do</label>
-          <textarea v-model.trim="reasonModal.reason" class="form-control" rows="3" placeholder="VD: Hết hạn / Lỗi xét nghiệm / Di chuyển kho..."></textarea>
-          <div class="text-muted small mt-1">* Không để trống.</div>
+            <div class="col-md-8">
+              <div class="border rounded-3 p-3 h-100">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="text-muted small">Nhóm máu</div>
+                    <div class="fw-semibold">{{ activeTx.blood_type || "-" }}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="text-muted small">Số lượng</div>
+                    <div class="fw-semibold">{{ activeTx.units ?? "-" }}</div>
+                  </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="text-muted small">Bởi</div>
+                    <div class="fw-semibold">{{ activeTx.by?.full_name || "-" }}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="text-muted small">Lô máu</div>
+                    <div class="fw-semibold">{{ formatBatchCode(activeTx.inventory_id) }}</div>
+                  </div>
+                </div>
+
+                <hr />
+
+                <div class="text-muted small">Ghi chú</div>
+                <div class="fw-semibold">{{ activeTx.reason || "-" }}</div>
+
+                <hr />
+
+                <div class="text-muted small">Thông tin lô (nếu có)</div>
+                <div class="fw-semibold">
+                  Nhập: {{ formatDate(activeTx.batch_donation_date) }} — Hết hạn:
+                  {{ formatDate(activeTx.batch_expiry_date) }}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="modal-footer">
-          <button class="btn btn-outline-secondary" @click="closeReasonModal">Hủy</button>
-          <button class="btn btn-primary" :disabled="!reasonModal.reason" @click="confirmReasonUpdate">Xác nhận</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
         </div>
       </div>
     </div>
@@ -430,380 +384,226 @@
 </template>
 
 <script>
-import Chart from "chart.js/auto";
+import baseRequestAdmin from "../../../core/baseRequestAdmin";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "vue-chartjs";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default {
-  name: "AdminBloodInventoryPage",
+  name: "AdminBloodInventory",
+  components: { Line },
   data() {
     return {
-      loading: false,
+      range: 7,
+      topCards: [
+        { title: "Tổng túi máu", value: 0, icon: "🩸" },
+        { title: "Nhập trong kỳ", value: 0, icon: "📥" },
+        { title: "Xuất trong kỳ", value: 0, icon: "📤" },
+        { title: "Sắp hết hạn", value: 0, icon: "⏳" },
+      ],
 
-      filters: {
-        bag_code: "",
-        abo: "",
-        rh: "",
-        status: "",
-        q: "",
-        exp_from: "",
-        exp_to: "",
+      inventorySummary: [],
+      latestBatches: [],
+      transactions: [],
+
+      txFilters: { type: "", q: "", from: "", to: "" },
+      txPage: 1,
+      txPageSize: 8,
+
+      activeBatch: {},
+      activeTx: {},
+
+      chartData: {
+        labels: [],
+        datasets: [
+          { label: "Nhập kho", data: [] },
+          { label: "Xuất kho", data: [] },
+        ],
       },
-
-      rows: [], // demo data below (bạn thay bằng API)
-      selectedIds: [],
-
-      pagination: {
-        page: 1,
-        limit: 10,
-        total: 0,
-        total_pages: 1,
-      },
-
-      stats: {
-        total_units: 0,
-        total_volume_ml: 0,
-        expiring_soon: 0,
-        by_status: {
-          AVAILABLE: 0,
-          RESERVED: 0,
-          ISSUED: 0,
-          TRANSFERRED: 0,
-          DISCARDED: 0,
-        },
-        by_type_rh: {
-          "A+": 0, "A-": 0,
-          "B+": 0, "B-": 0,
-          "AB+": 0, "AB-": 0,
-          "O+": 0, "O-": 0,
-        },
-      },
-
-      chart: null,
-
-      detailModal: { open: false, row: null },
-
-      reasonModal: {
-        open: false,
-        ids: [],
-        nextStatus: "",
-        reason: "",
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: true } },
       },
     };
   },
-
-  computed: {
-    isAllSelected() {
-      if (!this.rows.length) return false;
-      const ids = this.rows.map((x) => x.id);
-      return ids.every((id) => this.selectedIds.includes(id));
-    },
-
-    typeLegend() {
-      const colors = {
-        "A+": "#17a2b8",
-        "A-": "#6610f2",
-        "B+": "#28a745",
-        "B-": "#6f42c1",
-        "AB+": "#ffc107",
-        "AB-": "#e83e8c",
-        "O+": "#fd7e14",
-        "O-": "#dc3545",
-      };
-      const order = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-      return order.map((k) => ({
-        key: k,
-        label: k,
-        value: this.stats.by_type_rh[k] || 0,
-        color: colors[k],
-      }));
-    },
-  },
-
   mounted() {
-    // Demo data (bạn thay API)
-    this.seedDemo();
-    this.computeStatsFromRows();
-    this.renderChart();
+    this.loadData();
   },
+  computed: {
+    filteredTransactions() {
+      const type = (this.txFilters.type || "").trim().toUpperCase();
+      const q = (this.txFilters.q || "").trim().toLowerCase();
+      const from = this.txFilters.from ? new Date(this.txFilters.from) : null;
+      const to = this.txFilters.to ? new Date(this.txFilters.to) : null;
 
-  beforeUnmount() {
-    if (this.chart) this.chart.destroy();
-  },
+      return (this.transactions || []).filter((tx) => {
+        if (type && tx.tx_type !== type) return false;
 
-  methods: {
-    // ---------------- demo / later replace with API ----------------
-    seedDemo() {
-      const data = [
-        { id: 1, bag_code: "BAG-0001", abo: "A", rh: "+", volume_ml: 350, collected_at: "2025-11-10", expires_at: "2025-12-10", status: "AVAILABLE", hospital_name: "BV A" },
-        { id: 2, bag_code: "BAG-0002", abo: "O", rh: "-", volume_ml: 250, collected_at: "2025-11-05", expires_at: "2025-11-30", status: "RESERVED", hospital_name: "BV B" },
-        { id: 3, bag_code: "BAG-0003", abo: "B", rh: "+", volume_ml: 450, collected_at: "2025-11-20", expires_at: "2025-12-20", status: "ISSUED", hospital_name: "BV A" },
-        { id: 4, bag_code: "BAG-0004", abo: "AB", rh: "+", volume_ml: 350, collected_at: "2025-11-21", expires_at: "2025-11-26", status: "DISCARDED", hospital_name: "BV C", note: "Hết hạn" },
-      ];
-      this.rows = data;
-      this.pagination.total = data.length;
-      this.pagination.total_pages = 1;
-      this.pagination.page = 1;
-    },
+        if (q) {
+          const hay = [tx.blood_type, tx.reason, tx.by?.full_name, String(tx.id)]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
 
-    computeStatsFromRows() {
-      const byStatus = { AVAILABLE: 0, RESERVED: 0, ISSUED: 0, TRANSFERRED: 0, DISCARDED: 0 };
-      const byTypeRh = { "A+": 0, "A-": 0, "B+": 0, "B-": 0, "AB+": 0, "AB-": 0, "O+": 0, "O-": 0 };
+        if (from) {
+          const d = new Date(tx.occurred_at);
+          d.setHours(0, 0, 0, 0);
+          const f = new Date(from);
+          f.setHours(0, 0, 0, 0);
+          if (d < f) return false;
+        }
 
-      let totalUnits = 0;
-      let totalVol = 0;
-      let expSoon = 0;
+        if (to) {
+          const d = new Date(tx.occurred_at);
+          d.setHours(0, 0, 0, 0);
+          const t = new Date(to);
+          t.setHours(0, 0, 0, 0);
+          if (d > t) return false;
+        }
 
-      const now = new Date();
-      const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
-
-      for (const r of this.rows) {
-        totalUnits += 1;
-        totalVol += Number(r.volume_ml || 0);
-        byStatus[r.status] = (byStatus[r.status] || 0) + 1;
-
-        const key = `${r.abo}${r.rh}`;
-        if (byTypeRh[key] !== undefined) byTypeRh[key] += 1;
-
-        const exp = new Date(r.expires_at);
-        if (!Number.isNaN(exp.getTime()) && exp >= now && exp <= addDays(now, 7)) expSoon += 1;
-      }
-
-      this.stats.total_units = totalUnits;
-      this.stats.total_volume_ml = totalVol;
-      this.stats.expiring_soon = expSoon;
-      this.stats.by_status = byStatus;
-      this.stats.by_type_rh = byTypeRh;
-
-      this.updateChart();
-    },
-
-    // ---------------- actions ----------------
-    refresh() {
-      // sau này: gọi API + cập nhật chart
-      this.computeStatsFromRows();
-    },
-
-    applyFilters() {
-      // sau này: gọi API theo filters
-      this.computeStatsFromRows();
-    },
-
-    gotoPage(p) {
-      this.pagination.page = p;
-      this.applyFilters();
-    },
-
-    resetFilters() {
-      this.filters = { bag_code: "", abo: "", rh: "", status: "", q: "", exp_from: "", exp_to: "" };
-      this.selectedIds = [];
-      this.applyFilters();
-    },
-
-    toggleSelectAll(e) {
-      const checked = e?.target?.checked;
-      if (!checked) return this.clearSelection();
-      this.selectedIds = this.rows.map((r) => r.id);
-    },
-
-    clearSelection() {
-      this.selectedIds = [];
-    },
-
-    bulkSetStatus(nextStatus) {
-      if (!this.selectedIds.length) return;
-
-      if (["DISCARDED", "TRANSFERRED"].includes(nextStatus)) {
-        this.reasonModal.open = true;
-        this.reasonModal.ids = [...this.selectedIds];
-        this.reasonModal.nextStatus = nextStatus;
-        this.reasonModal.reason = "";
-        return;
-      }
-
-      this.rows = this.rows.map((r) => (this.selectedIds.includes(r.id) ? { ...r, status: nextStatus } : r));
-      this.clearSelection();
-      this.computeStatsFromRows();
-    },
-
-    setStatusSingle(row, nextStatus) {
-      if (!row?.id) return;
-
-      if (["DISCARDED", "TRANSFERRED"].includes(nextStatus)) {
-        this.reasonModal.open = true;
-        this.reasonModal.ids = [row.id];
-        this.reasonModal.nextStatus = nextStatus;
-        this.reasonModal.reason = "";
-        return;
-      }
-
-      this.rows = this.rows.map((r) => (r.id === row.id ? { ...r, status: nextStatus } : r));
-      this.computeStatsFromRows();
-    },
-
-    closeReasonModal() {
-      this.reasonModal.open = false;
-      this.reasonModal.ids = [];
-      this.reasonModal.nextStatus = "";
-      this.reasonModal.reason = "";
-    },
-
-    confirmReasonUpdate() {
-      const { ids, nextStatus, reason } = this.reasonModal;
-      if (!reason) return;
-
-      this.rows = this.rows.map((r) =>
-        ids.includes(r.id) ? { ...r, status: nextStatus, note: reason } : r
-      );
-
-      this.closeReasonModal();
-      this.clearSelection();
-      this.computeStatsFromRows();
-    },
-
-    openDetail(row) {
-      this.detailModal.row = row;
-      this.detailModal.open = true;
-    },
-
-    // ---------------- UI helpers ----------------
-    fmtDate(v) {
-      if (!v) return "-";
-      const d = new Date(v);
-      if (Number.isNaN(d.getTime())) return "-";
-      return new Intl.DateTimeFormat("vi-VN").format(d);
-    },
-
-    daysToExpire(row) {
-      if (!row?.expires_at) return null;
-      const exp = new Date(row.expires_at);
-      if (Number.isNaN(exp.getTime())) return null;
-      const now = new Date();
-      return Math.floor((exp.getTime() - now.getTime()) / 86400000);
-    },
-
-    expiryBadge(row) {
-      const d = this.daysToExpire(row);
-      if (d === null) return null;
-      if (d < 0) return { text: "Hết hạn", cls: "bg-dark" };
-      if (d <= 7) return { text: `Còn ${d}d`, cls: "bg-warning text-dark" };
-      return null;
-    },
-
-    statusBadge(status) {
-      const map = {
-        AVAILABLE: { label: "Có sẵn", cls: "bg-success" },
-        RESERVED: { label: "Giữ chỗ", cls: "bg-warning text-dark" },
-        ISSUED: { label: "Cấp phát", cls: "bg-primary" },
-        TRANSFERRED: { label: "Di chuyển", cls: "bg-info text-dark" },
-        DISCARDED: { label: "Hủy", cls: "bg-danger" },
-      };
-      return map[status] || { label: status || "-", cls: "bg-secondary" };
-    },
-
-    // ---------------- Chart ----------------
-    renderChart() {
-      const el = this.$refs.chartEl;
-      if (!el) return;
-
-      if (this.chart) {
-        this.chart.destroy();
-        this.chart = null;
-      }
-
-      const labels = this.typeLegend.map((x) => x.label);
-      const values = this.typeLegend.map((x) => x.value);
-      const colors = this.typeLegend.map((x) => x.color);
-
-      this.chart = new Chart(el, {
-        type: "doughnut",
-        data: {
-          labels,
-          datasets: [{ data: values, backgroundColor: colors, borderWidth: 0 }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          cutout: "60%",
-        },
+        return true;
       });
     },
 
-    updateChart() {
-      if (!this.chart) return this.renderChart();
-      this.chart.data.datasets[0].data = this.typeLegend.map((x) => x.value);
-      this.chart.update();
+    txTotalPages() {
+      const total = this.filteredTransactions.length;
+      return Math.max(1, Math.ceil(total / this.txPageSize));
+    },
+
+    paginatedTransactions() {
+      const page = Math.min(this.txPage, this.txTotalPages);
+      const start = (page - 1) * this.txPageSize;
+      return this.filteredTransactions.slice(start, start + this.txPageSize);
+    },
+  },
+  watch: {
+    txFilters: {
+      deep: true,
+      handler() {
+        this.txPage = 1;
+      },
+    },
+    filteredTransactions() {
+      if (this.txPage > this.txTotalPages) this.txPage = this.txTotalPages;
+    },
+  },
+  methods: {
+    reload() {
+      this.loadData();
+    },
+
+    setRange(v) {
+      this.range = v;
+      this.loadData();
+    },
+
+    loadData() {
+      const fallback = "Không thể tải dữ liệu kho máu!";
+      baseRequestAdmin
+        .get(`admin/blood-inventory/dashboard?range=${this.range}`)
+        .then((res) => {
+          if (res.data.status) {
+            const data = res.data.data || {};
+
+            const cards = data.cards || {};
+            this.topCards = [
+              { title: "Tổng túi máu", value: cards.total_units ?? 0, icon: "🩸" },
+              { title: "Nhập trong kỳ", value: cards.in_units ?? 0, icon: "📥" },
+              { title: "Xuất trong kỳ", value: cards.out_units ?? 0, icon: "📤" },
+              { title: "Sắp hết hạn", value: cards.expiring_units ?? 0, icon: "⏳" },
+            ];
+
+            this.inventorySummary = data.inventory || [];
+
+            const chart = data.chart || {};
+            this.chartData = {
+              labels: chart.labels || [],
+              datasets: [
+                {
+                  label: "Nhập kho",
+                  data: chart.in_series || [],
+                  borderColor: "#dc2626",
+                  backgroundColor: "rgba(220,38,38,0.15)",
+                  pointBackgroundColor: "#dc2626",
+                  pointBorderColor: "#dc2626",
+                  borderWidth: 2,
+                  tension: 0.35,
+                  fill: true,
+                },
+                {
+                  label: "Xuất kho",
+                  data: chart.out_series || [],
+                  borderColor: "#f59e0b",
+                  backgroundColor: "rgba(245,158,11,0.18)",
+                  pointBackgroundColor: "#f59e0b",
+                  pointBorderColor: "#f59e0b",
+                  borderWidth: 2,
+                  tension: 0.35,
+                  fill: true,
+                },
+              ],
+            };
+
+            this.latestBatches = data.latest_batches || [];
+            this.transactions = data.transactions || [];
+          } else {
+            this.$toast.error(res.data.message || fallback);
+          }
+        })
+        .catch((error) => {
+          const message = error.response?.data?.message || fallback;
+          this.$toast.error(message);
+        });
+    },
+
+    openBatchDetail(batch) {
+      this.activeBatch = { ...(batch || {}) };
+    },
+
+    openTxDetail(tx) {
+      this.activeTx = { ...(tx || {}) };
+    },
+
+    formatBatchCode(id) {
+      if (id === null || id === undefined) return "-";
+      const num = Number(id);
+      if (Number.isNaN(num)) return `BL${String(id)}`;
+      return `BL${String(num).padStart(6, "0")}`;
+    },
+
+    formatDate(d) {
+      if (!d) return "-";
+      return new Date(d).toLocaleDateString("vi-VN");
+    },
+
+    formatDateTime(d) {
+      if (!d) return "-";
+      return new Date(d).toLocaleString("vi-VN");
     },
   },
 };
 </script>
 
 <style scoped>
-/* Legend */
-.legend {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
-}
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.legend-swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-}
-.status-card {
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 14px;
-  padding: 12px;
-  background: #fff;
-}
-.status-card .label {
-  font-size: 12px;
-  color: #6c757d;
-}
-.status-card .value {
-  font-size: 20px;
-  font-weight: 800;
-  line-height: 1.1;
-  margin: 6px 0;
+.table {
+  font-size: 15px;
 }
 
-/* Simple modal */
-.modal-backdrop-custom {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  z-index: 9999;
-}
-.modal-custom {
-  width: min(720px, 100%);
-  background: #fff;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-}
-.modal-header,
-.modal-footer {
-  padding: 12px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  border-bottom: 1px solid #eee;
-}
-.modal-footer {
-  border-top: 1px solid #eee;
-  border-bottom: none;
-  justify-content: flex-end;
-}
-.modal-body {
-  padding: 14px;
+.modal-content {
+  border-radius: 1rem;
 }
 </style>

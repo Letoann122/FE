@@ -47,6 +47,11 @@
               </router-link>
             </li>
             <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/Hospital/donation-complete" exact-active-class="active">
+                Ghi nhận hiến máu
+              </router-link>
+            </li>
+            <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/campaign-management" exact-active-class="active">
                 Chiến dịch
               </router-link>
