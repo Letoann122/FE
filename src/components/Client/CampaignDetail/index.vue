@@ -103,7 +103,11 @@
               </div>
 
               <div class="col-12 d-flex gap-2">
-                <button class="btn btn-danger w-100" @click="submit" :disabled="submitting || !canSubmit">
+                <button
+                  class="btn btn-danger w-100"
+                  @click="submit"
+                  :disabled="submitting || !canSubmit"
+                >
                   <span v-if="submitting" class="spinner-border spinner-border-sm me-1"></span>
                   Đăng ký chiến dịch
                 </button>
@@ -166,7 +170,14 @@ export default {
     },
 
     async submit() {
-      if (!this.canSubmit) return;
+      if (!this.canSubmit) {
+        if (this.campaign?.status === "ended") {
+          this.$toast?.error?.("Chiến dịch đã kết thúc, không thể đăng ký.");
+        } else {
+          this.$toast?.error?.("Vui lòng chọn ngày và khung giờ tham gia.");
+        }
+        return;
+      }
 
       this.submitting = true;
       try {
@@ -182,7 +193,7 @@ export default {
 
         if (res.data?.status) {
           this.$toast?.success?.(res.data.message || "Đăng ký thành công!");
-          this.$router.push("/blood-donation-history");
+          this.$router.push("/register-blooddonation");
         } else {
           this.$toast?.error?.(res.data?.message || "Đăng ký thất bại!");
         }

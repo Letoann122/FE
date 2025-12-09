@@ -12,7 +12,7 @@
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
               <input type="text" class="form-control" v-model="filters.appointment_code"
-                placeholder="Nhập mã lịch hiến máu..." />
+                placeholder="Nhập mã lịch hiến máu" />
             </div>
 
             <div class="mb-3">
@@ -147,8 +147,6 @@
               <div class="col-lg-6">
                 <p class="mb-2">
                   <strong>Mã lịch:</strong> {{ selected.appointment_code }}
-                  <span v-if="selected.is_campaign" class="badge bg-info text-dark ms-2">Chiến dịch</span>
-                  <span v-else class="badge bg-secondary ms-2">Đặt lịch</span>
                 </p>
 
                 <p v-if="selected.is_campaign" class="mb-2">

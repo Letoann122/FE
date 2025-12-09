@@ -94,12 +94,6 @@
         <div class="card border-0 bg-white mt-4 shadow-sm">
           <div class="card-header bg-danger text-white fw-bold d-flex align-items-center justify-content-between">
             <div><i class="bi bi-heart-pulse me-2"></i>Chiến dịch hiến máu</div>
-
-            <button class="btn btn-sm btn-light" @click="fetchCampaigns" :disabled="loadingCampaigns">
-              <span v-if="loadingCampaigns" class="spinner-border spinner-border-sm me-1"></span>
-              <i v-else class="bi bi-arrow-repeat me-1"></i>
-              Tải lại
-            </button>
           </div>
 
           <div class="card-body">

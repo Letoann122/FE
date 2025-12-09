@@ -85,7 +85,7 @@ export default {
           localStorage.setItem("user", JSON.stringify(res.data.data));
           if (role === "admin") {
             localStorage.setItem("token_admin", token);
-            this.$router.push("/admin/home");
+            this.$router.push("/admin/dashboard");
           } else if (role === "doctor") {
             localStorage.setItem("token_doctor", token);
             this.$router.push("/Hospital/dashboard");
