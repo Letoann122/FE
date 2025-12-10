@@ -6,7 +6,9 @@
         <h3 class="fw-bold mb-1 text-danger">
           <i class="bi bi-bullseye me-2"></i>Chi tiết chiến dịch
         </h3>
-        <p class="text-muted mb-0">Thông tin chi tiết và danh sách donor tham gia.</p>
+        <p class="text-muted mb-0">
+          Thông tin chi tiết và danh sách donor tham gia.
+        </p>
       </div>
 
       <div>
@@ -14,12 +16,23 @@
           <i class="bi bi-arrow-left me-1"></i>Quay lại
         </button>
 
-        <!-- ❌ Disable khi đã ended -->
-        <button class="btn btn-warning me-2" @click="openEditModal" :disabled="isClosed">
+        <!-- Disable khi đã ended -->
+        <button
+          class="btn btn-warning me-2"
+          :disabled="isClosed"
+          data-bs-toggle="modal"
+          data-bs-target="#editCampaignModal"
+          @click="prepareEdit"
+        >
           <i class="bi bi-pencil me-1"></i>Sửa
         </button>
 
-        <button class="btn btn-danger" @click="openCloseModal" v-if="!isClosed">
+        <button
+          class="btn btn-danger"
+          v-if="!isClosed"
+          data-bs-toggle="modal"
+          data-bs-target="#closeCampaignModal"
+        >
           <i class="bi bi-x-circle me-1"></i>Đóng chiến dịch
         </button>
       </div>
@@ -32,20 +45,26 @@
           <div class="card-body">
             <h5 class="fw-bold text-danger">{{ campaign.title }}</h5>
             <p class="text-muted small mb-3">
-              Tạo bởi: <strong>{{ campaign.creator?.full_name }}</strong>
+              Tạo bởi:
+              <strong>{{ campaign.creator?.full_name }}</strong>
             </p>
 
             <ul class="list-group list-group-flush small">
               <li class="list-group-item d-flex justify-content-between">
                 <span>Loại chiến dịch</span>
-                <button class="btn btn-sm" :class="campaign.is_emergency ? 'btn-danger' : 'btn-info'">
+                <button
+                  class="btn btn-sm"
+                  :class="campaign.is_emergency ? 'btn-danger' : 'btn-info'"
+                >
                   {{ campaign.is_emergency ? "Khẩn cấp" : "Định kỳ" }}
                 </button>
               </li>
 
               <li class="list-group-item d-flex justify-content-between">
                 <span>Thời gian</span>
-                <strong>{{ formatRange(campaign.start_date, campaign.end_date) }}</strong>
+                <strong>
+                  {{ formatRange(campaign.start_date, campaign.end_date) }}
+                </strong>
               </li>
 
               <li class="list-group-item d-flex justify-content-between">
@@ -87,26 +106,28 @@
             <i class="bi bi-card-text text-danger me-2"></i>Mô tả chiến dịch
           </div>
           <div class="card-body">
-            <p class="text-muted">{{ campaign.content || "Không có mô tả" }}</p>
+            <p class="text-muted">
+              {{ campaign.content || "Không có mô tả" }}
+            </p>
           </div>
         </div>
 
         <!-- LIST -->
         <div class="card shadow-sm border-0">
-          <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+          <div
+            class="card-header bg-white fw-bold d-flex justify-content-between align-items-center"
+          >
             <span>
-              <i class="bi bi-people-fill text-danger me-2"></i>Danh sách lịch hẹn
+              <i class="bi bi-people-fill text-danger me-2"></i>Danh sách lịch
+              hẹn
             </span>
-
-            <button class="btn btn-success btn-sm" :disabled="!canViewAppointments">
-              <i class="bi bi-download me-2"></i>Xuất danh sách
-            </button>
           </div>
 
-          <!-- ✅ Nếu chưa duyệt -->
+          <!-- Nếu chưa duyệt -->
           <div v-if="!canViewAppointments" class="p-4 text-center text-muted">
             <i class="bi bi-shield-lock fs-3 d-block mb-2"></i>
-            Chiến dịch <strong>chưa được Admin duyệt</strong> nên chưa hiển thị danh sách lịch hẹn.
+            Chiến dịch <strong>chưa được Admin duyệt</strong> nên chưa hiển thị
+            danh sách lịch hẹn.
           </div>
 
           <div v-else class="table-responsive">
@@ -148,13 +169,23 @@
       </div>
     </div>
 
-    <!-- CLOSE MODAL -->
-    <div class="modal fade" id="closeCampaignModal" tabindex="-1">
+    <!-- CLOSE MODAL (Bootstrap data-api) -->
+    <div
+      class="modal fade"
+      id="closeCampaignModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-danger">Xác nhận đóng chiến dịch</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -162,49 +193,94 @@
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-            <button class="btn btn-danger" @click="confirmClose">Xác nhận</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
+            <!-- modal tự đóng bằng data-bs-dismiss -->
+            <button
+              class="btn btn-danger"
+              @click="confirmClose"
+              data-bs-dismiss="modal"
+            >
+              Xác nhận
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- EDIT MODAL -->
-    <div class="modal fade" id="editCampaignModal" tabindex="-1">
+    <!-- EDIT MODAL (Bootstrap data-api) -->
+    <div
+      class="modal fade"
+      id="editCampaignModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-danger">Sửa chiến dịch</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              class="btn-close"
+              type="button"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
 
           <div class="modal-body">
             <div class="mb-3">
               <label class="form-label">Tiêu đề</label>
-              <input type="text" class="form-control" v-model="form.title" :disabled="!canEditFull" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="form.title"
+                :disabled="!canEditFull"
+              />
             </div>
 
             <div class="mb-3">
               <label class="form-label">Mô tả</label>
-              <textarea class="form-control" rows="3" v-model="form.content"></textarea>
+              <textarea
+                class="form-control"
+                rows="3"
+                v-model="form.content"
+              ></textarea>
             </div>
 
             <div class="row g-3">
               <div class="col-6">
                 <label class="form-label">Ngày bắt đầu</label>
-                <input type="date" class="form-control" v-model="form.start_date" :disabled="!canEditFull" />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="form.start_date"
+                  :disabled="!canEditFull"
+                />
               </div>
 
               <div class="col-6">
                 <label class="form-label">Ngày kết thúc</label>
-                <input type="date" class="form-control" v-model="form.end_date" :disabled="!canEditFull" />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="form.end_date"
+                  :disabled="!canEditFull"
+                />
               </div>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-            <button class="btn btn-warning" @click="confirmEdit">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
+            <!-- modal tự đóng, mình chỉ call API -->
+            <button
+              class="btn btn-warning"
+              @click="confirmEdit"
+              data-bs-dismiss="modal"
+            >
               <i class="bi bi-save me-1"></i>Lưu
             </button>
           </div>
@@ -213,6 +289,7 @@
     </div>
   </div>
 
+  <!-- LOADING -->
   <div v-else class="text-center py-5">
     <div class="spinner-border text-danger"></div>
   </div>
@@ -220,7 +297,6 @@
 
 <script>
 import baseRequestDoctor from "../../../core/baseRequestDoctor";
-import * as bootstrap from "bootstrap";
 
 export default {
   data() {
@@ -228,8 +304,6 @@ export default {
       loaded: false,
       campaign: {},
       appointments: [],
-      modalClose: null,
-      modalEdit: null,
       form: {},
       canEditFull: true,
     };
@@ -237,12 +311,6 @@ export default {
 
   mounted() {
     const id = this.$route.params.id;
-
-    this.$nextTick(() => {
-      this.modalClose = new bootstrap.Modal(document.getElementById("closeCampaignModal"));
-      this.modalEdit = new bootstrap.Modal(document.getElementById("editCampaignModal"));
-    });
-
     this.loadDetail(id);
   },
 
@@ -262,9 +330,11 @@ export default {
         if (res.data.status) {
           this.campaign = res.data.data;
 
-          // ✅ chỉ load appointments khi đã duyệt
+          // chỉ load appointments khi đã duyệt
           if (this.campaign.approval_status === "approved") {
-            const rs2 = await baseRequestDoctor.get(`/doctor/campaigns/${id}/appointments`);
+            const rs2 = await baseRequestDoctor.get(
+              `/doctor/campaigns/${id}/appointments`
+            );
             this.appointments = rs2.data.status ? rs2.data.data : [];
           } else {
             this.appointments = [];
@@ -277,9 +347,10 @@ export default {
       }
     },
 
-    openEditModal() {
+    // chuẩn bị dữ liệu trước khi mở modal sửa
+    prepareEdit() {
       if (this.isClosed) {
-        this.$toast.error("Chiến dịch đã đóng — không thể sửa!");
+        this.$toast?.error?.("Chiến dịch đã đóng — không thể sửa!");
         return;
       }
 
@@ -288,8 +359,6 @@ export default {
       const now = new Date();
       const start = new Date(this.campaign.start_date);
       this.canEditFull = start > now;
-
-      this.modalEdit.show();
     },
 
     confirmEdit() {
@@ -297,35 +366,42 @@ export default {
         .put(`/doctor/campaigns/${this.campaign.id}`, this.form)
         .then((res) => {
           if (res.data.status) {
-            this.$toast.success(res.data.message || "Cập nhật chiến dịch thành công!");
-            this.modalEdit.hide();
+            this.$toast?.success?.(
+              res.data.message || "Cập nhật chiến dịch thành công!"
+            );
             this.loadDetail(this.campaign.id);
           } else {
-            this.$toast.error(res.data.message || "Không thể cập nhật chiến dịch");
+            this.$toast?.error?.(
+              res.data.message || "Không thể cập nhật chiến dịch"
+            );
           }
         })
-        .catch(() => this.$toast.error("Lỗi server!"));
-    },
-
-    openCloseModal() {
-      this.modalClose.show();
+        .catch(() => this.$toast?.error?.("Lỗi server!"));
     },
 
     confirmClose() {
-      baseRequestDoctor.patch(`/doctor/campaigns/${this.campaign.id}/close`).then((res) => {
-        if (res.data.status) {
-          this.$toast.success("Đã đóng chiến dịch!");
-          this.modalClose.hide();
-          this.loadDetail(this.campaign.id);
-        } else {
-          this.$toast.error(res.data.message || "Không thể đóng chiến dịch");
-        }
-      });
+      baseRequestDoctor
+        .patch(`/doctor/campaigns/${this.campaign.id}/close`)
+        .then((res) => {
+          if (res.data.status) {
+            this.$toast?.success?.("Đã đóng chiến dịch!");
+            this.loadDetail(this.campaign.id);
+          } else {
+            this.$toast?.error?.(
+              res.data.message || "Không thể đóng chiến dịch"
+            );
+          }
+        })
+        .catch(() => this.$toast?.error?.("Lỗi server!"));
     },
 
     formatRange(s, e) {
       if (!s || !e) return "-";
-      return new Date(s).toLocaleDateString("vi-VN") + " - " + new Date(e).toLocaleDateString("vi-VN");
+      return (
+        new Date(s).toLocaleDateString("vi-VN") +
+        " - " +
+        new Date(e).toLocaleDateString("vi-VN")
+      );
     },
 
     getCampaignStatus(item) {

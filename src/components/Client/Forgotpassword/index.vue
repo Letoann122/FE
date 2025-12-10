@@ -42,7 +42,7 @@ export default {
   methods: {
     async GuiMatKhau() {
       try {
-        const res = await axios.axios.post(`${API_BASE}/forgot-password`, {
+        const res = await axios.post(`${API_BASE}/forgot-password`, {
           email: this.benh_nhan.email,
         });
 

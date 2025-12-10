@@ -1,5 +1,6 @@
 <template>
   <div class="campaign-management-page container-fluid py-4">
+    <!-- ROW 1: FILTER + CREATE -->
     <div class="row g-4">
       <!-- LEFT: FILTER + STATS -->
       <div class="col-lg-3">
@@ -29,9 +30,8 @@
                 </select>
               </div>
 
-              <!-- ✅ APPROVAL FILTER -->
               <div class="col-12">
-                <label class="form-label small">Duyệt (Admin)</label>
+                <label class="form-label small">Tình trạng</label>
                 <select v-model="filters.approval_status" class="form-select form-select-sm">
                   <option value="">Tất cả</option>
                   <option value="pending">Chờ duyệt</option>
@@ -43,7 +43,6 @@
               <div class="col-12">
                 <label class="form-label small">Thời gian</label>
                 <select v-model="filters.time" class="form-select form-select-sm">
-                  <!-- ✅ FIX: có "Tất cả" và mặc định sẽ là "" -->
                   <option value="">Tất cả</option>
                   <option value="this_month">Tháng này</option>
                   <option value="last_month">Tháng trước</option>
@@ -52,7 +51,6 @@
                 </select>
               </div>
 
-              <!-- DATE RANGE -->
               <div class="col-12" v-if="filters.time === 'custom'">
                 <label class="form-label small">Từ ngày</label>
                 <input type="date" class="form-control form-control-sm" v-model="filters.start_from" />
@@ -63,9 +61,9 @@
                 <input type="date" class="form-control form-control-sm" v-model="filters.start_to" />
               </div>
 
-              <div class="col-12 d-grid">
-                <button class="btn btn-danger btn-sm" @click="applyFilter">
-                  <i class="bi bi-search"></i> Lọc
+              <div class="col-12 d-flex justify-content-end mt-3">
+                <button class="btn btn-danger" @click="applyFilter">
+                  <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i> Lọc
                 </button>
               </div>
             </div>
@@ -91,9 +89,8 @@
         </div>
       </div>
 
-      <!-- RIGHT: CREATE + LIST -->
+      <!-- RIGHT: CREATE -->
       <div class="col-lg-9">
-        <!-- CREATE -->
         <div class="card shadow-sm mb-4">
           <div class="card-body">
             <h5 class="card-title mb-4">
@@ -138,7 +135,12 @@
                 </div>
 
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" value="donation_site" v-model="form.locate_type" />
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="donation_site"
+                    v-model="form.locate_type"
+                  />
                   <label class="form-check-label">Chọn từ điểm hiến máu</label>
                 </div>
               </div>
@@ -181,8 +183,12 @@
             </form>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- LIST -->
+    <!-- ROW 2: LIST FULL WIDTH -->
+    <div class="row g-4 mt-0 mt-lg-4">
+      <div class="col-12">
         <div class="card shadow-sm">
           <div class="card-body">
             <h5 class="card-title mb-3">
@@ -287,7 +293,7 @@ export default {
         type: "",
         status: "",
         approval_status: "",
-        time: "", // ✅ FIX: mặc định là tất cả
+        time: "",
         start_from: "",
         start_to: "",
       },
@@ -305,7 +311,6 @@ export default {
   },
 
   watch: {
-    // ✅ nếu không phải custom thì clear date range để khỏi gửi bậy
     "filters.time"(val) {
       if (val !== "custom") {
         this.filters.start_from = "";
@@ -323,15 +328,12 @@ export default {
     buildFilterParams() {
       const params = { ...this.filters };
 
-      // ✅ FIX: time="" => không gửi time để backend không tự lọc
       if (!params.time) delete params.time;
 
-      // ✅ nếu không custom thì bỏ start_from/start_to
       if (params.time !== "custom") {
         delete params.start_from;
         delete params.start_to;
       } else {
-        // custom mà thiếu 1 trong 2 thì cũng khỏi gửi để tránh backend lọc sai
         if (!params.start_from || !params.start_to) {
           delete params.start_from;
           delete params.start_to;
@@ -435,3 +437,5 @@ export default {
   font-weight: 500;
 }
 </style>
+  
+Copy vô là card danh sách sẽ full container luôn, khỏi kéo ngang nữa 😎

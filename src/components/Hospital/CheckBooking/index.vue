@@ -15,22 +15,22 @@
                 placeholder="Nhập mã lịch hiến máu" />
             </div>
 
+            <!-- ĐỔI THÀNH TỪ NGÀY / ĐẾN NGÀY -->
             <div class="mb-3">
-              <label class="form-label small">Ngày hiến máu</label>
-              <input type="date" class="form-control" v-model="filters.date" />
+              <label class="form-label small">Ngày hiến từ</label>
+              <input type="date" class="form-control" v-model="filters.from_date" />
             </div>
 
-            <button class="btn btn-danger w-100" @click="applyFilter" :disabled="loadingList">
-              <span v-if="loadingList" class="spinner-border spinner-border-sm me-1"></span>
-              <i v-else class="bi bi-funnel me-1"></i>
-              Lọc lịch hiến máu
-            </button>
+            <div class="mb-3">
+              <label class="form-label small">Ngày hiến đến</label>
+              <input type="date" class="form-control" v-model="filters.to_date" />
+            </div>
 
-            <hr />
-
-            <p class="small text-muted mb-1">
-              Tổng số lịch hiến máu: <strong>{{ totalAppointments }}</strong>
-            </p>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-danger mt-2" @click="applyFilter">
+                Lọc dữ liệu
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -46,7 +46,8 @@
 
           <div class="card-body p-0">
             <div v-if="!loadingList && paginatedAppointments.length === 0" class="p-4 text-center text-muted">
-              <i class="bi bi-inbox me-1"></i> Không có lịch hiến máu nào phù hợp.
+              <i class="bi bi-inbox me-1"></i> Không có lịch hiến máu nào phù
+              hợp.
             </div>
 
             <div v-else-if="loadingList" class="p-4 text-center text-muted">
@@ -90,14 +91,8 @@
                 </tbody>
               </table>
 
-              <!-- Pagination -->
-              <div class="d-flex align-items-center justify-content-between px-3 py-3 border-top">
-                <div class="small text-muted">
-                  Hiển thị
-                  <strong>{{ pageFrom }}</strong> - <strong>{{ pageTo }}</strong>
-                  / <strong>{{ totalAppointments }}</strong> lịch
-                </div>
-
+              <!-- Pagination: ĐẨY SANG GÓC PHẢI -->
+              <div class="d-flex align-items-center justify-content-end px-3 py-3 border-top">
                 <nav aria-label="Pagination">
                   <ul class="pagination mb-0">
                     <li class="page-item" :class="{ disabled: currentPage === 1 }">
@@ -106,8 +101,10 @@
                       </button>
                     </li>
 
-                    <li v-for="p in pageNumbers" :key="String(p)" class="page-item"
-                      :class="{ active: p === currentPage, disabled: p === '...' }">
+                    <li v-for="p in pageNumbers" :key="String(p)" class="page-item" :class="{
+                      active: p === currentPage,
+                      disabled: p === '...',
+                    }">
                       <button v-if="p !== '...'" class="page-link" @click="goToPage(p)">
                         {{ p }}
                       </button>
@@ -150,7 +147,8 @@
                 </p>
 
                 <p v-if="selected.is_campaign" class="mb-2">
-                  <strong>Chiến dịch:</strong> {{ selected.campaign_title || "Không rõ" }}
+                  <strong>Chiến dịch:</strong>
+                  {{ selected.campaign_title || "Không rõ" }}
                 </p>
 
                 <p><strong>Người hiến:</strong> {{ selected.donor_name }}</p>
@@ -165,21 +163,31 @@
 
                 <p>
                   <strong>Địa điểm:</strong>
-                  {{ selected.location_display || selected.donation_site_name || "" }}
+                  {{
+                    selected.location_display ||
+                    selected.donation_site_name ||
+                    ""
+                  }}
                 </p>
 
                 <p>
                   <strong>Bệnh viện:</strong>
-                  <span v-if="selected.is_campaign && selected.campaign_locate_type === 'custom'">
+                  <span v-if="
+                    selected.is_campaign &&
+                    selected.campaign_locate_type === 'custom'
+                  ">
                     Tự chọn
                   </span>
                   <span v-else>
-                    {{ selected.hospital_display || selected.hospital_name || "" }}
+                    {{
+                      selected.hospital_display || selected.hospital_name || ""
+                    }}
                   </span>
                 </p>
 
                 <p>
-                  <strong>Lượng máu dự kiến:</strong> {{ selected.preferred_volume_ml }} ml
+                  <strong>Lượng máu dự kiến:</strong>
+                  {{ selected.preferred_volume_ml }} ml
                 </p>
               </div>
 
@@ -248,7 +256,8 @@ export default {
     return {
       filters: {
         appointment_code: "",
-        date: "",
+        from_date: "",
+        to_date: "",
       },
       appointments: [],
       loadingList: false,
@@ -296,7 +305,9 @@ export default {
       if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
 
       const pages = new Set([1, 2, total - 1, total, cur - 1, cur, cur + 1]);
-      const arr = [...pages].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
+      const arr = [...pages]
+        .filter((p) => p >= 1 && p <= total)
+        .sort((a, b) => a - b);
 
       const out = [];
       for (let i = 0; i < arr.length; i++) {
@@ -308,15 +319,21 @@ export default {
   },
 
   mounted() {
-    this.detailModal = bootstrap.Modal.getOrCreateInstance(this.$refs.detailModalEl, {
-      backdrop: "static",
-      keyboard: true,
-    });
+    this.detailModal = bootstrap.Modal.getOrCreateInstance(
+      this.$refs.detailModalEl,
+      {
+        backdrop: "static",
+        keyboard: true,
+      }
+    );
 
-    this.rejectModal = bootstrap.Modal.getOrCreateInstance(this.$refs.rejectModalEl, {
-      backdrop: "static",
-      keyboard: true,
-    });
+    this.rejectModal = bootstrap.Modal.getOrCreateInstance(
+      this.$refs.rejectModalEl,
+      {
+        backdrop: "static",
+        keyboard: true,
+      }
+    );
 
     this.$refs.rejectModalEl.addEventListener("hidden.bs.modal", () => {
       if (this.reopenDetailAfterRejectClose && this.selected) {
@@ -349,11 +366,14 @@ export default {
         .get("doctor/donation-appointments", { params })
         .then((res) => {
           if (res.data?.status) {
-            const list = (res.data.data || []).filter((x) => x.status === "REQUESTED");
+            const list = (res.data.data || []).filter(
+              (x) => x.status === "REQUESTED"
+            );
             this.appointments = list;
             this.totalAppointments = list.length;
 
-            if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
+            if (this.currentPage > this.totalPages)
+              this.currentPage = this.totalPages;
             if (this.currentPage < 1) this.currentPage = 1;
           }
         })
@@ -364,8 +384,10 @@ export default {
 
     applyFilter() {
       const params = {};
-      if (this.filters.appointment_code) params.appointment_code = this.filters.appointment_code;
-      if (this.filters.date) params.date = this.filters.date;
+      if (this.filters.appointment_code)
+        params.appointment_code = this.filters.appointment_code;
+      if (this.filters.from_date) params.from_date = this.filters.from_date;
+      if (this.filters.to_date) params.to_date = this.filters.to_date;
 
       this.currentPage = 1;
       this.loadAppointments(params);
@@ -467,7 +489,9 @@ export default {
         document.body.classList.remove("modal-open");
         document.body.style.removeProperty("padding-right");
         document.querySelectorAll(".modal-backdrop").forEach((b) => b.remove());
-        document.querySelectorAll(".modal.show").forEach((m) => m.classList.remove("show"));
+        document.querySelectorAll(".modal.show").forEach((m) =>
+          m.classList.remove("show")
+        );
       }, 200);
     },
   },

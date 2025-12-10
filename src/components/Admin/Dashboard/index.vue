@@ -15,10 +15,6 @@
           <option value="month">Tháng này</option>
           <option value="year">Năm nay</option>
         </select>
-        <button class="btn btn-primary btn-sm" :disabled="loading" @click="fetchDashboardData">
-          <i v-if="!loading" class="bi bi-arrow-clockwise"></i>
-          <span v-else class="spinner-border spinner-border-sm"></span>
-        </button>
       </div>
     </div>
 
@@ -55,10 +51,7 @@
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm rounded-3 h-100">
           <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-            <h6 class="fw-bold m-0">Tăng trưởng người dùng & Lượt hiến</h6>
-            <button class="btn btn-sm btn-light text-muted" @click="downloadGrowthCsv">
-              <i class="bi bi-download"></i>
-            </button>
+            <h6 class="fw-bold m-0">Thống kê người dùng mới và lượt hiến</h6>
           </div>
           <div class="card-body">
             <div v-if="loading" class="text-center py-4">
@@ -411,7 +404,6 @@ export default {
           icon: "bi bi-hourglass-split fs-5",
           iconBg: "bg-warning-subtle",
           iconColor: "warning",
-          borderClass: "border-start border-4 border-warning",
         },
         {
           title: "Kho máu toàn quốc",
@@ -632,22 +624,6 @@ export default {
       } finally {
         this.approvingKey = null;
       }
-    },
-
-    downloadGrowthCsv() {
-      const labels = this.growthChartData.labels || [];
-      const ds = this.growthChartData.datasets || [];
-      let csv = "label," + ds.map((d) => d.label).join(",") + "\n";
-      for (let i = 0; i < labels.length; i++) {
-        csv += labels[i] + "," + ds.map((d) => d.data[i] || 0).join(",") + "\n";
-      }
-      const blob = new Blob([csv], { type: "text/csv" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `growth-${this.filterTime}.csv`;
-      a.click();
-      URL.revokeObjectURL(url);
     },
   },
 

@@ -1,16 +1,5 @@
 <template>
   <div class="container-fluid py-4 min-vh-100">
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link>
-        </li>
-        <li class="breadcrumb-item active">
-          Danh sách lô — {{ typeLabel }}
-        </li>
-      </ol>
-    </nav>
-
     <div class="card shadow-sm border-0 mb-4">
       <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
         <div>

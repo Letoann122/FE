@@ -1,21 +1,16 @@
 <template>
   <div class="blood-batch-detail-wrapper container-fluid py-4">
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link to="/Hospital/blood-inventory">Quản lý kho máu</router-link>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">
-          Chi tiết lô máu #{{ idText }}
-        </li>
-      </ol>
-    </nav>
-
+    <!-- HEADER + NÚT QUAY LẠI -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="fw-bold mb-1">Chi tiết lô máu #{{ idText }}</h2>
         <p class="text-muted">Thông tin chi tiết và lịch sử hoạt động của lô máu.</p>
       </div>
+
+      <!-- Nút quay lại -->
+      <router-link class="btn btn-secondary btn-sm" :to="backLink">
+        <i class="bi bi-arrow-left me-1"></i>Quay lại
+      </router-link>
     </div>
 
     <!-- INFO CARDS -->
@@ -89,7 +84,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -113,6 +107,24 @@ export default {
   computed: {
     idText() {
       return this.id ? "BL" + this.id.toString().padStart(6, "0") : "";
+    },
+
+    // LINK QUAY LẠI
+    backLink() {
+      const bt = this.batch?.blood_type || null;
+
+      // Nếu chưa có thông tin nhóm máu (lúc mới load) thì quay về trang tổng kho
+      if (!bt || (!bt.abo && !bt.rh)) {
+        return { path: "/Hospital/blood-inventory" };
+      }
+
+      const type = `${bt.abo || ""}${bt.rh || ""}`;
+
+      // Quay lại trang danh sách lô theo nhóm máu
+      return {
+        path: "/Hospital/blood-inventory-by-type",
+        query: { type },
+      };
     },
 
     uiStatus() {
