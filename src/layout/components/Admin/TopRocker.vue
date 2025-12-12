@@ -6,19 +6,21 @@
           <h4 class="logo-text text-danger">Admin</h4>
         </div>
         <div class="ms-auto user-box dropdown">
-          <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret"
-            href="#" data-bs-toggle="dropdown">
+          <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#"
+            data-bs-toggle="dropdown">
             <img src="../../../assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar" />
             <div class="user-info ps-3">
-              <p class="user-name mb-0">{{ user.full_name || "Đang tải..." }}</p>
+              <p class="user-name mb-0">
+                {{ user.full_name || "Đang tải..." }}
+              </p>
               <p class="designattion mb-0">Admin</p>
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <router-link to="/admin/profile">
-              <li><a class="dropdown-item"><i class="bx bx-user"></i><span>Profile</span></a></li>
-            </router-link>
-            <li><a class="dropdown-item text-danger" @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</a></li>
+            <li>
+              <a class="dropdown-item text-danger" @click="logout"><i class="fa-solid fa-right-from-bracket"></i> Đăng
+                xuất</a>
+            </li>
           </ul>
         </div>
       </nav>

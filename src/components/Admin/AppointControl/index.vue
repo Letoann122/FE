@@ -9,18 +9,28 @@
         <p class="text-muted mb-0">Điều phối lịch hẹn toàn hệ thống</p>
       </div>
     </div>
+
+    <!-- BỘ LỌC -->
     <div class="card shadow-sm border-0 rounded-4 mb-3">
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-2">
             <label class="form-label small">Keyword</label>
-            <input class="form-control" v-model="filters.keyword" placeholder="Tên / mã / SĐT" />
+            <input
+              class="form-control"
+              v-model="filters.keyword"
+              placeholder="Tên / mã / SĐT"
+            />
           </div>
           <div class="col-md-2">
             <label class="form-label small">Trạng thái</label>
             <select class="form-select" v-model="filters.status">
               <option value="">Tất cả</option>
-              <option v-for="(status, i) in statuses" :key="i" :value="status">
+              <option
+                v-for="(status, i) in statuses"
+                :key="i"
+                :value="status"
+              >
                 {{ status }}
               </option>
             </select>
@@ -52,42 +62,65 @@
             <input type="date" class="form-control" v-model="filters.toDate" />
           </div>
         </div>
+
         <div class="mt-3 d-flex justify-content-end">
           <button class="btn btn-primary mt-3" @click="applyFilter">
             <i class="fa-solid fa-filter me-2"></i>
             Tìm
           </button>
         </div>
+
         <hr />
+
         <div class="d-flex justify-content-between align-items-center">
           <div class="small text-muted">
             Tổng: <b>{{ filtered.length }}</b> lịch
           </div>
+
           <div class="d-flex gap-2">
-            <button class="btn btn-outline-primary btn-sm" 
-              @click="openModal('approve')">
+            <button
+              class="btn btn-outline-primary btn-sm"
+              @click="openModal('approve')"
+              :data-bs-toggle="selectedIds.length ? 'modal' : null"
+              :data-bs-target="selectedIds.length ? '#bulkActionModal' : null"
+            >
               Duyệt hàng loạt
             </button>
-            <button class="btn btn-outline-danger btn-sm"  @click="openModal('cancel')">
+            <button
+              class="btn btn-outline-danger btn-sm"
+              @click="openModal('cancel')"
+              :data-bs-toggle="selectedIds.length ? 'modal' : null"
+              :data-bs-target="selectedIds.length ? '#bulkActionModal' : null"
+            >
               Huỷ hàng loạt
             </button>
-            <button class="btn btn-outline-secondary btn-sm" 
-              @click="openModal('notify')">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              @click="openModal('notify')"
+              :data-bs-toggle="selectedIds.length ? 'modal' : null"
+              :data-bs-target="selectedIds.length ? '#bulkActionModal' : null"
+            >
               Gửi thông báo
             </button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- DANH SÁCH -->
     <div class="card shadow-sm border-0 rounded-4">
       <div class="card-body table-responsive">
         <table class="table table-hover align-middle">
           <thead class="table-light">
             <tr>
               <th>
-                <input type="checkbox" class="form-check-input" :checked="allChecked" @change="toggleAll" />
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  :checked="allChecked"
+                  @change="toggleAll"
+                />
               </th>
-
               <th>STT</th>
               <th>Mã lịch</th>
               <th>Donor</th>
@@ -105,8 +138,12 @@
           <tbody>
             <tr v-for="(item, index) in paged" :key="item.id">
               <td>
-                <input type="checkbox" class="form-check-input" :checked="selectedMap[item.id]"
-                  @change="toggleOne(item.id)" />
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  :checked="selectedMap[item.id]"
+                  @change="toggleOne(item.id)"
+                />
               </td>
 
               <td>{{ (page - 1) * perPage + index + 1 }}</td>
@@ -119,7 +156,10 @@
               <td>{{ item.date }}</td>
 
               <td>
-                <span class="badge rounded-pill" :class="statusBadge(item.status)">
+                <span
+                  class="badge rounded-pill"
+                  :class="statusBadge(item.status)"
+                >
                   {{ item.status }}
                 </span>
               </td>
@@ -127,7 +167,12 @@
               <td>{{ item.doctorName || "—" }}</td>
 
               <td>
-                <button class="btn btn-sm btn-primary" @click="openDetail(item)">
+                <button
+                  class="btn btn-sm btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#detailModal"
+                  @click="openDetail(item)"
+                >
                   Chi tiết
                 </button>
               </td>
@@ -141,23 +186,38 @@
           </tbody>
         </table>
 
-        <!-- 🚀 PAGINATION -->
-        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
+        <!-- PAGINATION -->
+        <div
+          class="d-flex justify-content-between align-items-center mt-3 px-2"
+        >
           <div class="text-muted small">
             Trang <b>{{ page }}</b> / <b>{{ totalPages }}</b>
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-outline-secondary btn-sm" :disabled="page === 1" @click="prevPage">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              :disabled="page === 1"
+              @click="prevPage"
+            >
               ‹
             </button>
 
-            <button v-for="p in totalPages" :key="p" class="btn btn-sm"
-              :class="p === page ? 'btn-primary' : 'btn-outline-secondary'" @click="goPage(p)">
+            <button
+              v-for="p in totalPages"
+              :key="p"
+              class="btn btn-sm"
+              :class="p === page ? 'btn-primary' : 'btn-outline-secondary'"
+              @click="goPage(p)"
+            >
               {{ p }}
             </button>
 
-            <button class="btn btn-outline-secondary btn-sm" :disabled="page === totalPages" @click="nextPage">
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              :disabled="page === totalPages"
+              @click="nextPage"
+            >
               ›
             </button>
           </div>
@@ -165,7 +225,7 @@
       </div>
     </div>
 
-    <!-- ================= DETAIL MODAL ================= -->
+    <!-- DETAIL MODAL -->
     <div class="modal fade" id="detailModal" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
@@ -214,28 +274,26 @@
                   <td>{{ detail?.date || "—" }}</td>
                 </tr>
 
-                <!-- REQUESTED + APPROVED → Dự kiến -->
-                <tr v-if="
-                  detail?.status === 'REQUESTED' ||
-                  detail?.status === 'APPROVED'
-                ">
+                <tr
+                  v-if="
+                    detail?.status === 'REQUESTED' ||
+                    detail?.status === 'APPROVED'
+                  "
+                >
                   <th>Dự kiến (ml):</th>
-                  <td>{{ detail?.preferred_volume_ml || "—" }}</td>
+                  <td>{{ detail?.preferred_volume_ml || '—' }}</td>
                 </tr>
 
-                <!-- REJECTED -->
                 <tr v-if="detail?.status === 'REJECTED'">
                   <th>Lý do từ chối:</th>
-                  <td>{{ detail?.rejected_reason || "—" }}</td>
+                  <td>{{ detail?.rejected_reason || '—' }}</td>
                 </tr>
 
-                <!-- COMPLETED -->
                 <tr v-if="detail?.status === 'COMPLETED'">
                   <th>Thực nhận (ml):</th>
-                  <td>{{ detail?.actual_volume_ml || "—" }}</td>
+                  <td>{{ detail?.actual_volume_ml || '—' }}</td>
                 </tr>
 
-                <!-- Campaign -->
                 <tr v-if="detail?.campaign_name">
                   <th>Chiến dịch:</th>
                   <td>{{ detail?.campaign_name }}</td>
@@ -268,13 +326,17 @@
       </div>
     </div>
 
-    <!-- ================= BULK ACTION MODAL ================= -->
+    <!-- BULK ACTION MODAL -->
     <div class="modal fade" id="bulkActionModal" tabindex="-1">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title fw-bold">{{ modalTitle }}</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="bulkCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -282,7 +344,6 @@
               Số lịch xử lý: <b>{{ selectedIds.length }}</b>
             </p>
 
-            <!-- APPROVE INFO -->
             <template v-if="action === 'approve'">
               <div class="alert alert-info small">
                 Admin duyệt lịch — không cần chỉ định bác sĩ.
@@ -290,7 +351,11 @@
             </template>
 
             <label class="form-label fw-bold mt-3">Ghi chú</label>
-            <textarea class="form-control" rows="3" v-model="bulkForm.note"></textarea>
+            <textarea
+              class="form-control"
+              rows="3"
+              v-model="bulkForm.note"
+            ></textarea>
           </div>
 
           <div class="modal-footer">
@@ -308,7 +373,6 @@
 </template>
 
 <script>
-import * as bootstrap from "bootstrap";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
 
 export default {
@@ -351,9 +415,6 @@ export default {
 
       action: "",
       bulkForm: { note: "" },
-
-      bulkModalInstance: null,
-      detailModalInstance: null,
     };
   },
 
@@ -378,9 +439,7 @@ export default {
     },
 
     allChecked() {
-      return (
-        this.paged.length && this.paged.every((x) => this.selectedMap[x.id])
-      );
+      return this.paged.length && this.paged.every((x) => this.selectedMap[x.id]);
     },
 
     modalTitle() {
@@ -403,7 +462,6 @@ export default {
             this.appointments = res.data.data;
             this.doctors = res.data.doctors;
             this.sites = res.data.sites;
-
             this.applyFilter();
           } else {
             this.$toast.error(res.data.message);
@@ -464,18 +522,17 @@ export default {
 
     openDetail(item) {
       this.detail = { ...item };
-      const modal = document.getElementById("detailModal");
-      this.detailModalInstance = bootstrap.Modal.getOrCreateInstance(modal);
-      this.detailModalInstance.show();
+      // modal mở bằng data-bs-toggle trên nút
     },
 
     openModal(type) {
-      if (!this.selectedIds.length) return this.$toast.info("Chọn lịch trước!");
+      if (!this.selectedIds.length) {
+        this.$toast.info("Chọn lịch trước!");
+        return;
+      }
       this.action = type;
       this.bulkForm = { note: "" };
-      const modal = document.getElementById("bulkActionModal");
-      this.bulkModalInstance = bootstrap.Modal.getOrCreateInstance(modal);
-      this.bulkModalInstance.show();
+      // modal mở bằng data-bs-toggle / data-bs-target
     },
 
     submitBulk() {
@@ -493,19 +550,15 @@ export default {
       baseRequestAdmin
         .post(url, payload)
         .then((res) => {
-          // 🚨 Nếu BE trả về status=false → show toast error
           if (!res.data.status) {
             this.$toast.error(res.data.message);
             return;
           }
 
-          // Thành công
           this.$toast.success(res.data.message);
-
-          // Reload + reset
           this.loadData();
           this.selectedMap = {};
-          this.bulkModalInstance.hide();
+          this.$refs.bulkCloseBtn?.click(); // đóng modal qua nút có data-bs-dismiss
         })
         .catch(() => this.$toast.error("Lỗi xử lý!"));
     },
