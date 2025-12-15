@@ -29,16 +29,8 @@
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/guide-health" exact-active-class="active">Hướng dẫn sức khoẻ</router-link>
             </li>
-            <li class="nav-item dropdown mx-3">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Mục lục
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Xem thêm</a></li>
-                <li><a class="dropdown-item" href="#">Xem thêm</a></li>
-                <li><a class="dropdown-item" href="#">Xem thêm</a></li>
-              </ul>
+            <li class="nav-item mx-3">
+              <router-link class="nav-link" to="/contact" exact-active-class="active">Liên hệ</router-link>
             </li>
           </ul>
           <div v-if="!isLoggedIn" class="d-flex">

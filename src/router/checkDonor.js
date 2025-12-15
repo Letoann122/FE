@@ -2,12 +2,14 @@ import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 
 const toaster = createToaster({ position: "top-right" });
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export default function (to, from, next) {
-    if (import.meta.env.VITE_SKIP_TOKEN === "true") {
-    console.log("⚙️ DEV MODE: Bỏ qua checkToken (admin)");
+  if (import.meta.env.VITE_SKIP_TOKEN === "true") {
+    console.log("⚙️ DEV MODE: Bỏ qua checkToken (donor)");
     return next();
   }
+
   const token = localStorage.getItem("token_donor");
   if (!token) {
     toaster.error("Vui lòng đăng nhập tài khoản người hiến máu!");
@@ -15,7 +17,7 @@ export default function (to, from, next) {
   }
 
   axios
-    .get("http://localhost:4000/api/donor/check-token", {
+    .get(`${API_BASE}/api/donor/check-token`, {
       headers: {
         Authorization: "Bearer " + token,
       },

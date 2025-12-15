@@ -2,21 +2,22 @@ import axios from "axios";
 import { createToaster } from "@meforma/vue-toaster";
 
 const toaster = createToaster({ position: "top-right" });
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export default function (to, from, next) {
   if (import.meta.env.VITE_SKIP_TOKEN === "true") {
     console.log("⚙️ DEV MODE: Bỏ qua checkToken (admin)");
     return next();
   }
-  const token = localStorage.getItem("token_admin");
 
+  const token = localStorage.getItem("token_admin");
   if (!token) {
     toaster.error("Vui lòng đăng nhập tài khoản admin!");
     return next("/login");
   }
 
   axios
-    .get("http://localhost:4000/api/admin/check-token", {
+    .get(`${API_BASE}/api/admin/check-token`, {
       headers: {
         Authorization: "Bearer " + token,
       },

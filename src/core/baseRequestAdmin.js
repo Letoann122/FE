@@ -3,8 +3,11 @@ import { createToaster } from "@meforma/vue-toaster";
 
 const toast = createToaster();
 
+// Lấy base URL từ env, fallback localhost cho chắc
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
 const baseRequestAdmin = axios.create({
-  baseURL: "http://localhost:4000/api",
+  baseURL: `${API_BASE}/api`,
   timeout: 8000,
 });
 

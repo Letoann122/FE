@@ -1,10 +1,8 @@
 <template>
   <main class="dashboard-content p-4">
     <!-- ===== ALERT (API) ===== -->
-    <div
-      v-if="loaded && alerts.lowGroups && alerts.lowGroups.length > 0"
-      class="alert alert-danger d-flex align-items-center mb-4 rounded-3 shadow-sm"
-    >
+    <div v-if="loaded && alerts.lowGroups && alerts.lowGroups.length > 0"
+      class="alert alert-danger d-flex align-items-center mb-4 rounded-3 shadow-sm">
       <i class="fas fa-bell me-2 fs-5"></i>
       <div>
         Cảnh báo khẩn cấp: Nhóm máu
@@ -38,13 +36,9 @@
             <h5 class="mb-0 fw-bold">Tổng quan Kho máu</h5>
 
             <div class="btn-group btn-group-sm">
-              <button
-                v-for="btn in timeFilters"
-                :key="btn.value"
-                class="btn"
+              <button v-for="btn in timeFilters" :key="btn.value" class="btn"
                 :class="activeInventoryFilter === btn.value ? 'btn-primary' : 'btn-outline-primary'"
-                @click="changeInventoryFilter(btn.value)"
-              >
+                @click="changeInventoryFilter(btn.value)">
                 {{ btn.label }}
               </button>
             </div>
@@ -85,13 +79,9 @@
             <h5 class="mb-0 fw-bold">Tổng quan Lịch hẹn</h5>
 
             <div class="btn-group btn-group-sm">
-              <button
-                v-for="btn in timeFilters"
-                :key="btn.value"
-                class="btn"
+              <button v-for="btn in timeFilters" :key="btn.value" class="btn"
                 :class="activeAppointmentFilter === btn.value ? 'btn-primary' : 'btn-outline-primary'"
-                @click="changeAppointmentFilter(btn.value)"
-              >
+                @click="changeAppointmentFilter(btn.value)">
                 {{ btn.label }}
               </button>
             </div>
@@ -152,12 +142,8 @@
           </div>
 
           <div class="card-body">
-            <div
-              v-for="item in campaignsUI"
-              :key="item.id"
-              class="campaign-item p-3 mb-3 rounded-3"
-              :style="{ backgroundColor: item.bg, borderLeftColor: item.border }"
-            >
+            <div v-for="item in campaignsUI" :key="item.id" class="campaign-item p-3 mb-3 rounded-3"
+              :style="{ backgroundColor: item.bg, borderLeftColor: item.border }">
               <h6 class="fw-bold mb-1">{{ item.name }}</h6>
               <p class="small text-muted mb-1">{{ item.time }}</p>
               <span :class="'badge ' + item.badgeClass">{{ item.badge }}</span>
@@ -182,12 +168,8 @@
           </div>
 
           <div class="card-body">
-            <div
-              v-for="(n, i) in notificationsUI"
-              :key="i"
-              class="alert p-3 mb-3 rounded-3 small"
-              :class="alertClass(n.severity)"
-            >
+            <div v-for="(n, i) in notificationsUI" :key="i" class="alert p-3 mb-3 rounded-3 small"
+              :class="alertClass(n.severity)">
               <i :class="iconClass(n.severity) + ' me-2'"></i>
               {{ n.message }}
             </div>
@@ -314,11 +296,11 @@ export default {
       appointmentChartData: {
         labels: [],
         datasets: [
-          { label: "REQUESTED", data: [] },
-          { label: "APPROVED", data: [] },
-          { label: "REJECTED", data: [] },
-          { label: "COMPLETED", data: [] },
-          { label: "CANCELLED", data: [] },
+          { label: "Chờ duyệt", data: [] },
+          { label: "Đã duyệt", data: [] },
+          { label: "Từ chối", data: [] },
+          { label: "Hoàn thành", data: [] },
+          { label: "Huỷ", data: [] },
         ],
       },
       appointmentChartOptions: {

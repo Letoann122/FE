@@ -18,10 +18,16 @@
           class="form-control ps-5"
           style="width: 260px"
         />
-        <i class="fas fa-search position-absolute top-50 translate-middle-y start-0 ms-2 text-muted"></i>
+        <i
+          class="fas fa-search position-absolute top-50 translate-middle-y start-0 ms-2 text-muted"
+        ></i>
       </div>
 
-      <select class="form-select" v-model="tim_kiem.vai_tro" style="width: 150px;">
+      <select
+        class="form-select"
+        v-model="tim_kiem.vai_tro"
+        style="width: 150px"
+      >
         <option value="">Tất cả vai trò</option>
         <option value="doctor">Bác sĩ</option>
         <option value="donor">Người hiến máu</option>
@@ -42,43 +48,89 @@
         </thead>
 
         <tbody v-if="users.length > 0">
-          <tr v-for="(user,index) in users" :key="index">
+          <tr v-for="(user, index) in users" :key="index">
             <td>{{ user.full_name }}</td>
             <td>{{ user.email }}</td>
             <td>
-              <span v-if="user.role === 'doctor'" class="badge bg-primary">Doctor</span>
+              <span
+                v-if="user.role === 'doctor'"
+                class="badge bg-primary"
+                >Doctor</span
+              >
               <span v-else class="badge bg-secondary">Donor</span>
             </td>
             <td>{{ formatDate(user.created_at) }}</td>
 
             <td class="text-center">
-              <button class="btn btn-info btn-sm me-1" @click="openQuickView(user)">Xem</button>
-              <button class="btn btn-primary btn-sm" @click="openEditModal(user)">Sửa</button>
+              <button
+                class="btn btn-info btn-sm me-1"
+                data-bs-toggle="modal"
+                data-bs-target="#quickViewModal"
+                @click="openQuickView(user)"
+              >
+                Xem
+              </button>
+              <button
+                class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#editUserModal"
+                @click="openEditModal(user)"
+              >
+                Sửa
+              </button>
             </td>
           </tr>
         </tbody>
 
         <tbody v-else>
           <tr>
-            <td colspan="5" class="text-center py-4 text-muted">Không có người dùng nào.</td>
+            <td colspan="5" class="text-center py-4 text-muted">
+              Không có người dùng nào.
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <!-- PAGINATION -->
-    <div class="d-flex justify-content-center mt-4" v-if="pagination.totalPages > 1">
+    <div
+      class="d-flex justify-content-center mt-4"
+      v-if="pagination.totalPages > 1"
+    >
       <ul class="pagination">
-        <li class="page-item" :class="{disabled: pagination.currentPage === 1}">
-          <button class="page-link" @click="changePage(pagination.currentPage - 1)">«</button>
+        <li
+          class="page-item"
+          :class="{ disabled: pagination.currentPage === 1 }"
+        >
+          <button
+            class="page-link"
+            @click="changePage(pagination.currentPage - 1)"
+          >
+            «
+          </button>
         </li>
 
-        <li v-for="p in pagination.totalPages" :key="p" class="page-item" :class="{active: pagination.currentPage === p}">
+        <li
+          v-for="p in pagination.totalPages"
+          :key="p"
+          class="page-item"
+          :class="{ active: pagination.currentPage === p }"
+        >
           <button class="page-link" @click="changePage(p)">{{ p }}</button>
         </li>
 
-        <li class="page-item" :class="{disabled: pagination.currentPage === pagination.totalPages}">
-          <button class="page-link" @click="changePage(pagination.currentPage + 1)">»</button>
+        <li
+          class="page-item"
+          :class="{
+            disabled: pagination.currentPage === pagination.totalPages,
+          }"
+        >
+          <button
+            class="page-link"
+            @click="changePage(pagination.currentPage + 1)"
+          >
+            »
+          </button>
         </li>
       </ul>
     </div>
@@ -87,9 +139,10 @@
     <div class="modal fade" id="quickViewModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content border-0 shadow">
-
           <div class="modal-header bg-secondary text-white">
-            <h5 class="modal-title"><i class="fas fa-eye me-2"></i> Thông tin người dùng</h5>
+            <h5 class="modal-title">
+              <i class="fas fa-eye me-2"></i> Thông tin người dùng
+            </h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
@@ -98,25 +151,39 @@
               <div class="col-12"><b>Họ tên:</b> {{ quickUser.full_name }}</div>
               <div class="col-12"><b>Email:</b> {{ quickUser.email }}</div>
               <div class="col-md-6"><b>Vai trò:</b> {{ quickUser.role }}</div>
-              <div class="col-md-6"><b>Nhóm máu:</b> {{ quickUser.blood_group || "—" }}</div>
-              <div class="col-md-6"><b>Điện thoại:</b> {{ quickUser.phone }}</div>
-              <div class="col-md-6"><b>Tình trạng:</b> {{ quickUser.tinh_trang === 2 ? "Bị khóa" : "Hoạt động" }}</div>
-              <div class="col-12"><b>Địa chỉ:</b> {{ quickUser.address }}</div>
-              <div class="col-12"><b>Ngày tham gia:</b> {{ formatDate(quickUser.created_at) }}</div>
+              <div class="col-md-6">
+                <b>Nhóm máu:</b> {{ quickUser.blood_group || "—" }}
+              </div>
+              <div class="col-md-6">
+                <b>Điện thoại:</b> {{ quickUser.phone }}
+              </div>
+              <div class="col-md-6">
+                <b>Tình trạng:</b>
+                {{ quickUser.tinh_trang === 2 ? "Bị khóa" : "Hoạt động" }}
+              </div>
+              <div class="col-12">
+                <b>Địa chỉ:</b> {{ quickUser.address }}
+              </div>
+              <div class="col-12">
+                <b>Ngày tham gia:</b> {{ formatDate(quickUser.created_at) }}
+              </div>
 
               <template v-if="quickUser.role === 'donor'">
-                <hr>
+                <hr />
                 <div class="col-md-6">
                   <b>Số lần hiến máu:</b> {{ quickUser.donation_count }}
                 </div>
                 <div class="col-md-6">
                   <b>Hiến gần nhất:</b>
-                  {{ quickUser.last_donation_date ? formatDate(quickUser.last_donation_date) : "—" }}
+                  {{
+                    quickUser.last_donation_date
+                      ? formatDate(quickUser.last_donation_date)
+                      : "—"
+                  }}
                 </div>
               </template>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -125,17 +192,20 @@
     <div class="modal fade" id="editUserModal" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content border-0 shadow">
-
           <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title"><i class="fas fa-user-edit me-2"></i> Cập nhật người dùng</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title">
+              <i class="fas fa-user-edit me-2"></i> Cập nhật người dùng
+            </h5>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="editModalCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body p-4" v-if="editingUser">
             <form @submit.prevent="saveChanges">
-
               <div class="row g-3">
-
                 <div class="col-12">
                   <label class="form-label">Họ và tên</label>
                   <input v-model="editingUser.full_name" class="form-control" />
@@ -143,7 +213,11 @@
 
                 <div class="col-12">
                   <label class="form-label">Email</label>
-                  <input type="email" v-model="editingUser.email" class="form-control" />
+                  <input
+                    type="email"
+                    v-model="editingUser.email"
+                    class="form-control"
+                  />
                 </div>
 
                 <div class="col-md-6">
@@ -161,14 +235,23 @@
 
                 <div class="col-md-6" v-if="editingUser.role === 'donor'">
                   <label class="form-label">Ngày sinh</label>
-                  <input type="date" v-model="editingUser.birthday" class="form-control" />
+                  <input
+                    type="date"
+                    v-model="editingUser.birthday"
+                    class="form-control"
+                  />
                 </div>
 
                 <div class="col-md-6" v-if="editingUser.role === 'donor'">
                   <label class="form-label">Nhóm máu</label>
                   <select v-model="editingUser.blood_group" class="form-select">
                     <option value="">— Chọn —</option>
-                    <option v-for="(b,i) in bloodGroups" :key="i" :value="b">{{ b }}</option>
+                    <option
+                      v-for="(b, i) in bloodGroups"
+                      :key="i"
+                      :value="b"
+                      >{{ b }}</option
+                    >
                   </select>
                 </div>
 
@@ -179,7 +262,10 @@
 
                 <div class="col-md-6">
                   <label class="form-label">Tình trạng</label>
-                  <select v-model="editingUser.tinh_trang" class="form-select">
+                  <select
+                    v-model="editingUser.tinh_trang"
+                    class="form-select"
+                  >
                     <option :value="1">Hoạt động</option>
                     <option :value="2">Bị khóa</option>
                   </select>
@@ -187,28 +273,29 @@
 
                 <div class="col-md-6">
                   <label class="form-label">Ngày tham gia</label>
-                  <input disabled class="form-control" :value="formatDate(editingUser.created_at)" />
+                  <input
+                    disabled
+                    class="form-control"
+                    :value="formatDate(editingUser.created_at)"
+                  />
                 </div>
-
               </div>
 
               <div class="d-flex justify-content-end mt-4">
-                <button class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
+                <button class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                  Hủy
+                </button>
                 <button class="btn btn-primary">Lưu</button>
               </div>
-
             </form>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import * as bootstrap from "bootstrap";
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
 
 export default {
@@ -220,36 +307,37 @@ export default {
 
       bloodGroups: ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
 
-      pagination: { currentPage: 1, totalPages: 1, totalItems: 0, limit: 15 },
+      pagination: {
+        currentPage: 1,
+        totalPages: 1,
+        totalItems: 0,
+        limit: 15,
+      },
 
       tim_kiem: { noi_dung_tim: "", vai_tro: "" },
-
-      quickModalInstance: null,
-      editModalInstance: null,
     };
   },
 
   mounted() {
     this.loadData();
-    this.quickModalInstance = new bootstrap.Modal(document.getElementById("quickViewModal"));
-    this.editModalInstance = new bootstrap.Modal(document.getElementById("editUserModal"));
   },
 
   methods: {
     loadData() {
-      baseRequestAdmin.get("/admin/users", {
-        params: {
-          page: this.pagination.currentPage,
-          limit: this.pagination.limit,
-          search: this.tim_kiem.noi_dung_tim,
-          role: this.tim_kiem.vai_tro,
-        },
-      })
-      .then((res) => {
-        this.users = res.data.data || [];
-        this.pagination.totalItems = res.data.totalItems;
-        this.pagination.totalPages = res.data.totalPages;
-      });
+      baseRequestAdmin
+        .get("/admin/users", {
+          params: {
+            page: this.pagination.currentPage,
+            limit: this.pagination.limit,
+            search: this.tim_kiem.noi_dung_tim,
+            role: this.tim_kiem.vai_tro,
+          },
+        })
+        .then((res) => {
+          this.users = res.data.data || [];
+          this.pagination.totalItems = res.data.totalItems;
+          this.pagination.totalPages = res.data.totalPages;
+        });
     },
 
     changePage(p) {
@@ -260,20 +348,21 @@ export default {
 
     openQuickView(user) {
       this.quickUser = { ...user };
-      this.quickModalInstance.show();
+      // Modal mở bằng data-bs-toggle
     },
 
     openEditModal(user) {
       const genderFix = user.gender === "Nam" ? "male" : "female";
       this.editingUser = { ...user, gender: genderFix };
-      this.editModalInstance.show();
+      // Modal mở bằng data-bs-toggle
     },
 
     saveChanges() {
-      baseRequestAdmin.put(`/admin/users/${this.editingUser.id}`, this.editingUser)
+      baseRequestAdmin
+        .put(`/admin/users/${this.editingUser.id}`, this.editingUser)
         .then(() => {
           this.$toast.success("Cập nhật thành công!");
-          this.editModalInstance.hide();
+          this.$refs.editModalCloseBtn?.click(); // đóng modal qua button có data-bs-dismiss
           this.loadData();
         })
         .catch(() => this.$toast.error("Lỗi cập nhật!"));

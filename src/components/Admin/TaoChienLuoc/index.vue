@@ -7,7 +7,8 @@
           <i class="bi bi-check2-circle me-2"></i>Quản lý & Xét duyệt chiến dịch
         </h3>
         <p class="text-muted mb-0">
-          Admin xét duyệt chiến dịch do bệnh viện/bác sĩ tạo, và quản lý chiến dịch toàn hệ thống.
+          Admin xét duyệt chiến dịch do bệnh viện/bác sĩ tạo, và quản lý chiến
+          dịch toàn hệ thống.
         </p>
       </div>
 
@@ -18,9 +19,12 @@
 
     <!-- ===================== PENDING ===================== -->
     <div class="card shadow-sm mb-4 border-0">
-      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div
+        class="card-header bg-white d-flex justify-content-between align-items-center"
+      >
         <div class="fw-bold">
-          <i class="bi bi-shield-check text-danger me-2"></i>Xét duyệt chiến dịch (Pending)
+          <i class="bi bi-shield-check text-danger me-2"></i>Xét duyệt chiến
+          dịch (Pending)
         </div>
 
         <div class="d-flex gap-2">
@@ -32,7 +36,11 @@
             style="width: 260px"
           />
 
-          <select v-model="pendingFilters.type" class="form-select form-select-sm" style="width: 150px">
+          <select
+            v-model="pendingFilters.type"
+            class="form-select form-select-sm"
+            style="width: 150px"
+          >
             <option value="">Tất cả loại</option>
             <option value="0">Định kỳ</option>
             <option value="1">Khẩn cấp</option>
@@ -69,11 +77,18 @@
 
                 <td class="fw-semibold">
                   {{ c.title }}
-                  <div class="text-muted small">{{ truncate(c.content, 60) }}</div>
+                  <div class="text-muted small">
+                    {{ truncate(c.content, 60) }}
+                  </div>
                 </td>
 
                 <td>
-                  <span :class="['badge', c.is_emergency ? 'bg-danger' : 'bg-primary']">
+                  <span
+                    :class="[
+                      'badge',
+                      c.is_emergency ? 'bg-danger' : 'bg-primary',
+                    ]"
+                  >
                     {{ c.is_emergency ? "Khẩn cấp" : "Định kỳ" }}
                   </span>
                 </td>
@@ -81,15 +96,31 @@
                 <td>{{ c.start_date_fmt }} - {{ c.end_date_fmt }}</td>
 
                 <td>
-                  <span v-if="c.locate_type === 'custom'">{{ c.location || "-" }}</span>
+                  <span v-if="c.locate_type === 'custom'"
+                    >{{ c.location || "-" }}</span
+                  >
                   <span v-else>{{ c.donation_site?.name || "-" }}</span>
                 </td>
 
                 <td>{{ c.creator?.full_name || "-" }}</td>
 
                 <td class="text-end">
-                  <button class="btn btn-sm btn-primary me-2" @click="openApproveModal(c)">Duyệt</button>
-                  <button class="btn btn-sm btn-danger" @click="openRejectModal(c)">Từ chối</button>
+                  <button
+                    class="btn btn-sm btn-primary me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#approveCampaignModal"
+                    @click="openApproveModal(c)"
+                  >
+                    Duyệt
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#rejectCampaignModal"
+                    @click="openRejectModal(c)"
+                  >
+                    Từ chối
+                  </button>
                 </td>
               </tr>
 
@@ -106,7 +137,9 @@
 
     <!-- ===================== TẤT CẢ CHIẾN DỊCH ===================== -->
     <div class="card shadow-sm border-0">
-      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div
+        class="card-header bg-white d-flex justify-content-between align-items-center"
+      >
         <div class="fw-bold">
           <i class="bi bi-table text-danger me-2"></i>Quản lý chiến dịch
         </div>
@@ -120,14 +153,22 @@
             style="width: 260px"
           />
 
-          <select v-model="allFilters.approval_status" class="form-select form-select-sm" style="width: 160px">
+          <select
+            v-model="allFilters.approval_status"
+            class="form-select form-select-sm"
+            style="width: 160px"
+          >
             <option value="">Duyệt: Tất cả</option>
             <option value="pending">Chờ duyệt</option>
             <option value="approved">Đã duyệt</option>
             <option value="rejected">Từ chối</option>
           </select>
 
-          <select v-model="allFilters.status" class="form-select form-select-sm" style="width: 160px">
+          <select
+            v-model="allFilters.status"
+            class="form-select form-select-sm"
+            style="width: 160px"
+          >
             <option value="">Trạng thái: Tất cả</option>
             <option value="upcoming">Sắp diễn ra</option>
             <option value="running">Đang diễn ra</option>
@@ -163,12 +204,19 @@
             <tbody>
               <tr v-for="c in campaigns" :key="c.id">
                 <td class="fw-semibold">
-  <div>{{ c.title }}</div>
-  <div class="campaign-meta">Tạo bởi: {{ c.creator?.full_name }}</div>
-</td>
+                  <div>{{ c.title }}</div>
+                  <div class="campaign-meta">
+                    Tạo bởi: {{ c.creator?.full_name }}
+                  </div>
+                </td>
 
                 <td>
-                  <span :class="['badge', c.is_emergency ? 'bg-danger' : 'bg-primary']">
+                  <span
+                    :class="[
+                      'badge',
+                      c.is_emergency ? 'bg-danger' : 'bg-primary',
+                    ]"
+                  >
                     {{ c.is_emergency ? "Khẩn cấp" : "Định kỳ" }}
                   </span>
                 </td>
@@ -176,28 +224,50 @@
                 <td>{{ c.start_date_fmt }} - {{ c.end_date_fmt }}</td>
 
                 <td>
-                  <span v-if="c.locate_type === 'custom'">{{ c.location || "-" }}</span>
+                  <span v-if="c.locate_type === 'custom'"
+                    >{{ c.location || "-" }}</span
+                  >
                   <span v-else>{{ c.donation_site?.name || "-" }}</span>
                 </td>
 
-                <td class="text-center">{{ c.registration_count || 0 }}</td>
-
                 <td class="text-center">
-                  <span v-if="c.approval_status === 'approved'" class="badge bg-success">Đã duyệt</span>
-                  <span
-                    v-else-if="c.approval_status === 'rejected'"
-                    class="badge bg-danger"
-                    :title="c.rejected_reason ? `Lý do: ${c.rejected_reason}` : ''"
-                  >
-                    Từ chối
-                  </span>
-                  <span v-else class="badge bg-warning text-dark">Chờ duyệt</span>
+                  {{ c.registration_count || 0 }}
                 </td>
 
                 <td class="text-center">
-                  <span v-if="c.status === 'ended'" class="badge bg-secondary">Đã kết thúc</span>
-                  <span v-else-if="c.status === 'running'" class="badge bg-success">Đang diễn ra</span>
-                  <span v-else class="badge bg-warning text-dark">Sắp diễn ra</span>
+                  <span
+                    v-if="c.approval_status === 'approved'"
+                    class="badge bg-success"
+                    >Đã duyệt</span
+                  >
+                  <span
+                    v-else-if="c.approval_status === 'rejected'"
+                    class="badge bg-danger"
+                    :title="
+                      c.rejected_reason ? `Lý do: ${c.rejected_reason}` : ''
+                    "
+                  >
+                    Từ chối
+                  </span>
+                  <span v-else class="badge bg-warning text-dark"
+                    >Chờ duyệt</span
+                  >
+                </td>
+
+                <td class="text-center">
+                  <span
+                    v-if="c.status === 'ended'"
+                    class="badge bg-secondary"
+                    >Đã kết thúc</span
+                  >
+                  <span
+                    v-else-if="c.status === 'running'"
+                    class="badge bg-success"
+                    >Đang diễn ra</span
+                  >
+                  <span v-else class="badge bg-warning text-dark"
+                    >Sắp diễn ra</span
+                  >
                 </td>
 
                 <td class="text-end">
@@ -210,6 +280,8 @@
 
                   <button
                     class="btn btn-sm btn-warning me-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editCampaignModal"
                     @click="openEditModal(c)"
                     :disabled="c.status === 'ended'"
                   >
@@ -218,6 +290,8 @@
 
                   <button
                     class="btn btn-sm btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#closeCampaignModal"
                     @click="openCloseModal(c)"
                     :disabled="c.status === 'ended'"
                   >
@@ -244,7 +318,11 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-primary">Xác nhận duyệt chiến dịch</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="approveCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -257,15 +335,23 @@
               </div>
               <div class="text-muted small">
                 Địa điểm:
-                <span v-if="selected?.locate_type === 'custom'">{{ selected?.location }}</span>
+                <span v-if="selected?.locate_type === 'custom'"
+                  >{{ selected?.location }}</span
+                >
                 <span v-else>{{ selected?.donation_site?.name }}</span>
               </div>
             </div>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-            <button class="btn btn-primary" @click="confirmApprove" :disabled="submitting">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
+            <button
+              class="btn btn-primary"
+              @click="confirmApprove"
+              :disabled="submitting"
+            >
               <i class="bi bi-check2 me-1"></i>Xác nhận duyệt
             </button>
           </div>
@@ -278,8 +364,14 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title text-danger">Xác nhận từ chối chiến dịch</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <h5 class="modal-title text-danger">
+              Xác nhận từ chối chiến dịch
+            </h5>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="rejectCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body">
@@ -302,7 +394,9 @@
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
 
             <button
               class="btn btn-danger"
@@ -322,14 +416,22 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-warning">Sửa chiến dịch</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="editCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body">
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Tiêu đề</label>
-                <input type="text" class="form-control" v-model="editForm.title" />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="editForm.title"
+                />
               </div>
 
               <div class="col-md-6">
@@ -342,35 +444,62 @@
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Ngày bắt đầu</label>
-                <input type="date" class="form-control" v-model="editForm.start_date" />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="editForm.start_date"
+                />
               </div>
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Ngày kết thúc</label>
-                <input type="date" class="form-control" v-model="editForm.end_date" />
+                <input
+                  type="date"
+                  class="form-control"
+                  v-model="editForm.end_date"
+                />
               </div>
 
               <div class="col-12">
                 <label class="form-label fw-semibold">Mô tả</label>
-                <textarea class="form-control" rows="3" v-model="editForm.content"></textarea>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  v-model="editForm.content"
+                ></textarea>
               </div>
 
               <div class="col-12">
                 <label class="form-label fw-semibold">Địa điểm</label>
 
                 <div class="form-check">
-                  <input type="radio" v-model="editForm.locate_type" value="custom" class="form-check-input" />
+                  <input
+                    type="radio"
+                    v-model="editForm.locate_type"
+                    value="custom"
+                    class="form-check-input"
+                  />
                   <label class="form-check-label">Địa điểm tùy chỉnh</label>
                 </div>
 
                 <div class="form-check">
-                  <input type="radio" v-model="editForm.locate_type" value="donation_site" class="form-check-input" />
+                  <input
+                    type="radio"
+                    v-model="editForm.locate_type"
+                    value="donation_site"
+                    class="form-check-input"
+                  />
                   <label class="form-check-label">Theo điểm hiến máu</label>
                 </div>
               </div>
 
               <div class="col-12" v-if="editForm.locate_type === 'custom'">
-                <input type="text" class="form-control" v-model="editForm.location" placeholder="Nhập địa điểm..." />
+                <input
+                  type="text"
+                  class="form-control"
+                  v-model="editForm.location"
+                  placeholder="Nhập địa điểm..."
+                />
               </div>
 
               <div class="col-12" v-else>
@@ -385,9 +514,15 @@
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
 
-            <button class="btn btn-warning" @click="confirmEdit" :disabled="submitting">
+            <button
+              class="btn btn-warning"
+              @click="confirmEdit"
+              :disabled="submitting"
+            >
               <i class="bi bi-save me-1"></i>Lưu
             </button>
           </div>
@@ -401,20 +536,34 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-danger">Xác nhận đóng chiến dịch</h5>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
+            <button
+              class="btn-close"
+              data-bs-dismiss="modal"
+              ref="closeCloseBtn"
+            ></button>
           </div>
 
           <div class="modal-body">
             <p>
-              Bạn có chắc chắn muốn <strong>ĐÓNG</strong> chiến dịch
+              Bạn có chắc chắn muốn
+              <strong>ĐÓNG</strong> chiến dịch
               <strong class="text-danger">{{ selected?.title }}</strong>?
             </p>
-            <div class="text-muted small">Sau khi đóng, chiến dịch sẽ ở trạng thái <strong>ended</strong>.</div>
+            <div class="text-muted small">
+              Sau khi đóng, chiến dịch sẽ ở trạng thái
+              <strong>ended</strong>.
+            </div>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
-            <button class="btn btn-danger" @click="confirmClose" :disabled="submitting">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">
+              Huỷ
+            </button>
+            <button
+              class="btn btn-danger"
+              @click="confirmClose"
+              :disabled="submitting"
+            >
               <i class="bi bi-x-circle me-1"></i>Xác nhận đóng
             </button>
           </div>
@@ -424,10 +573,8 @@
   </div>
 </template>
 
-
 <script>
 import baseRequestAdmin from "../../../core/baseRequestAdmin";
-import * as bootstrap from "bootstrap";
 
 export default {
   name: "CampaignManagementAdmin",
@@ -444,11 +591,6 @@ export default {
       loadingPending: false,
       loadingAll: false,
       submitting: false,
-
-      approveModal: null,
-      rejectModal: null,
-      editModal: null,
-      closeModal: null,
 
       selected: null,
       rejectReason: "",
@@ -468,19 +610,11 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(() => {
-      this.approveModal = new bootstrap.Modal(document.getElementById("approveCampaignModal"));
-      this.rejectModal = new bootstrap.Modal(document.getElementById("rejectCampaignModal"));
-      this.editModal = new bootstrap.Modal(document.getElementById("editCampaignModal"));
-      this.closeModal = new bootstrap.Modal(document.getElementById("closeCampaignModal"));
-    });
-
     this.reloadAll();
     this.loadDonationSites();
   },
 
   methods: {
-    /** ====================== FORMAT DATE DD/MM/YYYY ====================== */
     fmtDate(d) {
       if (!d) return "-";
       const dt = new Date(d);
@@ -494,7 +628,6 @@ export default {
       return `${this.fmtDate(s)} - ${this.fmtDate(e)}`;
     },
 
-    /** ====================== LOAD DATA ====================== */
     async reloadAll() {
       await Promise.all([this.fetchPending(), this.fetchAllCampaigns()]);
     },
@@ -506,29 +639,27 @@ export default {
       } catch (_) {}
     },
 
-    /** ====================== PENDING LIST ====================== */
     async fetchPending() {
-  this.loadingPending = true;
-  try {
-    const res = await baseRequestAdmin.get("/admin/campaigns/pending", {
-      params: this.pendingFilters,
-    });
+      this.loadingPending = true;
+      try {
+        const res = await baseRequestAdmin.get("/admin/campaigns/pending", {
+          params: this.pendingFilters,
+        });
 
-    if (res.data.status) {
-      this.pendingCampaigns = res.data.data.map(c => ({
-        ...c,
-        start_date_fmt: this.fmtDate(c.start_date),
-        end_date_fmt: this.fmtDate(c.end_date),
-      }));
-    } else this.$toast.error(res.data.message);
-  } finally {
-    this.loadingPending = false;
-  }
-},
+        if (res.data.status) {
+          this.pendingCampaigns = res.data.data.map((c) => ({
+            ...c,
+            start_date_fmt: this.fmtDate(c.start_date),
+            end_date_fmt: this.fmtDate(c.end_date),
+          }));
+        } else this.$toast.error(res.data.message);
+      } finally {
+        this.loadingPending = false;
+      }
+    },
 
     openApproveModal(c) {
       this.selected = c;
-      this.approveModal.show();
     },
 
     async confirmApprove() {
@@ -536,10 +667,12 @@ export default {
       this.submitting = true;
 
       try {
-        const res = await baseRequestAdmin.patch(`/admin/campaigns/${this.selected.id}/approve`);
+        const res = await baseRequestAdmin.patch(
+          `/admin/campaigns/${this.selected.id}/approve`
+        );
         if (res.data.status) {
           this.$toast.success("Duyệt thành công");
-          this.approveModal.hide();
+          this.$refs.approveCloseBtn?.click();
           this.reloadAll();
         } else this.$toast.error(res.data.message);
       } finally {
@@ -550,22 +683,25 @@ export default {
     openRejectModal(c) {
       this.selected = c;
       this.rejectReason = "";
-      this.rejectModal.show();
     },
 
     async confirmReject() {
-      if (!this.rejectReason.trim()) return this.$toast.error("Nhập lý do!");
+      if (!this.rejectReason.trim())
+        return this.$toast.error("Nhập lý do!");
 
       this.submitting = true;
 
       try {
-        const res = await baseRequestAdmin.patch(`/admin/campaigns/${this.selected.id}/reject`, {
-          reason: this.rejectReason.trim(),
-        });
+        const res = await baseRequestAdmin.patch(
+          `/admin/campaigns/${this.selected.id}/reject`,
+          {
+            reason: this.rejectReason.trim(),
+          }
+        );
 
         if (res.data.status) {
           this.$toast.success("Đã từ chối chiến dịch");
-          this.rejectModal.hide();
+          this.$refs.rejectCloseBtn?.click();
           this.reloadAll();
         } else this.$toast.error(res.data.message);
       } finally {
@@ -573,27 +709,25 @@ export default {
       }
     },
 
-    /** ====================== ALL CAMPAIGNS ====================== */
     async fetchAllCampaigns() {
-  this.loadingAll = true;
-  try {
-    const res = await baseRequestAdmin.get("/admin/campaigns", {
-      params: this.allFilters,
-    });
+      this.loadingAll = true;
+      try {
+        const res = await baseRequestAdmin.get("/admin/campaigns", {
+          params: this.allFilters,
+        });
 
-    if (res.data.status) {
-      this.campaigns = res.data.data.map(c => ({
-        ...c,
-        start_date_fmt: this.fmtDate(c.start_date),
-        end_date_fmt: this.fmtDate(c.end_date),
-      }));
-    } else this.$toast.error(res.data.message);
-  } finally {
-    this.loadingAll = false;
-  }
-},
+        if (res.data.status) {
+          this.campaigns = res.data.data.map((c) => ({
+            ...c,
+            start_date_fmt: this.fmtDate(c.start_date),
+            end_date_fmt: this.fmtDate(c.end_date),
+          }));
+        } else this.$toast.error(res.data.message);
+      } finally {
+        this.loadingAll = false;
+      }
+    },
 
-    /** ====================== EDIT ====================== */
     openEditModal(c) {
       this.selected = c;
 
@@ -613,8 +747,6 @@ export default {
         location: c.location,
         donation_site_id: c.donation_site_id,
       };
-
-      this.editModal.show();
     },
 
     async confirmEdit() {
@@ -632,10 +764,13 @@ export default {
       this.submitting = true;
 
       try {
-        const res = await baseRequestAdmin.put(`/admin/campaigns/${f.id}`, f);
+        const res = await baseRequestAdmin.put(
+          `/admin/campaigns/${f.id}`,
+          f
+        );
         if (res.data.status) {
           this.$toast.success("Cập nhật thành công");
-          this.editModal.hide();
+          this.$refs.editCloseBtn?.click();
           this.fetchAllCampaigns();
         } else this.$toast.error(res.data.message);
       } finally {
@@ -643,19 +778,19 @@ export default {
       }
     },
 
-    /** ====================== CLOSE ====================== */
     openCloseModal(c) {
       this.selected = c;
-      this.closeModal.show();
     },
 
     async confirmClose() {
       this.submitting = true;
       try {
-        const res = await baseRequestAdmin.patch(`/admin/campaigns/${this.selected.id}/close`);
+        const res = await baseRequestAdmin.patch(
+          `/admin/campaigns/${this.selected.id}/close`
+        );
         if (res.data.status) {
           this.$toast.success("Đã đóng chiến dịch");
-          this.closeModal.hide();
+          this.$refs.closeCloseBtn?.click();
           this.fetchAllCampaigns();
         } else this.$toast.error(res.data.message);
       } finally {
@@ -663,7 +798,6 @@ export default {
       }
     },
 
-    /** ====================== UTILITY ====================== */
     truncate(s, n = 80) {
       return s?.length > n ? s.slice(0, n) + "..." : s;
     },
@@ -671,9 +805,9 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.table th, .table td {
+.table th,
+.table td {
   vertical-align: middle !important;
 }
 

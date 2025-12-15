@@ -151,6 +151,7 @@
 <script>
 import axios from "axios";
 import baseRequestClient from "../../../core/baseRequestClient";
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:4000";
 
 export default {
   data() {
@@ -179,7 +180,7 @@ export default {
         if (this.dateStart) params.start = this.dateStart;
         if (this.dateEnd) params.end = this.dateEnd;
 
-        const res = await axios.get("http://localhost:4000/api/news", { params });
+        const res = await axios.get(`${API_BASE}/api/news`, { params });
 
         if (res.data.status) {
           this.newsList = res.data.data;

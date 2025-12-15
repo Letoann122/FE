@@ -1,46 +1,31 @@
 <template>
   <div class="container py-4">
     <div class="row g-4">
-
-      <!-- LEFT FILTER -->
       <div class="col-lg-4">
         <div class="card shadow-sm border-0 rounded-4">
           <div class="card-body">
-
             <h5 class="mb-3 fw-bold text-danger">
               <i class="bi bi-search-heart me-2"></i>
               Tìm lịch đã duyệt
             </h5>
-
-            <!-- Mã lịch -->
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
               <input type="text" class="form-control" placeholder="Nhập mã lịch hiến máu" v-model="loc_lich.ma_lich" />
             </div>
-
-            <!-- Từ ngày -->
             <div class="mb-3">
               <label class="form-label small">Từ ngày</label>
               <input type="date" class="form-control" v-model="loc_lich.from_date" />
             </div>
-
-            <!-- Đến ngày -->
             <div class="mb-3">
               <label class="form-label small">Đến ngày</label>
               <input type="date" class="form-control" v-model="loc_lich.to_date" />
             </div>
-
-            <button class="btn btn-danger w-100" @click="locDanhSach" :disabled="dang_tai">
-              <span v-if="dang_tai" class="spinner-border spinner-border-sm me-1"></span>
-              Lọc lịch hiến máu
-            </button>
-
-            <hr />
-
-            <p class="small text-muted mb-0">
-              Tổng lịch chờ ghi nhận: <strong>{{ total_items }}</strong>
-            </p>
-
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-danger" @click="locDanhSach" :disabled="dang_tai">
+                <span v-if="dang_tai" class="spinner-border spinner-border-sm me-1"></span>
+                Lọc lịch
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +33,6 @@
       <!-- TABLE -->
       <div class="col-lg-8">
         <div class="card shadow-sm border-0 rounded-4">
-
           <div class="card-header bg-white border-0">
             <h5 class="fw-bold text-danger mb-1">
               <i class="bi bi-droplet-half me-2"></i> Ghi nhận hiến máu
@@ -56,7 +40,6 @@
           </div>
 
           <div class="card-body p-0">
-
             <!-- loading -->
             <div v-if="dang_tai" class="p-4 text-center">
               <div class="spinner-border text-danger"></div>
@@ -64,7 +47,6 @@
 
             <!-- table -->
             <div v-else class="table-responsive">
-
               <table class="table table-hover align-middle mb-0">
                 <thead>
                   <tr>
@@ -80,11 +62,17 @@
                 <tbody>
                   <tr v-for="(value, index) in paginatedData" :key="value.id">
                     <td>{{ index + 1 + (page - 1) * per_page }}</td>
-                    <td><span class="badge bg-light text-dark">{{ value.appointment_code }}</span></td>
+                    <td>
+                      <span class="badge bg-light text-dark">{{
+                        value.appointment_code
+                        }}</span>
+                    </td>
 
                     <td>
                       <strong>{{ value.donor_name }}</strong>
-                      <div class="small text-muted">{{ value.donor_phone }}</div>
+                      <div class="small text-muted">
+                        {{ value.donor_phone }}
+                      </div>
                     </td>
 
                     <td>
@@ -104,7 +92,6 @@
                   </tr>
                 </tbody>
               </table>
-
             </div>
 
             <!-- PAGINATION -->
@@ -119,37 +106,37 @@
                 Trang sau »
               </button>
             </div>
-
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- MODAL -->
     <div class="modal fade" id="modalGhiNhan" tabindex="-1">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4">
-
           <div class="modal-header">
             <h5 class="fw-bold mb-0">
-              <i class="bi bi-check2-circle text-success me-2"></i> Ghi nhận hiến máu
+              <i class="bi bi-check2-circle text-success me-2"></i> Ghi nhận
+              hiến máu
             </h5>
             <button class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body">
-
             <small class="text-muted">
               Mã lịch: <strong>{{ modal_data.appointment_code }}</strong>
             </small>
 
             <div class="fw-semibold">
-              {{ modal_data.donor_name }} – {{ modal_data.scheduled_date }} ({{ modal_data.time_range }})
+              {{ modal_data.donor_name }} – {{ modal_data.scheduled_date }} ({{
+                modal_data.time_range
+              }})
             </div>
 
             <div class="small text-muted mb-3">
-              {{ modal_data.donation_site_name }} – {{ modal_data.hospital_name }}
+              {{ modal_data.donation_site_name }} –
+              {{ modal_data.hospital_name }}
             </div>
 
             <hr />
@@ -198,21 +185,20 @@
             <hr />
             <label class="form-label small">Ghi chú</label>
             <textarea class="form-control" rows="2" v-model="form.ghi_chu"></textarea>
-
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal" :disabled="dang_luu">Hủy</button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal" :disabled="dang_luu">
+              Hủy
+            </button>
             <button class="btn btn-success" :disabled="dang_luu" @click="luu">
               <span v-if="dang_luu" class="spinner-border spinner-border-sm me-1"></span>
               Xác nhận hiến máu
             </button>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -250,7 +236,7 @@ export default {
     paginatedData() {
       const start = (this.page - 1) * this.per_page;
       return this.danh_sach_lich.slice(start, start + this.per_page);
-    }
+    },
   },
 
   mounted() {
@@ -292,13 +278,18 @@ export default {
     defaultDatetime(dateStr) {
       const now = new Date();
       const [y, m, d] = dateStr.split("-");
-      return `${y}-${m}-${d}T${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      return `${y}-${m}-${d}T${String(now.getHours()).padStart(
+        2,
+        "0"
+      )}:${String(now.getMinutes()).padStart(2, "0")}`;
     },
 
     luu() {
-      if (!this.form.nhom_mau) return this.$toast.error("Vui lòng chọn nhóm máu!");
+      if (!this.form.nhom_mau)
+        return this.$toast.error("Vui lòng chọn nhóm máu!");
       if (!this.form.so_ml) return this.$toast.error("Số ml không hợp lệ!");
-      if (!this.form.thoi_diem_lay) return this.$toast.error("Chưa chọn thời điểm!");
+      if (!this.form.thoi_diem_lay)
+        return this.$toast.error("Chưa chọn thời điểm!");
 
       this.dang_luu = true;
 
@@ -316,7 +307,9 @@ export default {
         .then((res) => {
           if (res.data?.status) {
             this.$toast.success("Ghi nhận thành công!");
-            bootstrap.Modal.getInstance(document.getElementById("modalGhiNhan")).hide();
+            bootstrap.Modal.getInstance(
+              document.getElementById("modalGhiNhan")
+            ).hide();
             this.taiDanhSach();
           }
         })
