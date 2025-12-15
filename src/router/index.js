@@ -5,7 +5,81 @@ import checkDonor from "./checkDonor";
 
 const routes = [
   { path: "/", redirect: "/home-page" },
-
+  {
+    path: "/home-page",
+    component: () => import("../components/Homepage/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/about",
+    component: () => import("../components/Client/About/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/news",
+    component: () => import("../components/Client/News/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/news/:id",
+    component: () => import("../components/Client/NewsDetail/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/see-details",
+    component: () => import("../components/Client/Seedetails/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/guide-health",
+    component: () => import("../components/Client/Guidehealth/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/contact",
+    component: () => import("../components/Client/Contact/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/login",
+    component: () => import("../components/Client/Login/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/register",
+    component: () => import("../components/Client/Register/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/forgot-password",
+    component: () => import("../components/Client/Forgotpassword/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/change-password",
+    component: () => import("../components/Client/Changepassword/index.vue"),
+    meta: { layout: "blank" },
+  },
+  {
+    path: "/fa-question",
+    component: () => import("../components/Client/Faquestion/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/privacy-policy",
+    component: () => import("../components/Client/Privacypolicy/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/terms-use",
+    component: () => import("../components/Client/TermsofUse/index.vue"),
+    meta: { layout: "client" },
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("../components/Client/Notfound/index.vue"),
+    meta: { layout: "client" },
+  },
   //admin
   {
     path: "/admin/dashboard",
@@ -162,40 +236,10 @@ const routes = [
   },
   //donor
   {
-    path: "/home-page",
-    component: () => import("../components/Homepage/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/about",
-    component: () => import("../components/Client/About/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/news",
-    component: () => import("../components/Client/News/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/news/:id",
-    component: () => import("../components/Client/NewsDetail/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
     path: "/campaigns/:id",
     component: () => import("../components/Client/CampaignDetail/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor
-  },
-  {
-    path: "/see-details",
-    component: () => import("../components/Client/Seedetails/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/guide-health",
-    component: () => import("../components/Client/Guidehealth/index.vue"),
-    meta: { layout: "client" },
   },
   {
     path: "/profile",
@@ -228,52 +272,6 @@ const routes = [
     component: () => import("../components/Client/notification/index.vue"),
     meta: { layout: "client" },
     beforeEnter: checkDonor,
-  },
-  {
-    path: "/contact",
-    component: () => import("../components/Client/Contact/index.vue"),
-    meta: { layout: "client" },
-  },
-
-  {
-    path: "/login",
-    component: () => import("../components/Client/Login/index.vue"),
-    meta: { layout: "blank" },
-  },
-  {
-    path: "/register",
-    component: () => import("../components/Client/Register/index.vue"),
-    meta: { layout: "blank" },
-  },
-  {
-    path: "/forgot-password",
-    component: () => import("../components/Client/Forgotpassword/index.vue"),
-    meta: { layout: "blank" },
-  },
-  {
-    path: "/change-password",
-    component: () => import("../components/Client/Changepassword/index.vue"),
-    meta: { layout: "blank" },
-  },
-  {
-    path: "/fa-question",
-    component: () => import("../components/Client/Faquestion/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/privacy-policy",
-    component: () => import("../components/Client/Privacypolicy/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/terms-use",
-    component: () => import("../components/Client/TermsofUse/index.vue"),
-    meta: { layout: "client" },
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    component: () => import("../components/Client/Notfound/index.vue"),
-    meta: { layout: "client" },
   },
 ];
 

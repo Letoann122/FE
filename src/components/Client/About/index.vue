@@ -135,7 +135,7 @@
     <div class="text-center mb">
       <h2 class="fw-bold">Đội Ngũ Phát Triển</h2>
       <p class="text-muted">
-        Những con người tận tâm đứng sau dự án Smart Blood Donation
+        Những con người tận tâm đứng sau dự án Smart Blood Donation System
       </p>
     </div>
 
@@ -172,7 +172,11 @@
 
 <script>
 import leaderImg from "../../../assets/img/avatar.jpg";
-
+import Luong from "../../../assets/img/Luong.jpeg";
+import Thanh from "../../../assets/img/Thanh.jpeg";
+import Tai from "../../../assets/img/Tai.jpeg";
+import Chi from "../../../assets/img/Chi.jpeg";
+import Toan from "../../../assets/img/Toan.jpeg";
 export default {
   // Thay thế setup() bằng data() trong Options API
   data() {
@@ -292,33 +296,33 @@ export default {
       team: [
         {
           name: "Tài Phạm",
-          role: "Project Leader",
-          email: "leader@smartblood.com",
-          image: leaderImg,
+          role: "Project Manager",
+          email: "phamtantaihocsinh@gmail.com",
+          image: Tai,
         },
         {
           name: "Lê Toàn",
           role: "Full-stack Developer",
-          email: "dev@smartblood.com",
-          image: leaderImg,
+          email: "Lvt1222003@gmail.com",
+          image: Toan,
         },
         {
           name: "Dương Lượng",
           role: "Frontend Developer",
-          email: "luong@smartblood.com",
-          image: leaderImg,
+          email: "luong0701qb@gmail.com",
+          image: Luong,
         },
         {
           name: "Quỳnh Chi",
           role: "Frontend Developer",
-          email: "design@smartblood.com",
-          image: leaderImg,
+          email: "quynhchihtk84@gmail.com",
+          image: Chi,
         },
         {
           name: "Minh Thành",
           role: "Frontend Developer",
-          email: "qa@smartblood.com",
-          image: leaderImg,
+          email: "duminhthanh.dmx2@gmail.com",
+          image: Thanh,
         },
       ],
     };
