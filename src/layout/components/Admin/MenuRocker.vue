@@ -13,7 +13,7 @@
       <ul class="navbar-nav justify-content-start flex-grow-1 gap-1">
         <li class="nav-item">
           <router-link to="/admin/dashboard" class="nav-link">
-            <div class="parent-icon"><i class="bx bx-home-circle"></i></div>
+            <div class="parent-icon"><i class="fa-solid fa-house"></i></div>
             <div class="menu-title">Dashboard</div>
           </router-link>
         </li>
@@ -25,33 +25,39 @@
         </li>
         <li class="nav-item">
           <router-link to="/admin/doctor-approve" class="nav-link">
-            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="parent-icon"><i class="fa-solid fa-user-doctor"></i></div>
             <div class="menu-title">Xét duyệt bác sĩ</div>
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/admin/create-campaign" class="nav-link">
-            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="parent-icon"><i class="fa-solid fa-bullhorn"></i></div>
             <div class="menu-title">Chiến dịch</div>
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/admin/user-management" class="nav-link">
-            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="parent-icon"><i class="fa-solid fa-users"></i></div>
             <div class="menu-title">Quản lý người dùng</div>
           </router-link>
         </li>
         <li class="nav-item">
           <router-link to="/admin/blood-inventory" class="nav-link">
-            <div class="parent-icon"><i class="fa-solid fa-newspaper"></i></div>
+            <div class="parent-icon"><i class="fa-solid fa-droplet"></i></div>
             <div class="menu-title">Quản lý kho máu</div>
           </router-link>
         </li>
         <li class="nav-item">
-          <router-link class="nav-link" to="/admin/appoint-control">
-            <i class="bi bi-calendar-check me-1"></i> Quản lý lịch hẹn
+          <router-link to="/admin/appoint-control" class="nav-link">
+            <div class="parent-icon"><i class="fa-solid fa-calendar-check"></i></div>
+            <div class="menu-title">Quản lý lịch hẹn</div>
           </router-link>
         </li>
+        <!-- <li class="nav-item">
+          <router-link class="nav-link" to="/admin/appoint-control">
+            <i class="fa-solid fa-calendar-check"></i> Quản lý lịch hẹn
+          </router-link>
+        </li> -->
       </ul>
     </nav>
   </div>
