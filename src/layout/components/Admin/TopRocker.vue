@@ -8,12 +8,10 @@
         <div class="ms-auto user-box dropdown">
           <a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#"
             data-bs-toggle="dropdown">
-            <img src="../../../assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar" />
             <div class="user-info ps-3">
               <p class="user-name mb-0">
                 {{ user.full_name || "Đang tải..." }}
               </p>
-              <p class="designattion mb-0">Admin</p>
             </div>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
