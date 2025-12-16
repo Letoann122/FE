@@ -7,77 +7,98 @@
     >
       <div class="container-fluid">
         <router-link class="navbar-brand fw-bold ms-3" to="/Hospital/dashboard">
-          <i class="fa-solid fa-hospital text-danger"></i> Smart Blood Donation
+          <i class="fa-solid fa-hospital text-danger"></i>
+          Smart Blood Donation
         </router-link>
 
-        <!-- Toggler Mobile -->
+        <!-- Mobile Toggler -->
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <!-- Nav Items -->
+          <!-- NAV MENU -->
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/dashboard" exact-active-class="active">
                 Dashboard
               </router-link>
             </li>
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/blood-inventory" exact-active-class="active">
                 Quản lý kho máu
               </router-link>
             </li>
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/donor-management" exact-active-class="active">
                 Quản lý Donor
               </router-link>
             </li>
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/check-booking" exact-active-class="active">
                 Quản lý đặt lịch
               </router-link>
             </li>
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/donation-complete" exact-active-class="active">
                 Ghi nhận hiến máu
               </router-link>
             </li>
-            <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/campaign-management" exact-active-class="active">
+
+            <!-- DROPDOWN: CHIẾN DỊCH + TIN TỨC -->
+            <li class="nav-item dropdown mx-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+                :class="{ active: isCampaignActive || isNewsActive }"
+                @click.prevent
+              >
                 Chiến dịch
-              </router-link>
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link class="dropdown-item" to="/Hospital/campaign-management">
+                    Chiến dịch
+                  </router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" to="/Hospital/news">
+                    Tin tức
+                  </router-link>
+                </li>
+              </ul>
             </li>
-            
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/support" exact-active-class="active">
                 Tư vấn & Hỗ trợ
               </router-link>
             </li>
+
             <li class="nav-item mx-3">
               <router-link class="nav-link" to="/Hospital/report" exact-active-class="active">
                 Báo cáo
               </router-link>
             </li>
-            
           </ul>
 
-          <!-- Khi chưa đăng nhập -->
+          <!-- AUTH -->
           <div v-if="!isLoggedIn" class="d-flex">
             <router-link class="btn btn-outline-secondary me-2" to="/login">
               Đăng nhập
             </router-link>
           </div>
 
-          <!-- Khi đã đăng nhập -->
           <div v-else class="dropdown">
             <a
               class="d-flex align-items-center text-decoration-none dropdown-toggle text-secondary fw-semibold"
@@ -103,7 +124,7 @@
       </div>
     </nav>
 
-    <!-- Giữ khoảng trống khi navbar fixed -->
+    <!-- Spacer khi navbar fixed -->
     <div v-show="isSticky" :style="{ height: navHeight + 'px' }"></div>
   </div>
 </template>
@@ -122,14 +143,26 @@ export default {
       stickyOffset: 10,
     };
   },
+
+  computed: {
+    isCampaignActive() {
+      return this.$route.path.startsWith("/Hospital/campaign");
+    },
+    isNewsActive() {
+      return this.$route.path.startsWith("/Hospital/news");
+    },
+  },
+
   mounted() {
     this.checkLoginDoctor();
     this.handleSticky();
     window.addEventListener("scroll", this.handleSticky);
   },
+
   unmounted() {
     window.removeEventListener("scroll", this.handleSticky);
   },
+
   methods: {
     async checkLoginDoctor() {
       const token = localStorage.getItem("token_doctor");
@@ -171,7 +204,7 @@ export default {
 
 <style scoped>
 .navbar {
-  transition: box-shadow 0.2s ease, padding 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .nav-link.active {
