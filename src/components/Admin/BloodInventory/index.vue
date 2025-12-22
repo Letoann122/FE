@@ -71,11 +71,7 @@
           <i class="bi bi-graph-up me-2"></i>Biểu đồ nhập - xuất máu
         </h5>
         <div>
-          <button
-            class="btn btn-sm"
-            :class="range === 7 ? 'btn-danger' : 'btn-outline-secondary'"
-            @click="setRange(7)"
-          >
+          <button class="btn btn-sm" :class="range === 7 ? 'btn-danger' : 'btn-outline-secondary'" @click="setRange(7)">
             7 ngày
           </button>
           <button
@@ -154,8 +150,8 @@
         <div class="d-flex gap-2 align-items-center">
           <select v-model="txFilters.type" class="form-select form-select-sm">
             <option value="">Tất cả</option>
-            <option value="IN">Nhập (IN)</option>
-            <option value="OUT">Xuất (OUT)</option>
+            <option value="IN">Nhập</option>
+            <option value="OUT">Xuất</option>
           </select>
 
           <input
@@ -192,7 +188,7 @@
                 <td style="white-space: nowrap">{{ formatDateTime(tx.occurred_at) }}</td>
                 <td>
                   <span class="badge" :class="tx.tx_type === 'IN' ? 'bg-success' : 'bg-danger'">
-                    {{ tx.tx_type }}
+                    {{ txLabel(tx.tx_type) }}
                   </span>
                 </td>
                 <td class="fw-bold">{{ tx.blood_type }}</td>
@@ -219,18 +215,13 @@
         </div>
       </div>
 
-      <!-- FIX: canh phải phân trang -->
       <div class="card-footer bg-white d-flex justify-content-end">
         <div class="d-flex gap-2 align-items-center">
           <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === 1" @click="txPage -= 1">
             Trước
           </button>
           <span class="small">Trang {{ txPage }} / {{ txTotalPages }}</span>
-          <button
-            class="btn btn-sm btn-outline-secondary"
-            :disabled="txPage === txTotalPages"
-            @click="txPage += 1"
-          >
+          <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === txTotalPages" @click="txPage += 1">
             Sau
           </button>
         </div>
@@ -323,7 +314,7 @@
                 <div class="text-muted small">Loại</div>
                 <div>
                   <span class="badge" :class="activeTx.tx_type === 'IN' ? 'bg-success' : 'bg-danger'">
-                    {{ activeTx.tx_type || "-" }}
+                    {{ txLabel(activeTx.tx_type) }}
                   </span>
                 </div>
                 <hr />
@@ -509,6 +500,14 @@ export default {
     setRange(v) {
       this.range = v;
       this.loadData();
+    },
+
+    // ✅ map IN/OUT -> Nhập/Xuất
+    txLabel(type) {
+      const t = String(type || "").toUpperCase();
+      if (t === "IN") return "Nhập";
+      if (t === "OUT") return "Xuất";
+      return t || "-";
     },
 
     loadData() {
