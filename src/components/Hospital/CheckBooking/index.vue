@@ -11,8 +11,12 @@
 
             <div class="mb-3">
               <label class="form-label small">Mã lịch hiến máu</label>
-              <input type="text" class="form-control" v-model="filters.appointment_code"
-                placeholder="Nhập mã lịch hiến máu" />
+              <input
+                type="text"
+                class="form-control"
+                v-model="filters.appointment_code"
+                placeholder="Nhập mã lịch hiến máu"
+              />
             </div>
 
             <div class="mb-3">
@@ -26,9 +30,7 @@
             </div>
 
             <div class="d-flex justify-content-end">
-              <button class="btn btn-danger mt-2" @click="applyFilter">
-                Lọc dữ liệu
-              </button>
+              <button class="btn btn-danger mt-2" @click="applyFilter">Lọc dữ liệu</button>
             </div>
           </div>
         </div>
@@ -44,7 +46,10 @@
           </div>
 
           <div class="card-body p-0">
-            <div v-if="!loadingList && paginatedAppointments.length === 0" class="p-4 text-center text-muted">
+            <div
+              v-if="!loadingList && paginatedAppointments.length === 0"
+              class="p-4 text-center text-muted"
+            >
               <i class="bi bi-inbox me-1"></i> Không có lịch hiến máu nào phù hợp.
             </div>
 
@@ -74,14 +79,26 @@
                     <td>{{ item.donor_name }}</td>
                     <td>{{ item.scheduled_date }}</td>
                     <td>{{ item.donor_phone }}</td>
+
                     <td class="text-center">
-                      <button v-if="item.status === 'REQUESTED'" class="btn btn-warning btn-sm w-100" type="button">
+                      <button
+                        v-if="item.status === 'REQUESTED'"
+                        class="btn btn-warning btn-sm w-100"
+                        type="button"
+                      >
                         Chờ duyệt
                       </button>
                       <span v-else class="badge bg-secondary">-</span>
                     </td>
+
                     <td class="text-end">
-                      <button type="button" class="btn btn-sm btn-outline-primary" @click="openDetail(item)">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#detailModal"
+                        @click="openDetail(item)"
+                      >
                         <i class="bi bi-eye me-1"></i> Chi tiết
                       </button>
                     </td>
@@ -94,23 +111,40 @@
                 <nav aria-label="Pagination">
                   <ul class="pagination mb-0">
                     <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                      <button type="button" class="page-link" @click="goToPage(currentPage - 1)"
-                        :disabled="currentPage === 1">
+                      <button
+                        class="page-link"
+                        type="button"
+                        @click="goToPage(currentPage - 1)"
+                        :disabled="currentPage === 1"
+                      >
                         ‹
                       </button>
                     </li>
 
-                    <li v-for="p in pageNumbers" :key="String(p)" class="page-item"
-                      :class="{ active: p === currentPage, disabled: p === '...' }">
-                      <button v-if="p !== '...'" type="button" class="page-link" @click="goToPage(p)">
+                    <li
+                      v-for="p in pageNumbers"
+                      :key="String(p)"
+                      class="page-item"
+                      :class="{ active: p === currentPage, disabled: p === '...' }"
+                    >
+                      <button
+                        v-if="p !== '...'"
+                        class="page-link"
+                        type="button"
+                        @click="goToPage(p)"
+                      >
                         {{ p }}
                       </button>
                       <span v-else class="page-link">...</span>
                     </li>
 
                     <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                      <button type="button" class="page-link" @click="goToPage(currentPage + 1)"
-                        :disabled="currentPage === totalPages">
+                      <button
+                        class="page-link"
+                        type="button"
+                        @click="goToPage(currentPage + 1)"
+                        :disabled="currentPage === totalPages"
+                      >
                         ›
                       </button>
                     </li>
@@ -124,8 +158,13 @@
       </div>
     </div>
 
-    <!-- MODAL CHI TIẾT (Bootstrap Modal) -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true" ref="detailModalEl">
+    <!-- MODAL CHI TIẾT (CHỈ DÙNG data-bs-*) -->
+    <div
+      class="modal fade"
+      id="detailModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
@@ -133,19 +172,25 @@
               <i class="bi bi-droplet-half text-danger me-2"></i>
               Chi tiết lịch hiến máu
             </h5>
-            <button type="button" class="btn-close" aria-label="Close" @click="hideDetailModal"></button>
+
+            <!-- NÚT CLOSE CHUẨN BOOTSTRAP + REF ĐỂ CLICK ĐÓNG SAU KHI DUYỆT -->
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              ref="detailCloseBtn"
+              @click="closeDetail"
+            ></button>
           </div>
 
           <div class="modal-body" v-if="selected">
             <div class="row g-3">
               <div class="col-lg-6">
-                <p class="mb-2">
-                  <strong>Mã lịch:</strong> {{ selected.appointment_code }}
-                </p>
+                <p class="mb-2"><strong>Mã lịch:</strong> {{ selected.appointment_code }}</p>
 
                 <p v-if="selected.is_campaign" class="mb-2">
-                  <strong>Chiến dịch:</strong>
-                  {{ selected.campaign_title || "Không rõ" }}
+                  <strong>Chiến dịch:</strong> {{ selected.campaign_title || "Không rõ" }}
                 </p>
 
                 <p><strong>Người hiến:</strong> {{ selected.donor_name }}</p>
@@ -165,7 +210,9 @@
 
                 <p>
                   <strong>Bệnh viện:</strong>
-                  <span v-if="selected.is_campaign && selected.campaign_locate_type === 'custom'">
+                  <span
+                    v-if="selected.is_campaign && selected.campaign_locate_type === 'custom'"
+                  >
                     Tự chọn
                   </span>
                   <span v-else>
@@ -174,29 +221,42 @@
                 </p>
 
                 <p>
-                  <strong>Lượng máu dự kiến:</strong>
-                  {{ selected.preferred_volume_ml }} ml
+                  <strong>Lượng máu dự kiến:</strong> {{ selected.preferred_volume_ml }} ml
                 </p>
               </div>
 
               <div class="col-12 mt-2">
-                <p>
-                  <strong>Ghi chú:</strong>
-                  {{ selected.notes || "Không có" }}
-                </p>
+                <p><strong>Ghi chú:</strong> {{ selected.notes || "Không có" }}</p>
               </div>
             </div>
           </div>
 
           <div class="modal-footer" v-if="selected">
-            <button v-if="selected.status === 'REQUESTED'" type="button" class="btn btn-success"
-              @click="approveSelected" :disabled="actionLoading">
-              <span v-if="actionLoading" class="spinner-border spinner-border-sm me-1"></span>
+            <button
+              v-if="selected.status === 'REQUESTED'"
+              type="button"
+              class="btn btn-success"
+              @click="approveSelected"
+              :disabled="actionLoading"
+            >
+              <span
+                v-if="actionLoading"
+                class="spinner-border spinner-border-sm me-1"
+              ></span>
               Duyệt
             </button>
 
-            <button v-if="selected.status === 'REQUESTED'" type="button" class="btn btn-danger"
-              @click="openRejectFromDetail" :disabled="actionLoading">
+            <!-- CHUYỂN SANG MODAL TỪ CHỐI BẰNG data-bs-* (KHÔNG IMPORT MODAL) -->
+            <button
+              v-if="selected.status === 'REQUESTED'"
+              type="button"
+              class="btn btn-outline-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#rejectModal"
+              data-bs-dismiss="modal"
+              @click="prepareReject"
+              :disabled="actionLoading"
+            >
               Từ chối
             </button>
           </div>
@@ -204,31 +264,63 @@
       </div>
     </div>
 
-    <!-- MODAL TỪ CHỐI (Bootstrap Modal) -->
-    <div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true" ref="rejectModalEl">
+    <!-- MODAL TỪ CHỐI (CHỈ DÙNG data-bs-*) -->
+    <div
+      class="modal fade"
+      id="rejectModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title fw-bold text-danger">
               <i class="bi bi-x-circle me-1"></i> Từ chối lịch hiến máu
             </h5>
-            <button type="button" class="btn-close" aria-label="Close" @click="hideRejectModal"
-              :disabled="actionLoading"></button>
+
+            <!-- REF ĐỂ CLICK ĐÓNG SAU KHI TỪ CHỐI -->
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              ref="rejectCloseBtn"
+              @click="resetRejectState"
+            ></button>
           </div>
 
           <div class="modal-body">
             <label class="form-label">Lý do từ chối</label>
-            <textarea v-model="rejectReason" class="form-control" rows="3"
-              placeholder="Nhập lý do từ chối..."></textarea>
+            <textarea
+              v-model="rejectReason"
+              class="form-control"
+              rows="3"
+              placeholder="Nhập lý do từ chối..."
+            ></textarea>
             <div class="small text-muted mt-1">Bắt buộc nhập lý do.</div>
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="hideRejectModal" :disabled="actionLoading">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+              @click="resetRejectState"
+              :disabled="actionLoading"
+            >
               Đóng
             </button>
-            <button type="button" class="btn btn-danger" @click="confirmReject" :disabled="actionLoading">
-              <span v-if="actionLoading" class="spinner-border spinner-border-sm me-1"></span>
+
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="confirmReject"
+              :disabled="actionLoading"
+            >
+              <span
+                v-if="actionLoading"
+                class="spinner-border spinner-border-sm me-1"
+              ></span>
               Xác nhận từ chối
             </button>
           </div>
@@ -241,7 +333,6 @@
 
 <script>
 import baseRequestDoctor from "../../../core/baseRequestDoctor";
-import { Modal } from "bootstrap";
 
 export default {
   data() {
@@ -263,13 +354,6 @@ export default {
       actionLoading: false,
 
       lastParams: {},
-
-      // Bootstrap instances
-      detailModal: null,
-      rejectModal: null,
-
-      // flag để chuyển modal mượt (detail -> reject)
-      switchingToReject: false,
     };
   },
 
@@ -305,40 +389,7 @@ export default {
   },
 
   mounted() {
-    // Init bootstrap modals (ONLY bootstrap)
-    const detailEl = this.$refs.detailModalEl;
-    const rejectEl = this.$refs.rejectModalEl;
-
-    this.detailModal = new Modal(detailEl, { backdrop: true, keyboard: true });
-    this.rejectModal = new Modal(rejectEl, { backdrop: true, keyboard: true });
-
-    // Cleanup state sau khi modal đóng hẳn
-    detailEl.addEventListener("hidden.bs.modal", () => {
-      if (this.switchingToReject) return; // đang chuyển qua reject thì đừng clear selected
-      this.selected = null;
-      this.rejectReason = "";
-    });
-
-    rejectEl.addEventListener("hidden.bs.modal", () => {
-      this.rejectReason = "";
-      this.actionLoading = false;
-    });
-
-    // Khi detail đóng xong để mở reject
-    detailEl.addEventListener("hidden.bs.modal", () => {
-      if (!this.switchingToReject) return;
-      this.switchingToReject = false;
-      this.rejectModal?.show();
-    });
-
     this.loadAppointments({});
-  },
-
-  beforeUnmount() {
-    try {
-      this.detailModal?.dispose?.();
-      this.rejectModal?.dispose?.();
-    } catch (_) { }
   },
 
   methods: {
@@ -386,30 +437,24 @@ export default {
       this.loadAppointments(params);
     },
 
-    // ===== Bootstrap Modal control (programmatic) =====
     openDetail(item) {
       this.selected = item;
       this.rejectReason = "";
-      this.detailModal?.show();
     },
 
-    hideDetailModal() {
-      this.switchingToReject = false;
-      this.detailModal?.hide();
-    },
-
-    openRejectFromDetail() {
-      // reset lý do + chuyển modal mượt
+    closeDetail() {
+      this.selected = null;
       this.rejectReason = "";
-      this.switchingToReject = true;
-      this.detailModal?.hide();
     },
 
-    hideRejectModal() {
-      this.rejectModal?.hide();
+    prepareReject() {
+      this.rejectReason = "";
     },
 
-    // ===== Actions =====
+    resetRejectState() {
+      this.rejectReason = "";
+    },
+
     approveSelected() {
       if (!this.selected) return;
       this.actionLoading = true;
@@ -419,8 +464,12 @@ export default {
         .then((res) => {
           if (res.data?.status) {
             this.$toast?.success?.("Duyệt thành công!");
-            // đóng modal bằng bootstrap => luôn consistent local/server
-            this.detailModal?.hide();
+
+            // ✅ ĐÓNG MODAL CHI TIẾT BẰNG CÁCH CLICK NÚT data-bs-dismiss (KHÔNG IMPORT MODAL)
+            this.$refs.detailCloseBtn?.click();
+
+            // dọn state + reload list
+            this.closeDetail();
             this.loadAppointments(this.lastParams);
           } else {
             this.$toast?.error?.(res.data?.message || "Duyệt thất bại!");
@@ -451,10 +500,11 @@ export default {
         .then((res) => {
           if (res.data?.status) {
             this.$toast?.success?.("Từ chối thành công!");
-            // đóng reject modal bằng bootstrap
-            this.rejectModal?.hide();
 
-            // clear + reload list
+            // ✅ ĐÓNG MODAL TỪ CHỐI BẰNG CÁCH CLICK NÚT data-bs-dismiss (KHÔNG IMPORT MODAL)
+            this.$refs.rejectCloseBtn?.click();
+
+            // dọn state + reload list
             this.selected = null;
             this.rejectReason = "";
             this.loadAppointments(this.lastParams);
