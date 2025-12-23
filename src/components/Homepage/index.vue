@@ -21,7 +21,7 @@
       </div>
       <div class="col-md-6 text-center">
         <img
-          src="https://dms.gov.vn/documents/20182/20167074/L%E1%BB%A3i+%C3%ADch+c%E1%BB%A7a+hi%E1%BA%BFn+m%C3%A1u.jpg/a75e9f83-f6a0-42fe-9f95-7ad9358fbeca"
+          src="https://benhvientinh.quangtri.gov.vn/uploads/news/2025_02/loi-ich-hien-mau.jpg"
           class="img-fluid" alt="Blood Donation" />
       </div>
     </div>

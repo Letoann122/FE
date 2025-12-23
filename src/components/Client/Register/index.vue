@@ -88,7 +88,9 @@
               <span v-if="!loading">Đăng ký</span>
               <span v-else><span class="spinner-border spinner-border-sm me-2"></span> Đang đăng ký...</span>
             </button>
-            <button type="button" class="btn btn-secondary ms-2" @click="resetForm" :disabled="loading">Huỷ</button>
+             <router-link to="/home-page" class="btn btn-secondary ms-2">
+              Huỷ
+            </router-link>
           </div>
         </form>
 
