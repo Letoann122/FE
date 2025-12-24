@@ -450,7 +450,7 @@ export default {
         return;
       }
       if (item.status === "pending") {
-        this.$toast.warning("Bài viết đang chờ duyệt, không thể sửa!");
+        this.$toast.error("Bài viết đang chờ duyệt, không thể sửa!");
         return;
       }
 

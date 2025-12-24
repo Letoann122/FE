@@ -11,8 +11,17 @@
           giúp bạn khỏe mạnh và an toàn.
         </p>
         <div class="d-flex gap-3">
-          <button class="btn btn-danger px-4">Trước khi hiến</button>
-          <button class="btn btn-outline-secondary px-4">Sau khi hiến</button>
+          <div class="d-flex gap-3">
+            <a href="https://vienhuyethoc.vn/luu-y-truoc-va-sau-hien-mau/" target="_blank" rel="noopener noreferrer"
+              class="btn btn-danger px-4">
+              Trước khi hiến
+            </a>
+
+            <a href="https://vienhuyethoc.vn/luu-y-truoc-va-sau-hien-mau/" target="_blank" rel="noopener noreferrer"
+              class="btn btn-outline-secondary px-4">
+              Sau khi hiến
+            </a>
+          </div>
         </div>
       </div>
 
