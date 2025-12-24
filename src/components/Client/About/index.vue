@@ -268,27 +268,27 @@ export default {
 
       statistics: [
         {
-          icon: "fas fa-user-md",
-          value: "50+",
-          label: "Bác sĩ chuyên khoa",
+          icon: "fas fa-users",
+          value: "500+",
+          label: "Người hiến máu đã đăng ký",
           bg: "bg-primary",
         },
         {
-          icon: "fas fa-procedures",
-          value: "10K+",
-          label: "Bệnh nhân/năm",
+          icon: "fas fa-calendar-check",
+          value: "1K+",
+          label: "Lịch hẹn hiến máu",
           bg: "bg-info",
         },
         {
-          icon: "fas fa-stethoscope",
-          value: "15+",
-          label: "Chuyên khoa",
+          icon: "fas fa-tint",
+          value: "3K+",
+          label: "Đơn vị máu được tiếp nhận",
           bg: "bg-success",
         },
         {
-          icon: "fas fa-certificate",
+          icon: "fas fa-bullhorn",
           value: "20+",
-          label: "Năm kinh nghiệm",
+          label: "Chiến dịch hiến máu",
           bg: "bg-warning",
         },
       ],

@@ -14,8 +14,8 @@
     <!-- PENDING -->
     <div class="card shadow-sm mb-4 border-0">
       <div class="card-header bg-white d-flex justify-content-between align-items-center">
-        <div class="fw-bold text-warning">
-          <i class="bi bi-hourglass-split me-2"></i>Bài viết chờ duyệt (Pending)
+        <div class="fw-bold">
+          <i class="bi bi-hourglass-split me-2 text-primary"></i>Bài viết chờ duyệt (Pending)
         </div>
         <div class="d-flex gap-2">
           <input v-model="pendingFilters.q" type="text" class="form-control form-control-sm"
@@ -204,9 +204,6 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Đóng
-            </button>
             <div v-if="selected?.status === 'pending'">
               <button class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#rejectNewsModal"
                 data-bs-dismiss="modal" @click="openRejectModal(selected)">

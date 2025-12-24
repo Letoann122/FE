@@ -18,16 +18,16 @@
               </h5>
               <form @submit.prevent="submitForm">
                 <div class="mb-3">
-                  <label class="form-label fw-semibold">Họ và tên *</label>
+                  <label class="form-label fw-semibold">Họ và tên <span class="text-danger">*</span> </label>
                   <input v-model="form.name" type="text" class="form-control" placeholder="Nguyễn Văn A" required />
                 </div>
                 <div class="mb-3">
-                  <label class="form-label fw-semibold">Email *</label>
+                  <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
                   <input v-model="form.email" type="email" class="form-control" placeholder="example@gmail.com"
                     required />
                 </div>
                 <div class="mb-3">
-                  <label class="form-label fw-semibold">Nội dung *</label>
+                  <label class="form-label fw-semibold">Nội dung <span class="text-danger">*</span></label>
                   <textarea v-model="form.message" class="form-control" rows="5"
                     placeholder="Nhập nội dung tin nhắn của bạn..." required></textarea>
                 </div>
@@ -46,7 +46,7 @@
               <ul class="list-unstyled mb-4">
                 <li class="mb-2">
                   <i class="bi bi-geo-alt-fill text-danger me-2"></i>
-                  254 Nguyễn Văn Linh, Quận Thanh Khê, Đà Nẵng
+                  120 Hoàng Minh Thảo, phường Hoà Khánh, TP. Đà Nẵng
                 </li>
                 <li class="mb-2">
                   <i class="bi bi-telephone-fill text-danger me-2"></i>
@@ -54,7 +54,7 @@
                 </li>
                 <li class="mb-2">
                   <i class="bi bi-envelope-fill text-danger me-2"></i>
-                  <strong>Email:</strong> Smart-blood-donation-system@gmail.com
+                  <strong>Email:</strong> Smart.blood.donation.system@gmail.com
                 </li>
                 <li>
                   <i class="bi bi-clock-fill text-danger me-2"></i>
@@ -63,9 +63,7 @@
               </ul>
 
               <div class="map-container rounded overflow-hidden shadow-sm">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.043728724053!2d108.20646887504788!3d16.058020139576756!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314219b06ad87f61%3A0x2d796ca4a97d7b6a!2zMjU0IE5ndXnhu4VuIFbEg24gTGluaCwgQW4gS2jDoW5nLCBUaOG6oW5oIFBo4bunLCDEkMOgIE7hurVuZw!5e0!3m2!1svi!2s!4v1709799999999!5m2!1svi!2s"
-                  width="100%" height="250" style="border: 0" allowfullscreen="" loading="lazy"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.307695418689!2d108.1591451!3d16.049514999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421938e07dc88f%3A0x7ced3a0b971c065b!2zMTIwIEhvw6BuZyBNaW5oIFRo4bqjbywgSG_DoCBLaMOhbmggTmFtLCBMacOqbiBDaGnhu4N1LCDEkMOgIE7hurVuZyA1NTAwMDA!5e0!3m2!1svi!2s!4v1766572434777!5m2!1svi!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
               </div>
             </div>
           </div>
