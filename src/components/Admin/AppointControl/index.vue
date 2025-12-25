@@ -16,25 +16,19 @@
         <div class="row g-3">
           <div class="col-md-2">
             <label class="form-label small">Keyword</label>
-            <input
-              class="form-control"
-              v-model="filters.keyword"
-              placeholder="Tên / mã / SĐT"
-            />
+            <input class="form-control" v-model="filters.keyword" placeholder="Tên / mã / SĐT" />
           </div>
+
           <div class="col-md-2">
             <label class="form-label small">Trạng thái</label>
             <select class="form-select" v-model="filters.status">
               <option value="">Tất cả</option>
-              <option
-                v-for="(status, i) in statuses"
-                :key="i"
-                :value="status"
-              >
-                {{ status }}
+              <option v-for="(opt, i) in statusOptions" :key="i" :value="opt.value">
+                {{ opt.label }}
               </option>
             </select>
           </div>
+
           <div class="col-md-2">
             <label class="form-label small">Site</label>
             <select class="form-select" v-model.number="filters.siteId">
@@ -44,6 +38,7 @@
               </option>
             </select>
           </div>
+
           <div class="col-md-2">
             <label class="form-label small">Khung giờ</label>
             <select class="form-select" v-model="filters.slot">
@@ -53,10 +48,12 @@
               </option>
             </select>
           </div>
+
           <div class="col-md-2">
             <label class="form-label small">Từ ngày</label>
             <input type="date" class="form-control" v-model="filters.fromDate" />
           </div>
+
           <div class="col-md-2">
             <label class="form-label small">Đến ngày</label>
             <input type="date" class="form-control" v-model="filters.toDate" />
@@ -86,6 +83,7 @@
             >
               Duyệt hàng loạt
             </button>
+
             <button
               class="btn btn-outline-danger btn-sm"
               @click="openModal('cancel')"
@@ -94,6 +92,7 @@
             >
               Huỷ hàng loạt
             </button>
+
             <button
               class="btn btn-outline-secondary btn-sm"
               @click="openModal('notify')"
@@ -156,11 +155,8 @@
               <td>{{ item.date }}</td>
 
               <td>
-                <span
-                  class="badge rounded-pill"
-                  :class="statusBadge(item.status)"
-                >
-                  {{ item.status }}
+                <span class="badge rounded-pill" :class="statusBadge(item.status)">
+                  {{ statusLabel(item.status) }}
                 </span>
               </td>
 
@@ -179,27 +175,19 @@
             </tr>
 
             <tr v-if="!filtered.length">
-              <td colspan="12" class="text-center text-muted py-3">
-                Không có dữ liệu
-              </td>
+              <td colspan="12" class="text-center text-muted py-3">Không có dữ liệu</td>
             </tr>
           </tbody>
         </table>
 
         <!-- PAGINATION -->
-        <div
-          class="d-flex justify-content-between align-items-center mt-3 px-2"
-        >
+        <div class="d-flex justify-content-between align-items-center mt-3 px-2">
           <div class="text-muted small">
             Trang <b>{{ page }}</b> / <b>{{ totalPages }}</b>
           </div>
 
           <div class="btn-group">
-            <button
-              class="btn btn-outline-secondary btn-sm"
-              :disabled="page === 1"
-              @click="prevPage"
-            >
+            <button class="btn btn-outline-secondary btn-sm" :disabled="page === 1" @click="prevPage">
               ‹
             </button>
 
@@ -213,11 +201,7 @@
               {{ p }}
             </button>
 
-            <button
-              class="btn btn-outline-secondary btn-sm"
-              :disabled="page === totalPages"
-              @click="nextPage"
-            >
+            <button class="btn btn-outline-secondary btn-sm" :disabled="page === totalPages" @click="nextPage">
               ›
             </button>
           </div>
@@ -239,59 +223,28 @@
           <div class="modal-body">
             <table class="table table-bordered">
               <tbody>
-                <tr>
-                  <th>Mã lịch:</th>
-                  <td>{{ detail?.code || "—" }}</td>
-                </tr>
+                <tr><th>Mã lịch:</th><td>{{ detail?.code || "—" }}</td></tr>
+                <tr><th>Donor:</th><td>{{ detail?.donor?.name || "—" }}</td></tr>
+                <tr><th>SĐT:</th><td>{{ detail?.donor?.phone || "—" }}</td></tr>
+                <tr><th>Email:</th><td>{{ detail?.donor?.email || "—" }}</td></tr>
+                <tr><th>Nhóm máu:</th><td>{{ detail?.donor?.blood || "—" }}</td></tr>
+                <tr><th>Site:</th><td>{{ detail?.site || "—" }}</td></tr>
+                <tr><th>Slot:</th><td>{{ detail?.slot || "—" }}</td></tr>
+                <tr><th>Ngày:</th><td>{{ detail?.date || "—" }}</td></tr>
 
-                <tr>
-                  <th>Donor:</th>
-                  <td>{{ detail?.donor?.name || "—" }}</td>
-                </tr>
-                <tr>
-                  <th>SĐT:</th>
-                  <td>{{ detail?.donor?.phone || "—" }}</td>
-                </tr>
-                <tr>
-                  <th>Email:</th>
-                  <td>{{ detail?.donor?.email || "—" }}</td>
-                </tr>
-                <tr>
-                  <th>Nhóm máu:</th>
-                  <td>{{ detail?.donor?.blood || "—" }}</td>
-                </tr>
-
-                <tr>
-                  <th>Site:</th>
-                  <td>{{ detail?.site || "—" }}</td>
-                </tr>
-                <tr>
-                  <th>Slot:</th>
-                  <td>{{ detail?.slot || "—" }}</td>
-                </tr>
-                <tr>
-                  <th>Ngày:</th>
-                  <td>{{ detail?.date || "—" }}</td>
-                </tr>
-
-                <tr
-                  v-if="
-                    detail?.status === 'REQUESTED' ||
-                    detail?.status === 'APPROVED'
-                  "
-                >
+                <tr v-if="detail?.status === 'REQUESTED' || detail?.status === 'APPROVED'">
                   <th>Dự kiến (ml):</th>
-                  <td>{{ detail?.preferred_volume_ml || '—' }}</td>
+                  <td>{{ detail?.preferred_volume_ml || "—" }}</td>
                 </tr>
 
                 <tr v-if="detail?.status === 'REJECTED'">
                   <th>Lý do từ chối:</th>
-                  <td>{{ detail?.rejected_reason || '—' }}</td>
+                  <td>{{ detail?.rejected_reason || "—" }}</td>
                 </tr>
 
                 <tr v-if="detail?.status === 'COMPLETED'">
                   <th>Thực nhận (ml):</th>
-                  <td>{{ detail?.actual_volume_ml || '—' }}</td>
+                  <td>{{ detail?.actual_volume_ml || "—" }}</td>
                 </tr>
 
                 <tr v-if="detail?.campaign_name">
@@ -301,26 +254,17 @@
 
                 <tr>
                   <th>Trạng thái:</th>
-                  <td>{{ detail?.status }}</td>
+                  <td>{{ statusLabel(detail?.status) }}</td>
                 </tr>
 
-                <tr>
-                  <th>Bác sĩ duyệt:</th>
-                  <td>{{ detail?.doctorName || "—" }}</td>
-                </tr>
-
-                <tr>
-                  <th>Ghi chú:</th>
-                  <td>{{ detail?.notes || "—" }}</td>
-                </tr>
+                <tr><th>Bác sĩ duyệt:</th><td>{{ detail?.doctorName || "—" }}</td></tr>
+                <tr><th>Ghi chú:</th><td>{{ detail?.notes || "—" }}</td></tr>
               </tbody>
             </table>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Đóng
-            </button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
           </div>
         </div>
       </div>
@@ -332,17 +276,11 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title fw-bold">{{ modalTitle }}</h5>
-            <button
-              class="btn-close"
-              data-bs-dismiss="modal"
-              ref="bulkCloseBtn"
-            ></button>
+            <button class="btn-close" data-bs-dismiss="modal" ref="bulkCloseBtn"></button>
           </div>
 
           <div class="modal-body">
-            <p>
-              Số lịch xử lý: <b>{{ selectedIds.length }}</b>
-            </p>
+            <p>Số lịch xử lý: <b>{{ selectedIds.length }}</b></p>
 
             <template v-if="action === 'approve'">
               <div class="alert alert-info small">
@@ -351,20 +289,12 @@
             </template>
 
             <label class="form-label fw-bold mt-3">Ghi chú</label>
-            <textarea
-              class="form-control"
-              rows="3"
-              v-model="bulkForm.note"
-            ></textarea>
+            <textarea class="form-control" rows="3" v-model="bulkForm.note"></textarea>
           </div>
 
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Huỷ
-            </button>
-            <button class="btn btn-danger fw-bold" @click="submitBulk">
-              Xác nhận
-            </button>
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+            <button class="btn btn-danger fw-bold" @click="submitBulk">Xác nhận</button>
           </div>
         </div>
       </div>
@@ -382,19 +312,16 @@ export default {
     return {
       sites: [],
       doctors: [],
-      slots: [
-        "07:00",
-        "08:00",
-        "09:00",
-        "10:00",
-        "11:00",
-        "13:00",
-        "14:00",
-        "15:00",
-        "16:00",
-        "17:00",
+      slots: ["07:00","08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00"],
+
+      // ✅ dropdown dùng label tiếng Việt nhưng value vẫn là status code từ DB/API
+      statusOptions: [
+        { value: "REQUESTED", label: "Chờ Duyệt" },
+        { value: "APPROVED", label: "Đã Duyệt" },
+        { value: "REJECTED", label: "Từ Chối" },
+        { value: "CANCELLED", label: "Đã Huỷ" },
+        { value: "COMPLETED", label: "Hoàn Thành" },
       ],
-      statuses: ["REQUESTED", "APPROVED", "REJECTED", "CANCELLED", "COMPLETED"],
 
       appointments: [],
       filtered: [],
@@ -402,7 +329,7 @@ export default {
 
       filters: {
         keyword: "",
-        status: "",
+        status: "",     // ✅ sẽ là REQUESTED/APPROVED...
         siteId: 0,
         slot: "",
         fromDate: "",
@@ -454,14 +381,26 @@ export default {
   },
 
   methods: {
+    // ✅ map status code -> label tiếng Việt
+    statusLabel(code) {
+      const map = {
+        REQUESTED: "Chờ Duyệt",
+        APPROVED: "Đã Duyệt",
+        REJECTED: "Từ Chối",
+        CANCELLED: "Đã Huỷ",
+        COMPLETED: "Hoàn Thành",
+      };
+      return map[code] || code || "—";
+    },
+
     loadData() {
       baseRequestAdmin
         .get("/admin/appointments")
         .then((res) => {
           if (res.data.status) {
-            this.appointments = res.data.data;
-            this.doctors = res.data.doctors;
-            this.sites = res.data.sites;
+            this.appointments = res.data.data || [];
+            this.doctors = res.data.doctors || [];
+            this.sites = res.data.sites || [];
             this.applyFilter();
           } else {
             this.$toast.error(res.data.message);
@@ -477,26 +416,22 @@ export default {
       if (kw) {
         arr = arr.filter(
           (x) =>
-            x.code.toLowerCase().includes(kw) ||
+            x.code?.toLowerCase().includes(kw) ||
             x.donor?.name?.toLowerCase().includes(kw) ||
             x.donor?.phone?.includes(kw)
         );
       }
 
-      if (this.filters.status)
-        arr = arr.filter((x) => x.status === this.filters.status);
+      // ✅ filters.status là REQUESTED/APPROVED... nên match đúng với x.status
+      if (this.filters.status) arr = arr.filter((x) => x.status === this.filters.status);
 
-      if (this.filters.siteId)
-        arr = arr.filter((x) => x.siteId === this.filters.siteId);
+      if (this.filters.siteId) arr = arr.filter((x) => x.siteId === this.filters.siteId);
 
-      if (this.filters.slot)
-        arr = arr.filter((x) => x.slot === this.filters.slot);
+      if (this.filters.slot) arr = arr.filter((x) => x.slot === this.filters.slot);
 
-      if (this.filters.fromDate)
-        arr = arr.filter((x) => x.date >= this.filters.fromDate);
+      if (this.filters.fromDate) arr = arr.filter((x) => x.date >= this.filters.fromDate);
 
-      if (this.filters.toDate)
-        arr = arr.filter((x) => x.date <= this.filters.toDate);
+      if (this.filters.toDate) arr = arr.filter((x) => x.date <= this.filters.toDate);
 
       this.filtered = arr;
       this.page = 1;
@@ -522,7 +457,6 @@ export default {
 
     openDetail(item) {
       this.detail = { ...item };
-      // modal mở bằng data-bs-toggle trên nút
     },
 
     openModal(type) {
@@ -532,20 +466,15 @@ export default {
       }
       this.action = type;
       this.bulkForm = { note: "" };
-      // modal mở bằng data-bs-toggle / data-bs-target
     },
 
     submitBulk() {
       let url = "";
       const payload = { ids: this.selectedIds, note: this.bulkForm.note };
 
-      if (this.action === "approve") {
-        url = "/admin/appointments/bulk-approve";
-      } else if (this.action === "cancel") {
-        url = "/admin/appointments/bulk-cancel";
-      } else if (this.action === "notify") {
-        url = "/admin/appointments/bulk-notify";
-      }
+      if (this.action === "approve") url = "/admin/appointments/bulk-approve";
+      else if (this.action === "cancel") url = "/admin/appointments/bulk-cancel";
+      else if (this.action === "notify") url = "/admin/appointments/bulk-notify";
 
       baseRequestAdmin
         .post(url, payload)
@@ -558,7 +487,7 @@ export default {
           this.$toast.success(res.data.message);
           this.loadData();
           this.selectedMap = {};
-          this.$refs.bulkCloseBtn?.click(); // đóng modal qua nút có data-bs-dismiss
+          this.$refs.bulkCloseBtn?.click();
         })
         .catch(() => this.$toast.error("Lỗi xử lý!"));
     },

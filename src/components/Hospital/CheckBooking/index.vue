@@ -21,26 +21,16 @@
 
             <div class="mb-3">
               <label class="form-label small">Ngày hiến từ</label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="filters.from_date"
-              />
+              <input type="date" class="form-control" v-model="filters.from_date" />
             </div>
 
             <div class="mb-3">
               <label class="form-label small">Ngày hiến đến</label>
-              <input
-                type="date"
-                class="form-control"
-                v-model="filters.to_date"
-              />
+              <input type="date" class="form-control" v-model="filters.to_date" />
             </div>
 
             <div class="d-flex justify-content-end">
-              <button class="btn btn-danger mt-2" @click="applyFilter">
-                Lọc dữ liệu
-              </button>
+              <button class="btn btn-danger mt-2" @click="applyFilter">Lọc dữ liệu</button>
             </div>
           </div>
         </div>
@@ -60,8 +50,7 @@
               v-if="!loadingList && paginatedAppointments.length === 0"
               class="p-4 text-center text-muted"
             >
-              <i class="bi bi-inbox me-1"></i> Không có lịch hiến máu nào phù
-              hợp.
+              <i class="bi bi-inbox me-1"></i> Không có lịch hiến máu nào phù hợp.
             </div>
 
             <div v-else-if="loadingList" class="p-4 text-center text-muted">
@@ -84,26 +73,27 @@
                 </thead>
 
                 <tbody>
-                  <tr
-                    v-for="(item, index) in paginatedAppointments"
-                    :key="item.id"
-                  >
+                  <tr v-for="(item, index) in paginatedAppointments" :key="item.id">
                     <td>{{ rowNumber(index) }}</td>
                     <td>{{ item.appointment_code }}</td>
                     <td>{{ item.donor_name }}</td>
                     <td>{{ item.scheduled_date }}</td>
                     <td>{{ item.donor_phone }}</td>
+
                     <td class="text-center">
                       <button
                         v-if="item.status === 'REQUESTED'"
                         class="btn btn-warning btn-sm w-100"
+                        type="button"
                       >
                         Chờ duyệt
                       </button>
                       <span v-else class="badge bg-secondary">-</span>
                     </td>
+
                     <td class="text-end">
                       <button
+                        type="button"
                         class="btn btn-sm btn-outline-primary"
                         data-bs-toggle="modal"
                         data-bs-target="#detailModal"
@@ -117,17 +107,13 @@
               </table>
 
               <!-- Pagination -->
-              <div
-                class="d-flex align-items-center justify-content-end px-3 py-3 border-top"
-              >
+              <div class="d-flex align-items-center justify-content-end px-3 py-3 border-top">
                 <nav aria-label="Pagination">
                   <ul class="pagination mb-0">
-                    <li
-                      class="page-item"
-                      :class="{ disabled: currentPage === 1 }"
-                    >
+                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
                       <button
                         class="page-link"
+                        type="button"
                         @click="goToPage(currentPage - 1)"
                         :disabled="currentPage === 1"
                       >
@@ -144,6 +130,7 @@
                       <button
                         v-if="p !== '...'"
                         class="page-link"
+                        type="button"
                         @click="goToPage(p)"
                       >
                         {{ p }}
@@ -151,12 +138,10 @@
                       <span v-else class="page-link">...</span>
                     </li>
 
-                    <li
-                      class="page-item"
-                      :class="{ disabled: currentPage === totalPages }"
-                    >
+                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
                       <button
                         class="page-link"
+                        type="button"
                         @click="goToPage(currentPage + 1)"
                         :disabled="currentPage === totalPages"
                       >
@@ -173,7 +158,7 @@
       </div>
     </div>
 
-    <!-- MODAL CHI TIẾT -->
+    <!-- MODAL CHI TIẾT (CHỈ DÙNG data-bs-*) -->
     <div
       class="modal fade"
       id="detailModal"
@@ -187,11 +172,14 @@
               <i class="bi bi-droplet-half text-danger me-2"></i>
               Chi tiết lịch hiến máu
             </h5>
+
+            <!-- NÚT CLOSE CHUẨN BOOTSTRAP + REF ĐỂ CLICK ĐÓNG SAU KHI DUYỆT -->
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              ref="detailCloseBtn"
               @click="closeDetail"
             ></button>
           </div>
@@ -199,13 +187,10 @@
           <div class="modal-body" v-if="selected">
             <div class="row g-3">
               <div class="col-lg-6">
-                <p class="mb-2">
-                  <strong>Mã lịch:</strong> {{ selected.appointment_code }}
-                </p>
+                <p class="mb-2"><strong>Mã lịch:</strong> {{ selected.appointment_code }}</p>
 
                 <p v-if="selected.is_campaign" class="mb-2">
-                  <strong>Chiến dịch:</strong>
-                  {{ selected.campaign_title || "Không rõ" }}
+                  <strong>Chiến dịch:</strong> {{ selected.campaign_title || "Không rõ" }}
                 </p>
 
                 <p><strong>Người hiến:</strong> {{ selected.donor_name }}</p>
@@ -220,43 +205,28 @@
 
                 <p>
                   <strong>Địa điểm:</strong>
-                  {{
-                    selected.location_display ||
-                    selected.donation_site_name ||
-                    ""
-                  }}
+                  {{ selected.location_display || selected.donation_site_name || "" }}
                 </p>
 
                 <p>
                   <strong>Bệnh viện:</strong>
                   <span
-                    v-if="
-                      selected.is_campaign &&
-                      selected.campaign_locate_type === 'custom'
-                    "
+                    v-if="selected.is_campaign && selected.campaign_locate_type === 'custom'"
                   >
                     Tự chọn
                   </span>
                   <span v-else>
-                    {{
-                      selected.hospital_display ||
-                      selected.hospital_name ||
-                      ""
-                    }}
+                    {{ selected.hospital_display || selected.hospital_name || "" }}
                   </span>
                 </p>
 
                 <p>
-                  <strong>Lượng máu dự kiến:</strong>
-                  {{ selected.preferred_volume_ml }} ml
+                  <strong>Lượng máu dự kiến:</strong> {{ selected.preferred_volume_ml }} ml
                 </p>
               </div>
 
               <div class="col-12 mt-2">
-                <p>
-                  <strong>Ghi chú:</strong>
-                  {{ selected.notes || "Không có" }}
-                </p>
+                <p><strong>Ghi chú:</strong> {{ selected.notes || "Không có" }}</p>
               </div>
             </div>
           </div>
@@ -264,6 +234,7 @@
           <div class="modal-footer" v-if="selected">
             <button
               v-if="selected.status === 'REQUESTED'"
+              type="button"
               class="btn btn-success"
               @click="approveSelected"
               :disabled="actionLoading"
@@ -275,8 +246,10 @@
               Duyệt
             </button>
 
+            <!-- CHUYỂN SANG MODAL TỪ CHỐI BẰNG data-bs-* (KHÔNG IMPORT MODAL) -->
             <button
               v-if="selected.status === 'REQUESTED'"
+              type="button"
               class="btn btn-outline-danger"
               data-bs-toggle="modal"
               data-bs-target="#rejectModal"
@@ -291,7 +264,7 @@
       </div>
     </div>
 
-    <!-- MODAL TỪ CHỐI -->
+    <!-- MODAL TỪ CHỐI (CHỈ DÙNG data-bs-*) -->
     <div
       class="modal fade"
       id="rejectModal"
@@ -304,13 +277,15 @@
             <h5 class="modal-title fw-bold text-danger">
               <i class="bi bi-x-circle me-1"></i> Từ chối lịch hiến máu
             </h5>
+
+            <!-- REF ĐỂ CLICK ĐÓNG SAU KHI TỪ CHỐI -->
             <button
               type="button"
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-              @click="resetRejectState"
               ref="rejectCloseBtn"
+              @click="resetRejectState"
             ></button>
           </div>
 
@@ -327,6 +302,7 @@
 
           <div class="modal-footer">
             <button
+              type="button"
               class="btn btn-secondary"
               data-bs-dismiss="modal"
               @click="resetRejectState"
@@ -334,7 +310,9 @@
             >
               Đóng
             </button>
+
             <button
+              type="button"
               class="btn btn-danger"
               @click="confirmReject"
               :disabled="actionLoading"
@@ -390,16 +368,6 @@ export default {
       return this.appointments.slice(start, start + this.pageSize);
     },
 
-    pageFrom() {
-      if (this.totalAppointments === 0) return 0;
-      return (this.currentPage - 1) * this.pageSize + 1;
-    },
-
-    pageTo() {
-      if (this.totalAppointments === 0) return 0;
-      return Math.min(this.currentPage * this.pageSize, this.totalAppointments);
-    },
-
     pageNumbers() {
       const total = this.totalPages;
       const cur = this.currentPage;
@@ -446,14 +414,11 @@ export default {
         .get("doctor/donation-appointments", { params })
         .then((res) => {
           if (res.data?.status) {
-            const list = (res.data.data || []).filter(
-              (x) => x.status === "REQUESTED"
-            );
+            const list = (res.data.data || []).filter((x) => x.status === "REQUESTED");
             this.appointments = list;
             this.totalAppointments = list.length;
 
-            if (this.currentPage > this.totalPages)
-              this.currentPage = this.totalPages;
+            if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
             if (this.currentPage < 1) this.currentPage = 1;
           }
         })
@@ -464,8 +429,7 @@ export default {
 
     applyFilter() {
       const params = {};
-      if (this.filters.appointment_code)
-        params.appointment_code = this.filters.appointment_code;
+      if (this.filters.appointment_code) params.appointment_code = this.filters.appointment_code;
       if (this.filters.from_date) params.from_date = this.filters.from_date;
       if (this.filters.to_date) params.to_date = this.filters.to_date;
 
@@ -475,23 +439,20 @@ export default {
 
     openDetail(item) {
       this.selected = item;
-      // Modal được mở tự động bởi data-bs-toggle / data-bs-target
+      this.rejectReason = "";
     },
 
     closeDetail() {
-      // Chỉ dọn state, modal tự đóng nhờ data-bs-dismiss
       this.selected = null;
       this.rejectReason = "";
     },
 
     prepareReject() {
-      // Khi mở modal từ chối, reset lý do
       this.rejectReason = "";
     },
 
     resetRejectState() {
       this.rejectReason = "";
-      // Không đụng DOM, Bootstrap tự remove backdrop / class
     },
 
     approveSelected() {
@@ -503,7 +464,12 @@ export default {
         .then((res) => {
           if (res.data?.status) {
             this.$toast?.success?.("Duyệt thành công!");
-            this.selected = null;
+
+            // ✅ ĐÓNG MODAL CHI TIẾT BẰNG CÁCH CLICK NÚT data-bs-dismiss (KHÔNG IMPORT MODAL)
+            this.$refs.detailCloseBtn?.click();
+
+            // dọn state + reload list
+            this.closeDetail();
             this.loadAppointments(this.lastParams);
           } else {
             this.$toast?.error?.(res.data?.message || "Duyệt thất bại!");
@@ -515,7 +481,7 @@ export default {
         });
     },
 
-    async confirmReject() {
+    confirmReject() {
       if (!this.selected) return;
 
       const reason = (this.rejectReason || "").trim();
@@ -535,9 +501,10 @@ export default {
           if (res.data?.status) {
             this.$toast?.success?.("Từ chối thành công!");
 
-            // Đóng modal bằng cách click nút close (đã có data-bs-dismiss)
+            // ✅ ĐÓNG MODAL TỪ CHỐI BẰNG CÁCH CLICK NÚT data-bs-dismiss (KHÔNG IMPORT MODAL)
             this.$refs.rejectCloseBtn?.click();
 
+            // dọn state + reload list
             this.selected = null;
             this.rejectReason = "";
             this.loadAppointments(this.lastParams);

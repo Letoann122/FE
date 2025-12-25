@@ -13,24 +13,14 @@
 
     <!-- PENDING -->
     <div class="card shadow-sm mb-4 border-0">
-      <div
-        class="card-header bg-white d-flex justify-content-between align-items-center"
-      >
-        <div class="fw-bold text-warning">
-          <i class="bi bi-hourglass-split me-2"></i>Bài viết chờ duyệt (Pending)
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <div class="fw-bold">
+          <i class="bi bi-hourglass-split me-2 text-primary"></i>Bài viết chờ duyệt (Pending)
         </div>
         <div class="d-flex gap-2">
-          <input
-            v-model="pendingFilters.q"
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="Tìm theo tiêu đề..."
-            style="width: 260px"
-          />
-          <button
-            class="btn btn-sm btn-warning text-dark"
-            @click="fetchPending"
-          >
+          <input v-model="pendingFilters.q" type="text" class="form-control form-control-sm"
+            placeholder="Tìm theo tiêu đề..." style="width: 260px" />
+          <button class="btn btn-sm btn-warning text-dark" @click="fetchPending">
             <i class="bi bi-search me-1"></i>Lọc
           </button>
         </div>
@@ -57,20 +47,11 @@
               <tr v-for="(item, idx) in pendingNews" :key="item.id">
                 <td>{{ idx + 1 }}</td>
                 <td>
-                  <img
-                    :src="item.image_url || 'https://via.placeholder.com/150'"
-                    class="rounded object-fit-cover"
-                    width="80"
-                    height="50"
-                    alt="thumb"
-                  />
+                  <img :src="item.image_url || 'https://via.placeholder.com/150'" class="rounded object-fit-cover"
+                    width="80" height="50" alt="thumb" />
                 </td>
                 <td class="fw-semibold">
-                  <div
-                    class="text-truncate"
-                    style="max-width: 300px"
-                    :title="item.title"
-                  >
+                  <div class="text-truncate" style="max-width: 300px" :title="item.title">
                     {{ item.title }}
                   </div>
                   <div class="text-muted small fw-normal">
@@ -87,28 +68,16 @@
                 </td>
                 <td>{{ fmtDate(item.published_date) }}</td>
                 <td class="text-end">
-                  <button
-                    class="btn btn-sm btn-outline-primary me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#previewNewsModal"
-                    @click="openPreviewModal(item)"
-                  >
+                  <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                    data-bs-target="#previewNewsModal" @click="openPreviewModal(item)">
                     <i class="bi bi-eye"></i>
                   </button>
-                  <button
-                    class="btn btn-sm btn-success me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#approveNewsModal"
-                    @click="openApproveModal(item)"
-                  >
+                  <button class="btn btn-sm btn-success me-2" data-bs-toggle="modal" data-bs-target="#approveNewsModal"
+                    @click="openApproveModal(item)">
                     <i class="bi bi-check-lg"></i>
                   </button>
-                  <button
-                    class="btn btn-sm btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#rejectNewsModal"
-                    @click="openRejectModal(item)"
-                  >
+                  <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectNewsModal"
+                    @click="openRejectModal(item)">
                     <i class="bi bi-x-lg"></i>
                   </button>
                 </td>
@@ -126,25 +95,14 @@
 
     <!-- ALL NEWS -->
     <div class="card shadow-sm border-0">
-      <div
-        class="card-header bg-white d-flex justify-content-between align-items-center"
-      >
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
         <div class="fw-bold">
           <i class="bi bi-table text-primary me-2"></i>Danh sách toàn bộ tin tức
         </div>
         <div class="d-flex gap-2">
-          <input
-            v-model="allFilters.q"
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="Tìm theo tiêu đề..."
-            style="width: 260px"
-          />
-          <select
-            v-model="allFilters.status"
-            class="form-select form-select-sm"
-            style="width: 160px"
-          >
+          <input v-model="allFilters.q" type="text" class="form-control form-control-sm"
+            placeholder="Tìm theo tiêu đề..." style="width: 260px" />
+          <select v-model="allFilters.status" class="form-select form-select-sm" style="width: 160px">
             <option value="">Trạng thái: Tất cả</option>
             <option value="pending">Chờ duyệt</option>
             <option value="approved">Đã duyệt</option>
@@ -185,42 +143,19 @@
                 <td>{{ item.creator?.full_name || "-" }}</td>
                 <td>{{ fmtDate(item.published_date) }}</td>
                 <td class="text-center">
-                  <span
-                    v-if="item.status === 'approved'"
-                    class="badge bg-success"
-                    >Đã duyệt</span
-                  >
-                  <span
-                    v-else-if="item.status === 'rejected'"
-                    class="badge bg-danger"
-                    :title="item.review_note"
-                    >Từ chối</span
-                  >
-                  <span
-                    v-else-if="item.status === 'draft'"
-                    class="badge bg-secondary"
-                    >Nháp</span
-                  >
-                  <span v-else class="badge bg-warning text-dark"
-                    >Chờ duyệt</span
-                  >
+                  <span v-if="item.status === 'approved'" class="badge bg-success">Đã duyệt</span>
+                  <span v-else-if="item.status === 'rejected'" class="badge bg-danger" :title="item.review_note">Từ
+                    chối</span>
+                  <span v-else-if="item.status === 'draft'" class="badge bg-secondary">Nháp</span>
+                  <span v-else class="badge bg-warning text-dark">Chờ duyệt</span>
                 </td>
                 <td class="text-end">
-                  <button
-                    class="btn btn-sm btn-outline-primary me-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#previewNewsModal"
-                    @click="openPreviewModal(item)"
-                  >
+                  <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                    data-bs-target="#previewNewsModal" @click="openPreviewModal(item)">
                     Chi tiết
                   </button>
-                  <button
-                    class="btn btn-sm btn-outline-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteNewsModal"
-                    @click="openDeleteModal(item)"
-                    title="Xóa vĩnh viễn"
-                  >
+                  <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteNewsModal"
+                    @click="openDeleteModal(item)" title="Xóa vĩnh viễn">
                     <i class="bi bi-trash"></i>
                   </button>
                 </td>
@@ -249,60 +184,33 @@
               <h4 class="fw-bold mb-3">{{ selected.title }}</h4>
               <div class="d-flex align-items-center text-muted mb-3 small">
                 <span class="me-3">
-                  <i class="bi bi-person me-1"></i
-                  >{{ selected.creator?.full_name }}
+                  <i class="bi bi-person me-1"></i>{{ selected.creator?.full_name }}
                 </span>
                 <span>
-                  <i class="bi bi-calendar me-1"></i
-                  >{{ fmtDate(selected.published_date) }}
+                  <i class="bi bi-calendar me-1"></i>{{ fmtDate(selected.published_date) }}
                 </span>
               </div>
               <div v-if="selected.image_url" class="mb-3 text-center">
-                <img
-                  :src="selected.image_url"
-                  class="img-fluid rounded shadow-sm"
-                  style="max-height: 400px"
-                />
+                <img :src="selected.image_url" class="img-fluid rounded shadow-sm" style="max-height: 400px" />
               </div>
-              <div
-                class="bg-light p-3 rounded"
-                style="white-space: pre-wrap"
-              >
+              <div class="bg-light p-3 rounded" style="white-space: pre-wrap">
                 {{ selected.content }}
               </div>
-              <div
-                v-if="selected.status === 'rejected'"
-                class="alert alert-danger mt-3"
-              >
-                <strong
-                  ><i class="bi bi-exclamation-triangle"></i> Lý do
-                  từ chối:</strong
-                >
+              <div v-if="selected.status === 'rejected'" class="alert alert-danger mt-3">
+                <strong><i class="bi bi-exclamation-triangle"></i> Lý do
+                  từ chối:</strong>
                 {{ selected.review_note }}
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" data-bs-dismiss="modal">
-              Đóng
-            </button>
             <div v-if="selected?.status === 'pending'">
-              <button
-                class="btn btn-danger me-2"
-                data-bs-toggle="modal"
-                data-bs-target="#rejectNewsModal"
-                data-bs-dismiss="modal"
-                @click="openRejectModal(selected)"
-              >
+              <button class="btn btn-danger me-2" data-bs-toggle="modal" data-bs-target="#rejectNewsModal"
+                data-bs-dismiss="modal" @click="openRejectModal(selected)">
                 Từ chối
               </button>
-              <button
-                class="btn btn-success"
-                data-bs-toggle="modal"
-                data-bs-target="#approveNewsModal"
-                data-bs-dismiss="modal"
-                @click="openApproveModal(selected)"
-              >
+              <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveNewsModal"
+                data-bs-dismiss="modal" @click="openApproveModal(selected)">
                 Duyệt ngay
               </button>
             </div>
@@ -317,11 +225,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-success">Xác nhận duyệt bài</h5>
-            <button
-              class="btn-close"
-              data-bs-dismiss="modal"
-              ref="approveCloseBtn"
-            ></button>
+            <button class="btn-close" data-bs-dismiss="modal" ref="approveCloseBtn"></button>
           </div>
           <div class="modal-body">
             <p>Bạn có chắc chắn muốn xuất bản bài viết này?</p>
@@ -333,15 +237,8 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Huỷ
             </button>
-            <button
-              class="btn btn-success"
-              @click="confirmApprove"
-              :disabled="submitting"
-            >
-              <span
-                v-if="submitting"
-                class="spinner-border spinner-border-sm me-1"
-              ></span>
+            <button class="btn btn-success" @click="confirmApprove" :disabled="submitting">
+              <span v-if="submitting" class="spinner-border spinner-border-sm me-1"></span>
               Xác nhận duyệt
             </button>
           </div>
@@ -355,37 +252,22 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-danger">Từ chối bài viết</h5>
-            <button
-              class="btn-close"
-              data-bs-dismiss="modal"
-              ref="rejectCloseBtn"
-            ></button>
+            <button class="btn-close" data-bs-dismiss="modal" ref="rejectCloseBtn"></button>
           </div>
           <div class="modal-body">
             <p>Nhập lý do từ chối (bác sĩ sẽ nhìn thấy):</p>
             <div class="mb-3 fw-bold text-muted">
               {{ selected?.title }}
             </div>
-            <textarea
-              v-model="reviewNote"
-              class="form-control"
-              rows="4"
-              placeholder="Ví dụ: Nội dung không phù hợp..."
-            ></textarea>
+            <textarea v-model="reviewNote" class="form-control" rows="4"
+              placeholder="Ví dụ: Nội dung không phù hợp..."></textarea>
           </div>
           <div class="modal-footer">
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Huỷ
             </button>
-            <button
-              class="btn btn-danger"
-              @click="confirmReject"
-              :disabled="submitting || !reviewNote.trim()"
-            >
-              <span
-                v-if="submitting"
-                class="spinner-border spinner-border-sm me-1"
-              ></span>
+            <button class="btn btn-danger" @click="confirmReject" :disabled="submitting || !reviewNote.trim()">
+              <span v-if="submitting" class="spinner-border spinner-border-sm me-1"></span>
               Gửi phản hồi
             </button>
           </div>
@@ -399,11 +281,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title text-danger">Xóa bài viết</h5>
-            <button
-              class="btn-close"
-              data-bs-dismiss="modal"
-              ref="deleteCloseBtn"
-            ></button>
+            <button class="btn-close" data-bs-dismiss="modal" ref="deleteCloseBtn"></button>
           </div>
           <div class="modal-body">
             <p class="text-danger fw-bold">
@@ -419,15 +297,8 @@
             <button class="btn btn-secondary" data-bs-dismiss="modal">
               Huỷ
             </button>
-            <button
-              class="btn btn-danger"
-              @click="confirmDelete"
-              :disabled="submitting"
-            >
-              <span
-                v-if="submitting"
-                class="spinner-border spinner-border-sm me-1"
-              ></span>
+            <button class="btn btn-danger" @click="confirmDelete" :disabled="submitting">
+              <span v-if="submitting" class="spinner-border spinner-border-sm me-1"></span>
               Xóa vĩnh viễn
             </button>
           </div>
@@ -604,6 +475,7 @@ export default {
   font-weight: 600;
   color: #495057;
 }
+
 .object-fit-cover {
   object-fit: cover;
 }

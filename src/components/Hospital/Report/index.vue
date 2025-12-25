@@ -81,7 +81,7 @@
         <div class="card shadow-sm border-0 h-100 rounded-4">
           <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center rounded-top-4">
             <h5 class="card-title fw-bold mb-0">
-              <i class="bi bi-pie-chart-fill me-2"></i>Thống kê Lịch hẹn (theo trạng thái)
+              <i class="bi bi-pie-chart-fill me-2"></i>Thống kê Lịch hẹn 
             </h5>
             <span class="badge bg-light text-dark border">{{ rangeLabel }}</span>
           </div>
@@ -213,7 +213,7 @@
     <div class="card shadow-sm border-0 mb-4 rounded-4">
       <div class="card-header bg-white py-3 rounded-top-4">
         <h5 class="card-title fw-bold mb-0">
-          <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>Báo cáo Cảnh báo
+          <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>Cảnh báo nhóm máu
         </h5>
       </div>
 
