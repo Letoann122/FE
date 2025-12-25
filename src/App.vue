@@ -5,9 +5,14 @@
 </template>
 
 <script>
-import { loadTawk, removeTawk } from "./core/tawk";
+import { showTawk, hideTawk } from "./core/tawk";
 
 const default_layout = "blank";
+
+function hasValidToken(key) {
+  const v = localStorage.getItem(key);
+  return !!v && v !== "null" && v !== "undefined";
+}
 
 export default {
   name: "App",
@@ -34,19 +39,17 @@ export default {
   },
 
   methods: {
-    applyTawkRule() {
-      // ƯU TIÊN theo token (chắc nhất)
-      const isAdmin = !!localStorage.getItem("token_admin");
-      const isDoctor = !!localStorage.getItem("token_doctor");
+    async applyTawkRule() {
+      const isAdmin = hasValidToken("token_admin");
+      const isDoctor = hasValidToken("token_doctor");
 
-      // admin/doctor => ẩn
       if (isAdmin || isDoctor) {
-        removeTawk();
+        hideTawk();
         return;
       }
 
       // guest hoặc donor => hiện
-      loadTawk();
+      await showTawk();
     },
   },
 };
