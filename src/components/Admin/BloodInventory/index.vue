@@ -29,6 +29,7 @@
           <i class="bi bi-grid-3x3-gap me-2"></i>Tổng quan kho máu
         </h5>
       </div>
+
       <div class="card-body p-0">
         <div class="table-responsive">
           <table class="table table-hover mb-0 align-middle">
@@ -40,8 +41,10 @@
                 <th>Sắp hết hạn</th>
               </tr>
             </thead>
+
             <tbody>
-              <tr v-for="(row, index) in inventorySummary" :key="index">
+              <!-- ✅ render theo thứ tự bloodTypes -->
+              <tr v-for="(row, index) in sortedInventorySummary" :key="row.blood_type">
                 <td>{{ index + 1 }}</td>
                 <th>{{ row.blood_type }}</th>
                 <td>{{ row.total_units }}</td>
@@ -55,7 +58,7 @@
                 </td>
               </tr>
 
-              <tr v-if="inventorySummary.length === 0">
+              <tr v-if="sortedInventorySummary.length === 0">
                 <td colspan="4" class="text-center text-muted py-4">Chưa có dữ liệu kho máu.</td>
               </tr>
             </tbody>
@@ -217,9 +220,7 @@
 
       <div class="card-footer bg-white d-flex justify-content-end">
         <div class="d-flex gap-2 align-items-center">
-          <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === 1" @click="txPage -= 1">
-            Trước
-          </button>
+          <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === 1" @click="txPage -= 1">Trước</button>
           <span class="small">Trang {{ txPage }} / {{ txTotalPages }}</span>
           <button class="btn btn-sm btn-outline-secondary" :disabled="txPage === txTotalPages" @click="txPage += 1">
             Sau
@@ -397,6 +398,19 @@ export default {
   data() {
     return {
       range: 7,
+
+      // ✅ thêm bloodTypes để “ép thứ tự” giống code 1
+      bloodTypes: [
+        { id: 1, name: "A+" },
+        { id: 2, name: "A-" },
+        { id: 3, name: "B+" },
+        { id: 4, name: "B-" },
+        { id: 5, name: "AB+" },
+        { id: 6, name: "AB-" },
+        { id: 7, name: "O+" },
+        { id: 8, name: "O-" },
+      ],
+
       topCards: [
         { title: "Tổng túi máu", value: 0, icon: "🩸" },
         { title: "Nhập trong kỳ", value: 0, icon: "📥" },
@@ -429,10 +443,36 @@ export default {
       },
     };
   },
+
   mounted() {
     this.loadData();
   },
+
   computed: {
+    // ✅ sort theo bloodTypes giống code 1
+    sortedInventorySummary() {
+      const map = Object.create(null);
+      (this.inventorySummary || []).forEach((row) => {
+        const k = String(row.blood_type || "").toUpperCase().trim();
+        if (k) map[k] = row;
+      });
+
+      const result = this.bloodTypes.map((t) => {
+        const key = String(t.name || "").toUpperCase().trim();
+        return (
+          map[key] || {
+            blood_type: t.name,
+            total_units: 0,
+            expiring_units: 0,
+          }
+        );
+      });
+
+      // nếu muốn: khi BE trả rỗng hoàn toàn thì return [] để hiện “Chưa có dữ liệu”
+      const hasAny = (this.inventorySummary || []).length > 0;
+      return hasAny ? result : [];
+    },
+
     filteredTransactions() {
       const type = (this.txFilters.type || "").trim().toUpperCase();
       const q = (this.txFilters.q || "").trim().toLowerCase();
@@ -481,6 +521,7 @@ export default {
       return this.filteredTransactions.slice(start, start + this.txPageSize);
     },
   },
+
   watch: {
     txFilters: {
       deep: true,
@@ -492,6 +533,7 @@ export default {
       if (this.txPage > this.txTotalPages) this.txPage = this.txTotalPages;
     },
   },
+
   methods: {
     reload() {
       this.loadData();
@@ -502,7 +544,6 @@ export default {
       this.loadData();
     },
 
-    // ✅ map IN/OUT -> Nhập/Xuất
     txLabel(type) {
       const t = String(type || "").toUpperCase();
       if (t === "IN") return "Nhập";
