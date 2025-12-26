@@ -10,8 +10,7 @@
         </p>
       </div>
 
-      <div class="d-flex align-items-center gap-2">
-      </div>
+      <div class="d-flex align-items-center gap-2"></div>
     </div>
 
     <!-- Error -->
@@ -66,9 +65,7 @@
         <div class="w-100" style="height: 340px">
           <Line v-if="hasInventoryTrend" :data="inventoryLineData" :options="inventoryLineOptions" />
           <div v-else class="text-center py-5 bg-light rounded-4 border">
-            <p class="text-muted mb-0">
-              Chưa có dữ liệu nhập/xuất trong khoảng thời gian này.
-            </p>
+            <p class="text-muted mb-0">Chưa có dữ liệu nhập/xuất trong khoảng thời gian này.</p>
           </div>
         </div>
       </div>
@@ -81,7 +78,7 @@
         <div class="card shadow-sm border-0 h-100 rounded-4">
           <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center rounded-top-4">
             <h5 class="card-title fw-bold mb-0">
-              <i class="bi bi-pie-chart-fill me-2"></i>Thống kê Lịch hẹn 
+              <i class="bi bi-pie-chart-fill me-2"></i>Thống kê Lịch hẹn
             </h5>
             <span class="badge bg-light text-dark border">{{ rangeLabel }}</span>
           </div>
@@ -95,9 +92,7 @@
                 :options="appointmentDonutOptions"
               />
               <div v-else class="text-center py-4 bg-light rounded-4 border">
-                <p class="text-muted mb-0">
-                  Chưa có dữ liệu lịch hẹn trong khoảng thời gian này.
-                </p>
+                <p class="text-muted mb-0">Chưa có dữ liệu lịch hẹn trong khoảng thời gian này.</p>
               </div>
             </div>
 
@@ -152,12 +147,7 @@
             <!-- Scroll list campaign -->
             <div class="mt-3 overflow-auto" style="max-height: 285px">
               <div v-if="campaignList.length">
-                <div
-                  v-for="c in campaignList"
-                  :key="c.id"
-                  class="mb-3 p-3 bg-light rounded-4"
-                >
-                  <!-- title + volume -->
+                <div v-for="c in campaignList" :key="c.id" class="mb-3 p-3 bg-light rounded-4">
                   <div class="d-flex justify-content-between align-items-center gap-2">
                     <div class="fw-bold text-truncate" style="max-width: 70%">
                       {{ c.title }}
@@ -176,33 +166,16 @@
                   </div>
 
                   <div class="d-flex flex-wrap gap-2 mt-2 text-muted small">
-                    <span>
-                      Chờ duyệt:
-                      <b class="text-dark">{{ Number(c.requested || 0) }}</b>
-                    </span>
-                    <span>
-                      Đã duyệt:
-                      <b class="text-dark">{{ Number(c.approved || 0) }}</b>
-                    </span>
-                    <span>
-                      Hoàn thành:
-                      <b class="text-dark">{{ Number(c.completed || 0) }}</b>
-                    </span>
-                    <span>
-                      Từ chối:
-                      <b class="text-dark">{{ Number(c.rejected || 0) }}</b>
-                    </span>
-                    <span>
-                      Đã huỷ:
-                      <b class="text-dark">{{ Number(c.cancelled || 0) }}</b>
-                    </span>
+                    <span>Chờ duyệt: <b class="text-dark">{{ Number(c.requested || 0) }}</b></span>
+                    <span>Đã duyệt: <b class="text-dark">{{ Number(c.approved || 0) }}</b></span>
+                    <span>Hoàn thành: <b class="text-dark">{{ Number(c.completed || 0) }}</b></span>
+                    <span>Từ chối: <b class="text-dark">{{ Number(c.rejected || 0) }}</b></span>
+                    <span>Đã huỷ: <b class="text-dark">{{ Number(c.cancelled || 0) }}</b></span>
                   </div>
                 </div>
               </div>
 
-              <div v-else class="text-muted small">
-                * Không có campaign phù hợp trong khoảng thời gian đang chọn.
-              </div>
+              <div v-else class="text-muted small">* Không có campaign phù hợp trong khoảng thời gian đang chọn.</div>
             </div>
           </div>
         </div>
@@ -250,15 +223,11 @@
                   <td class="fw-semibold">{{ x.type }}</td>
                   <td class="text-end">{{ x.units }}</td>
                   <td class="text-end">
-                    <span class="badge" :class="x.badgeClass">
-                      {{ x.levelLabel }}
-                    </span>
+                    <span class="badge" :class="x.badgeClass">{{ x.levelLabel }}</span>
                   </td>
                 </tr>
                 <tr v-if="inventoryByTypeRows.length === 0">
-                  <td colspan="3" class="text-center text-muted py-3">
-                    Chưa có dữ liệu tồn kho.
-                  </td>
+                  <td colspan="3" class="text-center text-muted py-3">Chưa có dữ liệu tồn kho.</td>
                 </tr>
               </tbody>
             </table>
@@ -313,16 +282,23 @@ export default {
       dashboard: null,
       campaignPerf: null,
       range: "7d",
+
+      // ✅ ép thứ tự hiển thị tồn kho theo nhóm máu
+      bloodTypes: [
+        { id: 1, name: "A+" },
+        { id: 2, name: "A-" },
+        { id: 3, name: "B+" },
+        { id: 4, name: "B-" },
+        { id: 5, name: "AB+" },
+        { id: 6, name: "AB-" },
+        { id: 7, name: "O+" },
+        { id: 8, name: "O-" },
+      ],
     };
   },
   computed: {
     rangeLabel() {
-      const m = {
-        "7d": "7 ngày",
-        "1m": "30 ngày",
-        "3m": "3 tháng",
-        "1y": "1 năm",
-      };
+      const m = { "7d": "7 ngày", "1m": "30 ngày", "3m": "3 tháng", "1y": "1 năm" };
       return m[this.range] || this.range;
     },
 
@@ -417,20 +393,13 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: "bottom",
-            labels: { boxWidth: 10, usePointStyle: true },
-          },
+          legend: { position: "bottom", labels: { boxWidth: 10, usePointStyle: true } },
           tooltip: { mode: "index", intersect: false },
         },
         interaction: { mode: "index", intersect: false },
         scales: {
           x: { grid: { color: this.palette.grid } },
-          y: {
-            beginAtZero: true,
-            ticks: { precision: 0 },
-            grid: { color: this.palette.grid },
-          },
+          y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: this.palette.grid } },
         },
       };
     },
@@ -470,10 +439,7 @@ export default {
         maintainAspectRatio: false,
         cutout: "62%",
         plugins: {
-          legend: {
-            position: "bottom",
-            labels: { usePointStyle: true, boxWidth: 10 },
-          },
+          legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 10 } },
           tooltip: { enabled: true },
         },
       };
@@ -526,20 +492,13 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: "bottom",
-            labels: { boxWidth: 10, usePointStyle: true },
-          },
+          legend: { position: "bottom", labels: { boxWidth: 10, usePointStyle: true } },
           tooltip: { mode: "index", intersect: false },
         },
         interaction: { mode: "index", intersect: false },
         scales: {
           x: { grid: { display: false } },
-          y: {
-            beginAtZero: true,
-            ticks: { precision: 0 },
-            grid: { color: this.palette.grid },
-          },
+          y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: this.palette.grid } },
         },
       };
     },
@@ -549,27 +508,18 @@ export default {
       const lowGroups = this.dashboard?.alerts?.lowGroups || [];
       const exp = this.dashboard?.alerts?.expiring?.units ?? 0;
       const pending =
-        this.dashboard?.topCards?.find((x) => x.key === "pending_appointments")
-          ?.value ?? null;
-      const totalUnits =
-        this.dashboard?.topCards?.find((x) => x.key === "total_units")?.value ??
-        null;
+        this.dashboard?.topCards?.find((x) => x.key === "pending_appointments")?.value ?? null;
+      const totalUnits = this.dashboard?.topCards?.find((x) => x.key === "total_units")?.value ?? null;
 
       const first = lowGroups[0];
       const arr = [];
 
       arr.push({
         key: "low_inventory",
-        title: first?.blood_type?.type_name
-          ? `Thiếu máu ${first.blood_type.type_name}`
-          : "Thiếu máu",
+        title: first?.blood_type?.type_name ? `Thiếu máu ${first.blood_type.type_name}` : "Thiếu máu",
         value: first ? `${first.units} túi` : "—",
-        desc: first
-          ? "Tồn kho đang thấp, cần bổ sung."
-          : "Không có cảnh báo thiếu máu.",
-        class: first
-          ? "alert alert-danger rounded-4"
-          : "alert alert-warning rounded-4",
+        desc: first ? "Tồn kho đang thấp, cần bổ sung." : "Không có cảnh báo thiếu máu.",
+        class: first ? "alert alert-danger rounded-4" : "alert alert-warning rounded-4",
       });
 
       arr.push({
@@ -577,10 +527,7 @@ export default {
         title: "Sắp hết hạn",
         value: `${Number(exp || 0)} túi`,
         desc: "Tổng túi máu sẽ hết hạn trong 3 ngày.",
-        class:
-          Number(exp || 0) > 0
-            ? "alert alert-warning rounded-4"
-            : "alert alert-primary rounded-4",
+        class: Number(exp || 0) > 0 ? "alert alert-warning rounded-4" : "alert alert-primary rounded-4",
       });
 
       arr.push({
@@ -588,10 +535,7 @@ export default {
         title: "Chờ duyệt",
         value: pending === null ? "—" : `${Number(pending)} lịch`,
         desc: "Số lịch chờ duyệt trong kỳ.",
-        class:
-          pending && pending >= 10
-            ? "alert alert-warning rounded-4"
-            : "alert alert-success rounded-4",
+        class: pending && pending >= 10 ? "alert alert-warning rounded-4" : "alert alert-success rounded-4",
       });
 
       arr.push({
@@ -605,45 +549,62 @@ export default {
       return arr;
     },
 
+    // ✅ SORT theo bloodTypes (A+, A-, B+...)
     inventoryByTypeRows() {
       const rows = this.dashboard?.inventory?.byType || [];
-      return rows.map((x) => {
+
+      const mapLevel = {
+        critical: { label: "Nguy cấp", cls: "bg-danger" },
+        low: { label: "Ít", cls: "bg-warning text-dark" },
+        full: { label: "Đủ", cls: "bg-success" },
+        expiring: { label: "Sắp hết hạn", cls: "bg-warning text-dark" },
+      };
+
+      // 1) lookup theo typeName
+      const lookup = Object.create(null);
+      rows.forEach((x) => {
         const type =
           x?.blood_type?.type_name ||
           `${x?.blood_type?.abo || ""}${x?.blood_type?.rh || ""}` ||
-          "?";
+          "";
+        const key = String(type).toUpperCase().trim();
+        if (!key) return;
+
         const units = Number(x?.units || 0);
         const level = String(x?.level || "full");
+        const info = mapLevel[level] || mapLevel.full;
 
-        const map = {
-          critical: {
-            label: "Nguy cấp",
-            cls: "bg-danger",
-          },
-          low: {
-            label: "Ít",
-            cls: "bg-warning text-dark",
-          },
-          full: {
-            label: "Đủ",
-            cls: "bg-success",
-          },
-          expiring: {
-            label: "Sắp hết hạn",
-            cls: "bg-warning text-dark",
-          },
-        };
-
-        const info = map[level] || map.full;
-
-        return {
-          key: type,
-          type,
+        lookup[key] = {
+          key,
+          type: key,
           units,
           levelLabel: info.label,
           badgeClass: info.cls,
         };
       });
+
+      // 2) ép thứ tự theo bloodTypes, thiếu thì fill 0
+      const ordered = this.bloodTypes.map((bt) => {
+        const key = String(bt.name).toUpperCase().trim();
+        return (
+          lookup[key] || {
+            key,
+            type: bt.name,
+            units: 0,
+            levelLabel: "Đủ",
+            badgeClass: "bg-success",
+          }
+        );
+      });
+
+      // 3) append loại máu lạ (nếu BE trả thêm)
+      const extra = Object.keys(lookup)
+        .filter((k) => !this.bloodTypes.some((bt) => String(bt.name).toUpperCase().trim() === k))
+        .sort((a, b) => a.localeCompare(b))
+        .map((k) => lookup[k]);
+
+      const hasAny = rows.length > 0;
+      return hasAny ? [...ordered, ...extra] : [];
     },
   },
 
@@ -653,10 +614,7 @@ export default {
 
   methods: {
     async fetchAll() {
-      await Promise.allSettled([
-        this.fetchDashboard(),
-        this.fetchCampaignPerformance(),
-      ]);
+      await Promise.allSettled([this.fetchDashboard(), this.fetchCampaignPerformance()]);
     },
 
     async fetchDashboard() {
@@ -664,18 +622,10 @@ export default {
       this.error = null;
 
       try {
-        const params = {
-          inventory_range: this.range,
-          appointment_range: this.range,
-        };
-        const res = await baseRequestDoctor.get("/doctor/dashboard", {
-          params,
-        });
+        const params = { inventory_range: this.range, appointment_range: this.range };
+        const res = await baseRequestDoctor.get("/doctor/dashboard", { params });
 
-        if (!res?.data?.status)
-          throw new Error(
-            res?.data?.message || "Tải dữ liệu dashboard thất bại"
-          );
+        if (!res?.data?.status) throw new Error(res?.data?.message || "Tải dữ liệu dashboard thất bại");
         this.dashboard = res.data.data || null;
       } catch (e) {
         this.dashboard = null;
@@ -688,10 +638,7 @@ export default {
     async fetchCampaignPerformance() {
       try {
         const params = { range: this.range };
-        const res = await baseRequestDoctor.get(
-          "/doctor/reports/campaign-performance",
-          { params }
-        );
+        const res = await baseRequestDoctor.get("/doctor/reports/campaign-performance", { params });
         if (!res?.data?.status) {
           this.campaignPerf = { campaigns: [] };
           return;

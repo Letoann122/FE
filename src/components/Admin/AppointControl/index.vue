@@ -4,7 +4,7 @@
       <div>
         <h3 class="fw-bold mb-1">
           <i class="fa-solid fa-calendar-check text-danger me-2"></i>
-          Appointment Control Center
+          Quản Lí Lịch Hẹn
         </h3>
         <p class="text-muted mb-0">Điều phối lịch hẹn toàn hệ thống</p>
       </div>

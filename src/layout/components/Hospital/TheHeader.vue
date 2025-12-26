@@ -6,6 +6,7 @@
       :class="{ 'fixed-top shadow-sm': isSticky }"
     >
       <div class="container-fluid">
+        <!-- BRAND -->
         <router-link class="navbar-brand fw-bold ms-3" to="/Hospital/dashboard">
           <i class="fa-solid fa-hospital text-danger"></i>
           Smart Blood Donation
@@ -25,36 +26,56 @@
           <!-- NAV MENU -->
           <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/dashboard" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/dashboard"
+                exact-active-class="active"
+              >
                 Dashboard
               </router-link>
             </li>
 
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/blood-inventory" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/blood-inventory"
+                exact-active-class="active"
+              >
                 Quản lý kho máu
               </router-link>
             </li>
 
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/donor-management" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/donor-management"
+                exact-active-class="active"
+              >
                 Quản lý Donor
               </router-link>
             </li>
 
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/check-booking" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/check-booking"
+                exact-active-class="active"
+              >
                 Quản lý đặt lịch
               </router-link>
             </li>
 
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/donation-complete" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/donation-complete"
+                exact-active-class="active"
+              >
                 Ghi nhận hiến máu
               </router-link>
             </li>
 
-            <!-- DROPDOWN: CHIẾN DỊCH + TIN TỨC -->
+            <!-- DROPDOWN: CHIẾN DỊCH -->
             <li class="nav-item dropdown mx-3">
               <a
                 class="nav-link dropdown-toggle"
@@ -80,15 +101,45 @@
             </li>
 
             <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/support" exact-active-class="active">
+              <router-link
+                class="nav-link"
+                to="/Hospital/support"
+                exact-active-class="active"
+              >
                 Tư vấn & Hỗ trợ
               </router-link>
             </li>
 
-            <li class="nav-item mx-3">
-              <router-link class="nav-link" to="/Hospital/report" exact-active-class="active">
+            <!-- ✅ DROPDOWN: BÁO CÁO -->
+            <li class="nav-item dropdown mx-3">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                data-bs-toggle="dropdown"
+                :class="{ active: isReportActive || isBloodLogActive }"
+                @click.prevent
+              >
                 Báo cáo
-              </router-link>
+              </a>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link class="dropdown-item" to="/Hospital/report">
+                    Báo cáo & Thống kê
+                  </router-link>
+                </li>
+
+                <li><hr class="dropdown-divider" /></li>
+
+                <li>
+                  <router-link
+                    class="dropdown-item"
+                    to="/Hospital/blood-inventory/log"
+                  >
+                    Nhật ký kho máu
+                  </router-link>
+                </li>
+              </ul>
             </li>
           </ul>
 
@@ -134,6 +185,7 @@ import baseRequestDoctor from "../../../core/baseRequestDoctor";
 
 export default {
   name: "HospitalHeader",
+
   data() {
     return {
       isLoggedIn: false,
@@ -150,6 +202,12 @@ export default {
     },
     isNewsActive() {
       return this.$route.path.startsWith("/Hospital/news");
+    },
+    isReportActive() {
+      return this.$route.path.startsWith("/Hospital/report");
+    },
+    isBloodLogActive() {
+      return this.$route.path.startsWith("/Hospital/blood-inventory/log");
     },
   },
 
