@@ -24,9 +24,7 @@
         <div :class="['card border-0 shadow-sm rounded-3 h-100', card.borderClass || '']">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <div class="text-muted small fw-bold text-uppercase">
-                {{ card.title }}
-              </div>
+              <div class="text-muted small fw-bold text-uppercase">{{ card.title }}</div>
               <div :class="['icon-box', card.iconBg, 'text-' + card.iconColor, 'rounded-circle p-2']">
                 <i :class="card.icon"></i>
               </div>
@@ -45,6 +43,7 @@
           <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h6 class="fw-bold m-0">Thống kê người dùng mới và lượt hiến</h6>
           </div>
+
           <div class="card-body">
             <div v-if="loading" class="text-center py-4">
               <div class="spinner-border text-danger"></div>
@@ -62,6 +61,7 @@
           <div class="card-header bg-white py-3">
             <h6 class="fw-bold m-0">Tỷ lệ nhóm máu hệ thống</h6>
           </div>
+
           <div class="card-body d-flex flex-column justify-content-center align-items-center">
             <div v-if="loading" class="w-100 text-center py-3">
               <div class="spinner-border text-danger"></div>
@@ -83,183 +83,159 @@
     <div class="row g-4">
       <div class="col-lg-8">
         <div class="card border-0 shadow-sm rounded-3 h-100">
+          <!-- Tabs -->
           <div class="card-header bg-white p-0 border-bottom-0">
             <ul class="nav nav-tabs px-3 pt-3 border-bottom-0" role="tablist">
               <li class="nav-item">
                 <button
+                  type="button"
                   class="nav-link fw-bold"
                   :class="activeTab === 'news' ? 'active text-dark' : 'text-muted'"
-                  data-bs-toggle="tab"
-                  data-bs-target="#pending-news"
                   @click="activeTab = 'news'"
                 >
                   Tin tức
-                  <span class="badge bg-danger rounded-pill ms-1">
-                    {{ pendingNews.length }}
-                  </span>
+                  <span class="badge bg-danger rounded-pill ms-1">{{ pendingNews.length }}</span>
                 </button>
               </li>
 
               <li class="nav-item">
                 <button
+                  type="button"
                   class="nav-link fw-bold"
                   :class="activeTab === 'campaigns' ? 'active text-dark' : 'text-muted'"
-                  data-bs-toggle="tab"
-                  data-bs-target="#pending-campaigns"
                   @click="activeTab = 'campaigns'"
                 >
                   Chiến dịch
-                  <span class="badge bg-warning text-dark rounded-pill ms-1">
-                    {{ pendingCampaigns.length }}
-                  </span>
+                  <span class="badge bg-warning text-dark rounded-pill ms-1">{{ pendingCampaigns.length }}</span>
                 </button>
               </li>
 
               <li class="nav-item">
                 <button
+                  type="button"
                   class="nav-link fw-bold"
                   :class="activeTab === 'doctors' ? 'active text-dark' : 'text-muted'"
-                  data-bs-toggle="tab"
-                  data-bs-target="#pending-doctors"
                   @click="activeTab = 'doctors'"
                 >
                   Bác sĩ mới
-                  <span class="badge bg-secondary rounded-pill ms-1">
-                    {{ pendingDoctors.length }}
-                  </span>
+                  <span class="badge bg-secondary rounded-pill ms-1">{{ pendingDoctors.length }}</span>
                 </button>
               </li>
             </ul>
           </div>
 
+          <!-- Content -->
           <div class="card-body p-0">
-            <div class="tab-content">
-              <!-- NEWS -->
-              <div class="tab-pane fade show active" id="pending-news">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                      <tr>
-                        <th class="ps-4">Tiêu đề</th>
-                        <th>Tác giả</th>
-                        <th>Ngày gửi</th>
-                        <th class="text-end pe-4">Hành động</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in pendingNews" :key="item.id">
-                        <td class="ps-4 fw-semibold">{{ item.title }}</td>
-                        <td>{{ item.author }}</td>
-                        <td>{{ formatDate(item.date) }}</td>
-                        <td class="text-end pe-4">
-                          <button class="btn btn-sm btn-outline-primary me-2" @click="viewNews(item.id)">
-                            Xem
-                          </button>
-                          <button
-                            class="btn btn-sm btn-success"
-                            :disabled="approvingKey === `news-${item.id}`"
-                            @click="approveNews(item.id)"
-                          >
-                            <span v-if="approvingKey === `news-${item.id}`" class="spinner-border spinner-border-sm"></span>
-                            <span v-else>Duyệt</span>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr v-if="pendingNews.length === 0">
-                        <td colspan="4" class="text-center text-muted py-4">
-                          Không có bài chờ duyệt.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            <!-- NEWS -->
+            <div v-if="activeTab === 'news'" class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="ps-4">Tiêu đề</th>
+                    <th>Tác giả</th>
+                    <th>Ngày gửi</th>
+                    <th class="text-end pe-4">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in pendingNews" :key="item.id">
+                    <td class="ps-4 fw-semibold">{{ item.title }}</td>
+                    <td>{{ item.author }}</td>
+                    <td>{{ formatDate(item.date) }}</td>
+                    <td class="text-end pe-4">
+                      <button class="btn btn-sm btn-outline-primary me-2" @click="viewNews(item.id)">Xem</button>
+                      <button
+                        class="btn btn-sm btn-success"
+                        :disabled="approvingKey === `news-${item.id}`"
+                        @click="approveNews(item.id)"
+                      >
+                        <span v-if="approvingKey === `news-${item.id}`" class="spinner-border spinner-border-sm"></span>
+                        <span v-else>Duyệt</span>
+                      </button>
+                    </td>
+                  </tr>
 
-              <!-- CAMPAIGNS -->
-              <div class="tab-pane fade" id="pending-campaigns">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                      <tr>
-                        <th class="ps-4">Tên chiến dịch</th>
-                        <th>Bệnh viện / Địa điểm</th>
-                        <th>Ngày gửi</th>
-                        <th class="text-end pe-4">Hành động</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in pendingCampaigns" :key="item.id">
-                        <td class="ps-4 fw-semibold">{{ item.title }}</td>
-                        <td>{{ item.hospital || "—" }}</td>
-                        <td>{{ formatDate(item.date) }}</td>
-                        <td class="text-end pe-4">
-                          <button class="btn btn-sm btn-outline-primary me-2" @click="viewCampaign(item.id)">
-                            Xem
-                          </button>
-                          <button
-                            class="btn btn-sm btn-success"
-                            :disabled="approvingKey === `camp-${item.id}`"
-                            @click="approveCampaign(item.id)"
-                          >
-                            <span v-if="approvingKey === `camp-${item.id}`" class="spinner-border spinner-border-sm"></span>
-                            <span v-else>Duyệt</span>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr v-if="pendingCampaigns.length === 0">
-                        <td colspan="4" class="text-center text-muted py-4">
-                          Không có chiến dịch chờ duyệt.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                  <tr v-if="pendingNews.length === 0">
+                    <td colspan="4" class="text-center text-muted py-4">Không có bài chờ duyệt.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
-              <!-- DOCTORS -->
-              <div class="tab-pane fade" id="pending-doctors">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                      <tr>
-                        <th class="ps-4">Họ tên</th>
-                        <th>Email</th>
-                        <th>Ngày đăng ký</th>
-                        <th class="text-end pe-4">Hành động</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="item in pendingDoctors" :key="item.id">
-                        <td class="ps-4 fw-semibold">{{ item.fullName }}</td>
-                        <td>{{ item.email }}</td>
-                        <td>{{ formatDate(item.date) }}</td>
-                        <td class="text-end pe-4">
-                          <button class="btn btn-sm btn-outline-primary me-2" @click="viewDoctor(item.id)">
-                            Xem
-                          </button>
-                          <button
-                            class="btn btn-sm btn-success"
-                            :disabled="approvingKey === `doc-${item.id}`"
-                            @click="approveDoctor(item.id)"
-                          >
-                            <span v-if="approvingKey === `doc-${item.id}`" class="spinner-border spinner-border-sm"></span>
-                            <span v-else>Duyệt</span>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr v-if="pendingDoctors.length === 0">
-                        <td colspan="4" class="text-center text-muted py-4">
-                          Không có bác sĩ mới.
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            <!-- CAMPAIGNS -->
+            <div v-if="activeTab === 'campaigns'" class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="ps-4">Tên chiến dịch</th>
+                    <th>Bệnh viện / Địa điểm</th>
+                    <th>Ngày gửi</th>
+                    <th class="text-end pe-4">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in pendingCampaigns" :key="item.id">
+                    <td class="ps-4 fw-semibold">{{ item.title }}</td>
+                    <td>{{ item.hospital || "—" }}</td>
+                    <td>{{ formatDate(item.date) }}</td>
+                    <td class="text-end pe-4">
+                      <button class="btn btn-sm btn-outline-primary me-2" @click="viewCampaign(item.id)">Xem</button>
+                      <button
+                        class="btn btn-sm btn-success"
+                        :disabled="approvingKey === `camp-${item.id}`"
+                        @click="approveCampaign(item.id)"
+                      >
+                        <span v-if="approvingKey === `camp-${item.id}`" class="spinner-border spinner-border-sm"></span>
+                        <span v-else>Duyệt</span>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr v-if="pendingCampaigns.length === 0">
+                    <td colspan="4" class="text-center text-muted py-4">Không có chiến dịch chờ duyệt.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- DOCTORS -->
+            <div v-if="activeTab === 'doctors'" class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th class="ps-4">Họ tên</th>
+                    <th>Email</th>
+                    <th>Ngày đăng ký</th>
+                    <th class="text-end pe-4">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in pendingDoctors" :key="item.id">
+                    <td class="ps-4 fw-semibold">{{ item.fullName }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ formatDate(item.date) }}</td>
+                    <td class="text-end pe-4">
+                      <button class="btn btn-sm btn-outline-primary me-2" @click="viewDoctor(item.id)">Xem</button>
+                      <button
+                        class="btn btn-sm btn-success"
+                        :disabled="approvingKey === `doc-${item.id}`"
+                        @click="approveDoctor(item.id)"
+                      >
+                        <span v-if="approvingKey === `doc-${item.id}`" class="spinner-border spinner-border-sm"></span>
+                        <span v-else>Duyệt</span>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr v-if="pendingDoctors.length === 0">
+                    <td colspan="4" class="text-center text-muted py-4">Không có bác sĩ mới.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <!-- Footer: Xem thêm theo tab -->
+          <!-- Footer -->
           <div class="card-footer bg-white border-top-0 text-center py-3">
             <router-link :to="moreUrl" class="text-decoration-none small fw-bold">
               Xem thêm <i class="bi bi-arrow-right"></i>
@@ -272,18 +248,15 @@
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm rounded-3 h-100">
           <div class="card-header bg-white py-3">
-            <h6 class="fw-bold m-0">
-              <i class="bi bi-activity me-2 text-primary"></i>Hoạt động gần đây
-            </h6>
+            <h6 class="fw-bold m-0"><i class="bi bi-activity me-2 text-primary"></i>Hoạt động gần đây</h6>
           </div>
+
           <div class="card-body p-0">
             <div class="list-group list-group-flush">
               <div v-for="(log, i) in systemLogs" :key="i" class="list-group-item px-4 py-3">
                 <div class="d-flex justify-content-between">
                   <div>
-                    <div class="small fw-bold text-dark">
-                      {{ log.action }}
-                    </div>
+                    <div class="small fw-bold text-dark">{{ log.action }}</div>
                     <div class="text-muted" style="font-size: 0.8rem">
                       {{ log.user }} - {{ log.role }}
                     </div>
@@ -291,6 +264,7 @@
                   <small class="text-muted">{{ formatDate(log.time) }}</small>
                 </div>
               </div>
+
               <div v-if="systemLogs.length === 0" class="text-center text-muted p-3">
                 Không có hoạt động gần đây.
               </div>
@@ -353,17 +327,34 @@ export default {
       pendingDoctors: [],
       systemLogs: [],
 
+      // ✅ giữ màu line chart
       growthChartData: {
         labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
         datasets: [
-          { label: "Người dùng mới", data: [0, 0, 0, 0, 0, 0, 0], tension: 0.4 },
-          { label: "Lượt hiến máu", data: [0, 0, 0, 0, 0, 0, 0], tension: 0.4 },
+          {
+            label: "Người dùng mới",
+            data: [0, 0, 0, 0, 0, 0, 0],
+            borderColor: "#0d6efd",
+            backgroundColor: "#0d6efd",
+            pointBackgroundColor: "#0d6efd",
+            pointBorderColor: "#0d6efd",
+            tension: 0.4,
+          },
+          {
+            label: "Lượt hiến máu",
+            data: [0, 0, 0, 0, 0, 0, 0],
+            borderColor: "#dc3545",
+            backgroundColor: "#dc3545",
+            pointBackgroundColor: "#dc3545",
+            pointBorderColor: "#dc3545",
+            tension: 0.4,
+          },
         ],
       },
 
       bloodTypeChartData: {
         labels: ["O", "A", "B", "AB"],
-        datasets: [{ data: [0, 0, 0, 0] }],
+        datasets: [{ data: [0, 0, 0, 0], backgroundColor: ["#0dcaf0", "#0d6efd", "#198754", "#6610f2"] }],
       },
 
       chartOptions: {
@@ -445,7 +436,6 @@ export default {
       return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
 
-    // dd/MM/yyyy HH:mm:ss
     formatDate(v) {
       if (!v) return "—";
       const d = new Date(v);
@@ -456,7 +446,7 @@ export default {
       )}:${pad(d.getSeconds())}`;
     },
 
-    // ✅ FIX: lấy pending campaigns từ API đúng (đang dùng ở trang Chiến dịch)
+    // ✅ FIX: pending campaigns lấy từ endpoint chuẩn
     async fetchPendingCampaigns() {
       try {
         const res = await baseRequestAdmin.get("/admin/campaigns/pending", {
@@ -470,7 +460,6 @@ export default {
 
         const raw = res.data.data || [];
 
-        // map đúng format dashboard table đang dùng: title, hospital, date
         this.pendingCampaigns = raw.map((c) => {
           const hospital =
             c.locate_type === "donation_site"
@@ -513,9 +502,10 @@ export default {
         this.pendingDoctors = payload.pendingDoctors || [];
         this.systemLogs = payload.systemLogs || [];
 
-        // ✅ luôn lấy campaigns pending từ endpoint chuẩn
+        // ✅ luôn sync pending campaigns từ endpoint chuẩn
         await this.fetchPendingCampaigns();
 
+        // ✅ Giữ màu line chart kể cả backend trả về data
         if (payload.growthChartData) {
           const g = payload.growthChartData;
           const ds0 = g?.datasets?.[0] || {};
@@ -523,12 +513,29 @@ export default {
           this.growthChartData = {
             labels: g.labels || [],
             datasets: [
-              { label: ds0.label || "Người dùng mới", data: ds0.data || [], tension: 0.4 },
-              { label: ds1.label || "Lượt hiến máu", data: ds1.data || [], tension: 0.4 },
+              {
+                label: ds0.label || "Người dùng mới",
+                data: ds0.data || [],
+                borderColor: "#0d6efd",
+                backgroundColor: "#0d6efd",
+                pointBackgroundColor: "#0d6efd",
+                pointBorderColor: "#0d6efd",
+                tension: 0.4,
+              },
+              {
+                label: ds1.label || "Lượt hiến máu",
+                data: ds1.data || [],
+                borderColor: "#dc3545",
+                backgroundColor: "#dc3545",
+                pointBackgroundColor: "#dc3545",
+                pointBorderColor: "#dc3545",
+                tension: 0.4,
+              },
             ],
           };
         }
 
+        // ✅ Doughnut màu theo nhóm máu
         if (payload.bloodTypeChartData) {
           const b = payload.bloodTypeChartData;
           const labels = b.labels || ["O", "A", "B", "AB"];
@@ -589,8 +596,6 @@ export default {
         const res = await baseRequestAdmin.patch(`/admin/campaigns/${id}/approve`);
         if (!res?.data?.status) throw new Error(res?.data?.message || "Không thể duyệt chiến dịch");
         this.$toast?.success("Duyệt chiến dịch thành công");
-
-        // ✅ reload lại dashboard + list pending campaigns
         await this.fetchDashboardData();
       } catch (e) {
         this.$toast?.error(e?.response?.data?.message || e?.message || "Không thể duyệt chiến dịch");
@@ -625,18 +630,10 @@ export default {
 </script>
 
 <style scoped>
-.bg-primary-subtle {
-  background-color: #cfe2ff;
-}
-.bg-success-subtle {
-  background-color: #d1e7dd;
-}
-.bg-warning-subtle {
-  background-color: #fff3cd;
-}
-.bg-danger-subtle {
-  background-color: #f8d7da;
-}
+.bg-primary-subtle { background-color: #cfe2ff; }
+.bg-success-subtle { background-color: #d1e7dd; }
+.bg-warning-subtle { background-color: #fff3cd; }
+.bg-danger-subtle  { background-color: #f8d7da; }
 
 .nav-tabs .nav-link {
   border: none;
