@@ -438,4 +438,3 @@ export default {
 }
 </style>
   
-Copy vô là card danh sách sẽ full container luôn, khỏi kéo ngang nữa 😎

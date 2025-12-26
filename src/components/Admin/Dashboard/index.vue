@@ -21,21 +21,13 @@
     <!-- KPI -->
     <div class="row g-3 mb-4">
       <div class="col-md-6 col-lg-3" v-for="(card, i) in kpiCards" :key="i">
-        <div :class="[
-          'card border-0 shadow-sm rounded-3 h-100',
-          card.borderClass || '',
-        ]">
+        <div :class="['card border-0 shadow-sm rounded-3 h-100', card.borderClass || '']">
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <div class="text-muted small fw-bold text-uppercase">
                 {{ card.title }}
               </div>
-              <div :class="[
-                'icon-box',
-                card.iconBg,
-                'text-' + card.iconColor,
-                'rounded-circle p-2',
-              ]">
+              <div :class="['icon-box', card.iconBg, 'text-' + card.iconColor, 'rounded-circle p-2']">
                 <i :class="card.icon"></i>
               </div>
             </div>
@@ -94,26 +86,43 @@
           <div class="card-header bg-white p-0 border-bottom-0">
             <ul class="nav nav-tabs px-3 pt-3 border-bottom-0" role="tablist">
               <li class="nav-item">
-                <button class="nav-link active fw-bold text-dark" data-bs-toggle="tab" data-bs-target="#pending-news"
-                  @click="activeTab = 'news'">
+                <button
+                  class="nav-link fw-bold"
+                  :class="activeTab === 'news' ? 'active text-dark' : 'text-muted'"
+                  data-bs-toggle="tab"
+                  data-bs-target="#pending-news"
+                  @click="activeTab = 'news'"
+                >
                   Tin tức
                   <span class="badge bg-danger rounded-pill ms-1">
                     {{ pendingNews.length }}
                   </span>
                 </button>
               </li>
+
               <li class="nav-item">
-                <button class="nav-link fw-bold text-muted" data-bs-toggle="tab" data-bs-target="#pending-campaigns"
-                  @click="activeTab = 'campaigns'">
+                <button
+                  class="nav-link fw-bold"
+                  :class="activeTab === 'campaigns' ? 'active text-dark' : 'text-muted'"
+                  data-bs-toggle="tab"
+                  data-bs-target="#pending-campaigns"
+                  @click="activeTab = 'campaigns'"
+                >
                   Chiến dịch
                   <span class="badge bg-warning text-dark rounded-pill ms-1">
                     {{ pendingCampaigns.length }}
                   </span>
                 </button>
               </li>
+
               <li class="nav-item">
-                <button class="nav-link fw-bold text-muted" data-bs-toggle="tab" data-bs-target="#pending-doctors"
-                  @click="activeTab = 'doctors'">
+                <button
+                  class="nav-link fw-bold"
+                  :class="activeTab === 'doctors' ? 'active text-dark' : 'text-muted'"
+                  data-bs-toggle="tab"
+                  data-bs-target="#pending-doctors"
+                  @click="activeTab = 'doctors'"
+                >
                   Bác sĩ mới
                   <span class="badge bg-secondary rounded-pill ms-1">
                     {{ pendingDoctors.length }}
@@ -146,10 +155,12 @@
                           <button class="btn btn-sm btn-outline-primary me-2" @click="viewNews(item.id)">
                             Xem
                           </button>
-                          <button class="btn btn-sm btn-success" :disabled="approvingKey === `news-${item.id}`"
-                            @click="approveNews(item.id)">
-                            <span v-if="approvingKey === `news-${item.id}`"
-                              class="spinner-border spinner-border-sm"></span>
+                          <button
+                            class="btn btn-sm btn-success"
+                            :disabled="approvingKey === `news-${item.id}`"
+                            @click="approveNews(item.id)"
+                          >
+                            <span v-if="approvingKey === `news-${item.id}`" class="spinner-border spinner-border-sm"></span>
                             <span v-else>Duyệt</span>
                           </button>
                         </td>
@@ -185,10 +196,12 @@
                           <button class="btn btn-sm btn-outline-primary me-2" @click="viewCampaign(item.id)">
                             Xem
                           </button>
-                          <button class="btn btn-sm btn-success" :disabled="approvingKey === `camp-${item.id}`"
-                            @click="approveCampaign(item.id)">
-                            <span v-if="approvingKey === `camp-${item.id}`"
-                              class="spinner-border spinner-border-sm"></span>
+                          <button
+                            class="btn btn-sm btn-success"
+                            :disabled="approvingKey === `camp-${item.id}`"
+                            @click="approveCampaign(item.id)"
+                          >
+                            <span v-if="approvingKey === `camp-${item.id}`" class="spinner-border spinner-border-sm"></span>
                             <span v-else>Duyệt</span>
                           </button>
                         </td>
@@ -224,10 +237,12 @@
                           <button class="btn btn-sm btn-outline-primary me-2" @click="viewDoctor(item.id)">
                             Xem
                           </button>
-                          <button class="btn btn-sm btn-success" :disabled="approvingKey === `doc-${item.id}`"
-                            @click="approveDoctor(item.id)">
-                            <span v-if="approvingKey === `doc-${item.id}`"
-                              class="spinner-border spinner-border-sm"></span>
+                          <button
+                            class="btn btn-sm btn-success"
+                            :disabled="approvingKey === `doc-${item.id}`"
+                            @click="approveDoctor(item.id)"
+                          >
+                            <span v-if="approvingKey === `doc-${item.id}`" class="spinner-border spinner-border-sm"></span>
                             <span v-else>Duyệt</span>
                           </button>
                         </td>
@@ -341,11 +356,7 @@ export default {
       growthChartData: {
         labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
         datasets: [
-          {
-            label: "Người dùng mới",
-            data: [0, 0, 0, 0, 0, 0, 0],
-            tension: 0.4,
-          },
+          { label: "Người dùng mới", data: [0, 0, 0, 0, 0, 0, 0], tension: 0.4 },
           { label: "Lượt hiến máu", data: [0, 0, 0, 0, 0, 0, 0], tension: 0.4 },
         ],
       },
@@ -382,9 +393,7 @@ export default {
         {
           title: "Tổng User",
           value: this.formatNumber(this.stats.totalUsers),
-          sub: `<i class="bi bi-arrow-up"></i> ${this.formatNumber(
-            this.stats.newUsers
-          )} mới`,
+          sub: `<i class="bi bi-arrow-up"></i> ${this.formatNumber(this.stats.newUsers)} mới`,
           icon: "bi bi-people-fill fs-5",
           iconBg: "bg-primary-subtle",
           iconColor: "primary",
@@ -442,11 +451,43 @@ export default {
       const d = new Date(v);
       if (Number.isNaN(d.getTime())) return String(v);
       const pad = (x) => String(x).padStart(2, "0");
-      return `${pad(d.getDate())}/${pad(
-        d.getMonth() + 1
-      )}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(
-        d.getSeconds()
-      )}`;
+      return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(
+        d.getMinutes()
+      )}:${pad(d.getSeconds())}`;
+    },
+
+    // ✅ FIX: lấy pending campaigns từ API đúng (đang dùng ở trang Chiến dịch)
+    async fetchPendingCampaigns() {
+      try {
+        const res = await baseRequestAdmin.get("/admin/campaigns/pending", {
+          params: { q: "", type: "" },
+        });
+
+        if (!res?.data?.status) {
+          this.pendingCampaigns = [];
+          return;
+        }
+
+        const raw = res.data.data || [];
+
+        // map đúng format dashboard table đang dùng: title, hospital, date
+        this.pendingCampaigns = raw.map((c) => {
+          const hospital =
+            c.locate_type === "donation_site"
+              ? c?.donation_site?.name || "—"
+              : c.location || "—";
+
+          return {
+            id: c.id,
+            title: c.title,
+            hospital,
+            date: c.created_at || c.createdAt || new Date(),
+          };
+        });
+      } catch (e) {
+        console.error("fetchPendingCampaigns error:", e);
+        this.pendingCampaigns = [];
+      }
     },
 
     async fetchDashboardData() {
@@ -457,10 +498,7 @@ export default {
           params: { filter: this.filterTime },
         });
 
-        if (!res?.data?.status)
-          throw new Error(
-            res?.data?.message || "Không thể tải dữ liệu dashboard"
-          );
+        if (!res?.data?.status) throw new Error(res?.data?.message || "Không thể tải dữ liệu dashboard");
 
         const payload = res.data.data || {};
 
@@ -472,9 +510,11 @@ export default {
         this.stats.totalBloodUnits = s.totalBloodUnits || 0;
 
         this.pendingNews = payload.pendingNews || [];
-        this.pendingCampaigns = payload.pendingCampaigns || [];
         this.pendingDoctors = payload.pendingDoctors || [];
         this.systemLogs = payload.systemLogs || [];
+
+        // ✅ luôn lấy campaigns pending từ endpoint chuẩn
+        await this.fetchPendingCampaigns();
 
         if (payload.growthChartData) {
           const g = payload.growthChartData;
@@ -483,20 +523,8 @@ export default {
           this.growthChartData = {
             labels: g.labels || [],
             datasets: [
-              {
-                label: ds0.label || "Người dùng mới",
-                data: ds0.data || [],
-                backgroundColor: "#0d6efd",
-                borderColor: "#0d6efd",
-                tension: 0.4,
-              },
-              {
-                label: ds1.label || "Lượt hiến máu",
-                data: ds1.data || [],
-                backgroundColor: "#dc3545",
-                borderColor: "#dc3545",
-                tension: 0.4,
-              },
+              { label: ds0.label || "Người dùng mới", data: ds0.data || [], tension: 0.4 },
+              { label: ds1.label || "Lượt hiến máu", data: ds1.data || [], tension: 0.4 },
             ],
           };
         }
@@ -506,7 +534,6 @@ export default {
           const labels = b.labels || ["O", "A", "B", "AB"];
           const data = b?.datasets?.[0]?.data || labels.map(() => 0);
 
-          // Mỗi nhóm máu 1 màu cố định
           const colorMap = {
             "A+": "#0d6efd",
             "A-": "#6c757d",
@@ -518,42 +545,17 @@ export default {
             "O-": "#fd7e14",
           };
 
-          // fallback palette nếu backend sau này có label lạ
-          const fallbackPalette = [
-            "#0dcaf0",
-            "#6f42c1",
-            "#fd7e14",
-            "#198754",
-            "#0d6efd",
-            "#dc3545",
-            "#ffc107",
-            "#6c757d",
-          ];
-
-          const backgroundColor = labels.map((lb, idx) => {
-            return (
-              colorMap[lb] || fallbackPalette[idx % fallbackPalette.length]
-            );
-          });
+          const fallbackPalette = ["#0dcaf0", "#6f42c1", "#fd7e14", "#198754", "#0d6efd", "#dc3545", "#ffc107", "#6c757d"];
+          const backgroundColor = labels.map((lb, idx) => colorMap[lb] || fallbackPalette[idx % fallbackPalette.length]);
 
           this.bloodTypeChartData = {
             labels,
-            datasets: [
-              {
-                label: "Tỷ lệ nhóm máu",
-                data,
-                backgroundColor,
-              },
-            ],
+            datasets: [{ label: "Tỷ lệ nhóm máu", data, backgroundColor }],
           };
         }
       } catch (err) {
         console.error("Fetch dashboard error:", err);
-        this.$toast?.error(
-          err?.response?.data?.message ||
-          err?.message ||
-          "Lỗi khi tải dashboard"
-        );
+        this.$toast?.error(err?.response?.data?.message || err?.message || "Lỗi khi tải dashboard");
       } finally {
         this.loading = false;
       }
@@ -567,14 +569,11 @@ export default {
       try {
         this.approvingKey = `news-${id}`;
         const res = await baseRequestAdmin.patch(`/admin/news/${id}/approve`);
-        if (!res?.data?.status)
-          throw new Error(res?.data?.message || "Không thể duyệt bài");
+        if (!res?.data?.status) throw new Error(res?.data?.message || "Không thể duyệt bài");
         this.$toast?.success("Duyệt tin tức thành công");
-        this.fetchDashboardData();
+        await this.fetchDashboardData();
       } catch (e) {
-        this.$toast?.error(
-          e?.response?.data?.message || e?.message || "Không thể duyệt bài"
-        );
+        this.$toast?.error(e?.response?.data?.message || e?.message || "Không thể duyệt bài");
       } finally {
         this.approvingKey = null;
       }
@@ -587,40 +586,32 @@ export default {
     async approveCampaign(id) {
       try {
         this.approvingKey = `camp-${id}`;
-        const res = await baseRequestAdmin.patch(
-          `/admin/campaigns/${id}/approve`
-        );
-        if (!res?.data?.status)
-          throw new Error(res?.data?.message || "Không thể duyệt chiến dịch");
+        const res = await baseRequestAdmin.patch(`/admin/campaigns/${id}/approve`);
+        if (!res?.data?.status) throw new Error(res?.data?.message || "Không thể duyệt chiến dịch");
         this.$toast?.success("Duyệt chiến dịch thành công");
-        this.fetchDashboardData();
+
+        // ✅ reload lại dashboard + list pending campaigns
+        await this.fetchDashboardData();
       } catch (e) {
-        this.$toast?.error(
-          e?.response?.data?.message ||
-          e?.message ||
-          "Không thể duyệt chiến dịch"
-        );
+        this.$toast?.error(e?.response?.data?.message || e?.message || "Không thể duyệt chiến dịch");
       } finally {
         this.approvingKey = null;
       }
     },
 
-    // DOCTOR – dùng chung API với trang duyệt bác sĩ
-    viewDoctor(/* id */) {
+    // DOCTOR
+    viewDoctor() {
       this.$router.push("/admin/doctor-approve");
     },
     async approveDoctor(id) {
       try {
         this.approvingKey = `doc-${id}`;
         const res = await baseRequestAdmin.put(`/admin/doctors/${id}/approve`);
-        if (!res?.data?.status)
-          throw new Error(res?.data?.message || "Không thể duyệt bác sĩ");
+        if (!res?.data?.status) throw new Error(res?.data?.message || "Không thể duyệt bác sĩ");
         this.$toast?.success("Duyệt bác sĩ thành công");
-        this.fetchDashboardData();
+        await this.fetchDashboardData();
       } catch (e) {
-        this.$toast?.error(
-          e?.response?.data?.message || e?.message || "Không thể duyệt bác sĩ"
-        );
+        this.$toast?.error(e?.response?.data?.message || e?.message || "Không thể duyệt bác sĩ");
       } finally {
         this.approvingKey = null;
       }
@@ -637,15 +628,12 @@ export default {
 .bg-primary-subtle {
   background-color: #cfe2ff;
 }
-
 .bg-success-subtle {
   background-color: #d1e7dd;
 }
-
 .bg-warning-subtle {
   background-color: #fff3cd;
 }
-
 .bg-danger-subtle {
   background-color: #f8d7da;
 }
@@ -655,13 +643,11 @@ export default {
   border-bottom: 3px solid transparent;
   color: #6c757d;
 }
-
 .nav-tabs .nav-link.active {
   border-bottom: 3px solid #0d6efd;
   color: #0d6efd !important;
   background: transparent;
 }
-
 .nav-tabs .nav-link:hover {
   border-color: transparent;
   color: #0d6efd;
